@@ -14,7 +14,7 @@ import { SuggestionCard } from "./SuggestionCard";
 import { AvailabilityModal } from "./AvailabilityModal";
 import { AvailabilityDisplay } from "./AvailabilityDisplay";
 import { healthMetrics, suggestions } from "../../data/mockData";
-import { User, WeeklySchedule } from "../../types";
+import type { User, WeeklySchedule } from "../../types";
 
 interface DashboardProps {
   user: User;
