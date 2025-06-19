@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { LoginForm } from "./components/auth/LoginForm";
-import { SignupForm } from "./components/auth/SignupForm";
-import { Dashboard } from "./components/dashboard/Dashboard";
-import { User } from "./types";
+//import { SignupForm } from './components/auth/SignupForm';
+//import { Dashboard } from "./components/dashboard/Dashboard";
+import type { User } from "./types";
 
 type AuthView = "login" | "signup";
 
@@ -38,22 +38,29 @@ function App() {
   };
 
   if (user) {
-    return <Dashboard user={user} onLogout={handleLogout} />;
+    return null;
+    {
+      /* <Dashboard user={user} onLogout={handleLogout} /> */
+    }
   }
 
   return (
     <>
-      {currentView === "login" ? (
-        <LoginForm
-          onLogin={handleLogin}
-          onSwitchToSignup={() => setCurrentView("signup")}
-        />
-      ) : (
-        <SignupForm
-          onSignup={handleSignup}
-          onSwitchToLogin={() => setCurrentView("login")}
-        />
-      )}
+      {
+        currentView === "login" ? (
+          <LoginForm
+            onLogin={handleLogin}
+            onSwitchToSignup={() => setCurrentView("signup")}
+          />
+        ) : null
+
+        // (
+        //   <SignupForm
+        //     onSignup={handleSignup}
+        //     onSwitchToLogin={() => setCurrentView("login")}
+        //   />
+        // )
+      }
     </>
   );
 }
