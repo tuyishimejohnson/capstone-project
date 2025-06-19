@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 import { MetricCard } from "./MetricCard";
 import { SuggestionCard } from "./SuggestionCard";
-//import { AvailabilityModal } from "./AvailabilityModal";
-//import { AvailabilityDisplay } from "./AvailabilityDisplay";
+import { AvailabilityModal } from "./AvailabilityModal";
+import { AvailabilityDisplay } from "./AvailabilityDisplay";
 import { healthMetrics, suggestions } from "../../data/mockData";
 import type { User, WeeklySchedule } from "../../types";
 
@@ -178,10 +178,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
         </div>
 
         {/* Availability Display */}
-        {/* <AvailabilityDisplay
-          schedule={schedule}
-          onEditClick={() => setIsAvailabilityModalOpen(true)}
-        /> */}
+        {
+          <AvailabilityDisplay
+            schedule={schedule}
+            onEditClick={() => setIsAvailabilityModalOpen(true)}
+          />
+        }
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -272,12 +274,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       </main>
 
       {/* Availability Modal */}
-      {/* <AvailabilityModal
-        isOpen={isAvailabilityModalOpen}
-        onClose={() => setIsAvailabilityModalOpen(false)}
-        onSave={handleScheduleSave}
-        currentSchedule={schedule}
-      /> */}
+      {
+        <AvailabilityModal
+          isOpen={isAvailabilityModalOpen}
+          onClose={() => setIsAvailabilityModalOpen(false)}
+          onSave={handleScheduleSave}
+          currentSchedule={schedule}
+        />
+      }
     </div>
   );
 };
