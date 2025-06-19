@@ -48,7 +48,7 @@ export const healthMetrics: HealthMetric[] = [
   },
   {
     id: "6",
-    title: "Maternal Deaths (YTD)",
+    title: "Maternal Deaths",
     value: 2,
     total: 156,
     percentage: 1.3,
@@ -62,7 +62,7 @@ export const suggestions: Suggestion[] = [
     id: "1",
     title: "Increase Prenatal Visit Frequency",
     description:
-      "Schedule additional check-ups for high-risk pregnancies to monitor complications early.",
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores optio voluptatibus unde!",
     priority: "high",
     category: "maternal",
     icon: "Calendar",
@@ -71,7 +71,7 @@ export const suggestions: Suggestion[] = [
     id: "2",
     title: "Distribute Bed Nets",
     description:
-      "Target households in high-malaria areas with insecticide-treated nets.",
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores optio voluptatibus unde!",
     priority: "medium",
     category: "malaria",
     icon: "Shield",
@@ -80,7 +80,7 @@ export const suggestions: Suggestion[] = [
     id: "3",
     title: "Nutrition Education Program",
     description:
-      "Launch community workshops on child nutrition and feeding practices.",
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores optio voluptatibus unde!",
     priority: "high",
     category: "nutrition",
     icon: "BookOpen",
@@ -89,7 +89,7 @@ export const suggestions: Suggestion[] = [
     id: "4",
     title: "Mobile Health Clinic",
     description:
-      "Deploy mobile units to remote areas with limited healthcare access.",
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores optio voluptatibus unde!",
     priority: "medium",
     category: "maternal",
     icon: "Truck",
@@ -98,7 +98,7 @@ export const suggestions: Suggestion[] = [
     id: "5",
     title: "Malaria Testing Campaign",
     description:
-      "Conduct community-wide rapid diagnostic testing in affected areas.",
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores optio voluptatibus unde!",
     priority: "high",
     category: "malaria",
     icon: "TestTube",
