@@ -7,7 +7,7 @@ import {
   CheckCircle2,
   AlertCircle,
 } from "lucide-react";
-import { HealthMetric } from "../../types";
+import type { HealthMetric } from "../../types";
 
 interface MetricCardProps {
   metric: HealthMetric;
