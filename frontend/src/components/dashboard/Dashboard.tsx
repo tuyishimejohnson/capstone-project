@@ -105,6 +105,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
               </div>
             </div>
 
+            <div className="bg-amber-300"> </div>
+
             <div className="flex items-center space-x-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -167,14 +169,22 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            {/* Welcome back, {user.name} */} Welcomee!!!!!!!!
-          </h2>
-          <p className="text-gray-600">
-            Here's an overview of your community's health metrics and
-            recommended actions.
-          </p>
+        <div className="mb-8 flex justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              {/* Welcome back, {user.name} */} Welcomee!!!!!!!!
+            </h2>
+            <p className="text-gray-600">
+              Here is an overview of your availability customization and
+              recommended actions.
+            </p>
+          </div>
+
+          <div className="border border-gray-200 flex items-center justify-center">
+            <button className="bg-gray-400 px-4 py-3 rounded-2xl">
+              View registered CHW
+            </button>
+          </div>
         </div>
 
         {/* Availability Display */}
