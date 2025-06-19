@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { LoginForm } from "./components/auth/LoginForm";
 import { SignupForm } from "./components/auth/SignUpForm";
-//import { Dashboard } from "./components/dashboard/Dashboard";
+import { Dashboard } from "./components/dashboard/Dashboard";
 import type { User } from "./types";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 type AuthView = "login" | "signup";
 
 function App() {
-  const [currentView, setCurrentView] = useState<AuthView>("login");
-  const [user, setUser] = useState<User | null>(null);
+  //const [currentView, setCurrentView] = useState<AuthView>("login");
+  //const [user, setUser] = useState<User | null>(null);
 
-  const handleLogin = (email: string, password: string) => {
+  /* const handleLogin = (email: string, password: string) => {
     // Mock authentication - in real app, this would be an API call
     const mockUser: User = {
       id: "1",
@@ -19,9 +20,9 @@ function App() {
       role: "health_worker",
     };
     setUser(mockUser);
-  };
+  }; */
 
-  const handleSignup = (name: string, email: string, password: string) => {
+  /* const handleSignup = (name: string, email: string, password: string) => {
     // Mock registration - in real app, this would be an API call
     const mockUser: User = {
       id: "2",
@@ -31,22 +32,26 @@ function App() {
     };
     setUser(mockUser);
   };
-
-  const handleLogout = () => {
+ */
+  /* const handleLogout = () => {
     setUser(null);
     setCurrentView("login");
-  };
+  }; */
 
-  if (user) {
-    return null;
-    {
-      /* <Dashboard user={user} onLogout={handleLogout} /> */
-    }
-  }
+  /* if (user) {
+    return <Dashboard user={user} onLogout={handleLogout} />;
+  } */
 
   return (
     <>
-      {currentView === "login" ? (
+      <Router>
+        <Routes>
+          <Route path="/" element={<LoginForm />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </Router>
+
+      {/* {currentView === "login" ? (
         <LoginForm
           onLogin={handleLogin}
           onSwitchToSignup={() => setCurrentView("signup")}
@@ -56,7 +61,7 @@ function App() {
           onSignup={handleSignup}
           onSwitchToLogin={() => setCurrentView("login")}
         />
-      )}
+      )} */}
     </>
   );
 }

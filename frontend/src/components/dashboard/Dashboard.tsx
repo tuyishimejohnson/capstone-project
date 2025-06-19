@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 import { MetricCard } from "./MetricCard";
 import { SuggestionCard } from "./SuggestionCard";
-import { AvailabilityModal } from "./AvailabilityModal";
-import { AvailabilityDisplay } from "./AvailabilityDisplay";
+//import { AvailabilityModal } from "./AvailabilityModal";
+//import { AvailabilityDisplay } from "./AvailabilityDisplay";
 import { healthMetrics, suggestions } from "../../data/mockData";
 import type { User, WeeklySchedule } from "../../types";
 
@@ -60,11 +60,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
   const [schedule, setSchedule] = useState<WeeklySchedule>(defaultSchedule);
 
-  const criticalMetrics = healthMetrics.filter((m) => m.status === "critical");
-  const warningMetrics = healthMetrics.filter((m) => m.status === "warning");
-  const goodMetrics = healthMetrics.filter((m) => m.status === "good");
+  const criticalMetrics = healthMetrics.filter(
+    (m: any) => m.status === "critical"
+  );
+  const warningMetrics = healthMetrics.filter(
+    (m: any) => m.status === "warning"
+  );
+  const goodMetrics = healthMetrics.filter((m: any) => m.status === "good");
   const highPrioritySuggestions = suggestions.filter(
-    (s) => s.priority === "high"
+    (s: any) => s.priority === "high"
   );
 
   const handleScheduleSave = (newSchedule: WeeklySchedule) => {
@@ -96,7 +100,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
               <div className="flex items-center">
                 <Heart className="w-8 h-8 text-teal-600" />
                 <h1 className="ml-2 text-xl font-bold text-gray-900">
-                  HealthWorker Portal
+                  CHW Portal
                 </h1>
               </div>
             </div>
@@ -134,15 +138,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 <div className="flex items-center">
                   <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
                     <span className="text-sm font-medium text-teal-600">
-                      {user.name.charAt(0).toUpperCase()}
+                      {/* {user.name.charAt(0).toUpperCase()} */}
                     </span>
                   </div>
                   <div className="ml-2">
                     <p className="text-sm font-medium text-gray-900">
-                      {user.name}
+                      {/* {user.name} */}
                     </p>
                     <p className="text-xs text-gray-500 capitalize">
-                      {user.role.replace("_", " ")}
+                      {/* {user.role.replace("_", " ")} */}
                     </p>
                   </div>
                 </div>
@@ -165,7 +169,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Welcome back, {user.name}
+            {/* Welcome back, {user.name} */} Welcomee!!!!!!!!
           </h2>
           <p className="text-gray-600">
             Here's an overview of your community's health metrics and
@@ -174,10 +178,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
         </div>
 
         {/* Availability Display */}
-        <AvailabilityDisplay
+        {/* <AvailabilityDisplay
           schedule={schedule}
           onEditClick={() => setIsAvailabilityModalOpen(true)}
-        />
+        /> */}
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -268,12 +272,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       </main>
 
       {/* Availability Modal */}
-      <AvailabilityModal
+      {/* <AvailabilityModal
         isOpen={isAvailabilityModalOpen}
         onClose={() => setIsAvailabilityModalOpen(false)}
         onSave={handleScheduleSave}
         currentSchedule={schedule}
-      />
+      /> */}
     </div>
   );
 };

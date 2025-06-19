@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, Heart } from "lucide-react";
 import { validateLoginForm } from "../../utils/validation";
 import type { FormErrors } from "../../types";
+import { Dashboard } from "../dashboard/Dashboard";
+import { useNavigate } from "react-router-dom";
 
 interface LoginFormProps {
   onLogin: (email: string, password: string) => void;
@@ -12,6 +14,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   onLogin,
   onSwitchToSignup,
 }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -29,10 +32,17 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
     setErrors({});
     setIsLoading(true);
+    setEmail("");
+    setPassword("");
 
     // Simulate API call
     setTimeout(() => {
-      onLogin(email, password);
+      //onLogin(email, password);
+      console.log(
+        "=============================================>",
+        `${email} and ${password}`
+      );
+      navigate("/dashboard");
       setIsLoading(false);
     }, 1500);
   };
@@ -48,7 +58,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
               Welcome Back
             </h1>
-            <p className="text-gray-600">Community Health Worker Portal</p>
+            <p className="text-gray-600">CHW Portal</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
