@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { LoginForm } from "./components/auth/LoginForm";
-//import { SignupForm } from './components/auth/SignupForm';
+import { SignupForm } from "./components/auth/SignUpForm";
 //import { Dashboard } from "./components/dashboard/Dashboard";
 import type { User } from "./types";
 
@@ -14,7 +14,7 @@ function App() {
     // Mock authentication - in real app, this would be an API call
     const mockUser: User = {
       id: "1",
-      name: "Sarah Johnson",
+      name: "Johnson Tuyishime",
       email: email,
       role: "health_worker",
     };
@@ -46,21 +46,17 @@ function App() {
 
   return (
     <>
-      {
-        currentView === "login" ? (
-          <LoginForm
-            onLogin={handleLogin}
-            onSwitchToSignup={() => setCurrentView("signup")}
-          />
-        ) : null
-
-        // (
-        //   <SignupForm
-        //     onSignup={handleSignup}
-        //     onSwitchToLogin={() => setCurrentView("login")}
-        //   />
-        // )
-      }
+      {currentView === "login" ? (
+        <LoginForm
+          onLogin={handleLogin}
+          onSwitchToSignup={() => setCurrentView("signup")}
+        />
+      ) : (
+        <SignupForm
+          onSignup={handleSignup}
+          onSwitchToLogin={() => setCurrentView("login")}
+        />
+      )}
     </>
   );
 }

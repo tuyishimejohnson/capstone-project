@@ -31,6 +31,7 @@ const UserSessionSchema = new mongoose.Schema({
   selectedDistrict: String,
   selectedSector: String,
   selectedCell: String,
+  selectedVillage: String,
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
@@ -109,11 +110,11 @@ const getLocationData = async () => {
 // USSD Text Messages
 const messages = {
   en: {
-    welcome:
-      "CON Welcome to Patient Management System\nSelect your preferred language:",
+    welcome: "CON Welcome!\nSelect your preferred language:",
     selectDistrict: "CON Select your district:",
     selectSector: "CON Select your sector:",
     selectCell: "CON Select your cell:",
+    selectVillage: "CON Select your village:",
     completion:
       "END Thank you! Your selection has been recorded.\nDistrict: {district}\nSector: {sector}\nCell: {cell}",
     error: "END Sorry, an error occurred. Please try again.",
@@ -125,8 +126,9 @@ const messages = {
     selectDistrict: "CON Hitamo akarere kawe:",
     selectSector: "CON Hitamo umurenge wawe:",
     selectCell: "CON Hitamo akagari kawe:",
+    selectVillage: "CON Hitamo umudugudu wawe:",
     completion:
-      "END Murakoze! Amakuru yanyu yarakiriwe.\nAkarere: {district}\nUmurenge: {sector}\nAkagari: {cell}",
+      "END Murakoze! Amakuru yanyu yarakiriwe.\nAkarere: {district}\nUmurenge: {sector}\nAkagari: {cell}\nUmudugudu: {village}",
     error: "END Ihangane, habaye ikosa. Ongera ugerageze.",
     invalidInput: "CON Ikinyuranyo kidakwiye. Ongera ugerageze:",
     goBack: "0. Subira Inyuma",
@@ -290,10 +292,10 @@ app.post("/", async (req, res) => {
           const selectedCell = sector.cells[cellIndex];
           await updateSession(phoneNumber, {
             selectedCell: selectedCell.name,
-            currentStep: "completed",
+            currentStep: "village",
           });
 
-          response = msg.completion
+          /* response = msg.selectVillage
             .replace("{district}", session.selectedDistrict)
             .replace("{sector}", session.selectedSector)
             .replace("{cell}", selectedCell.name);
@@ -303,6 +305,70 @@ app.post("/", async (req, res) => {
           sector.cells.forEach((cell, index) => {
             const cellName = lang === "en" ? cell.name : cell.nameRw;
             response += `\n${index + 1}. ${cellName}`;
+          });
+          response += `\n${msg.goBack}`;
+        } */
+
+          response = msg.selectVillage;
+          selectedCell.villages.forEach((village, index) => {
+            const villageName = lang === "en" ? village.name : village.nameRw;
+            response += `\n${index + 1}. ${villageName}`;
+          });
+          response += `\n${msg.goBack}`;
+          console.log("Village selection response:", response);
+        } else {
+          response = msg.invalidInput;
+          response += "\n" + msg.selectCell;
+          sector.cells.forEach((cell, index) => {
+            const cellName = lang === "en" ? cell.name : cell.nameRw;
+            response += `\n${index + 1}. ${cellName}`;
+          });
+          response += `\n${msg.goBack}`;
+        }
+      }
+    }
+
+    // Handle village selection considering the data in locations.js
+    else if (session.currentStep === "village") {
+      const lang = session.selectedLanguage || "en";
+      const msg = messages[lang];
+      const district = locationData.districts.find(
+        (d) => d.name === session.selectedDistrict
+      );
+      const sector = district.sectors.find(
+        (s) => s.name === session.selectedSector
+      );
+      const cell = sector.cells.find((c) => c.name === session.selectedCell);
+
+      if (lastInput === "0") {
+        // Go back to cell selection
+        response = msg.selectCell;
+        sector.cells.forEach((cell, index) => {
+          const cellName = lang === "en" ? cell.name : cell.nameRw;
+          response += `\n${index + 1}. ${cellName}`;
+        });
+        response += `\n${msg.goBack}`;
+        await updateSession(phoneNumber, { currentStep: "cell" });
+      } else {
+        const villageIndex = parseInt(lastInput) - 1;
+        if (villageIndex >= 0 && villageIndex < cell.villages.length) {
+          const selectedVillage = cell.villages[villageIndex];
+          await updateSession(phoneNumber, {
+            selectedVillage: selectedVillage.name,
+            currentStep: "completed",
+          });
+
+          response = msg.completion
+            .replace("{district}", session.selectedDistrict)
+            .replace("{sector}", session.selectedSector)
+            .replace("{cell}", session.selectedCell)
+            .replace("{village}", selectedVillage.name);
+        } else {
+          response = msg.invalidInput;
+          response += "\n" + msg.selectVillage;
+          cell.villages.forEach((village, index) => {
+            const villageName = lang === "en" ? village.name : village.nameRw;
+            response += `\n${index + 1}. ${villageName}`;
           });
           response += `\n${msg.goBack}`;
         }
