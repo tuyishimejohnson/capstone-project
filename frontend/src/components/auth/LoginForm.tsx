@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, Heart } from "lucide-react";
 import { validateLoginForm } from "../../utils/validation";
 import type { FormErrors } from "../../types";
-import { Dashboard } from "../dashboard/Dashboard";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 interface LoginFormProps {
@@ -146,12 +146,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <div className="mt-6 text-center">
             <p className="text-gray-600">
               Don't have an account?{" "}
-              <button
+              <Link
+                to={"/signup"}
                 onClick={onSwitchToSignup}
                 className="text-teal-600 hover:text-teal-700 font-medium transition-colors"
               >
                 Sign up here
-              </button>
+              </Link>
             </p>
           </div>
         </div>

@@ -2,16 +2,14 @@ import React, { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, User, Heart } from "lucide-react";
 import { validateSignupForm } from "../../utils/validation";
 import type { FormErrors } from "../../types";
+import { Link } from "react-router";
 
 interface SignupFormProps {
   onSignup: (name: string, email: string, password: string) => void;
   onSwitchToLogin: () => void;
 }
 
-export const SignupForm: React.FC<SignupFormProps> = ({
-  onSignup,
-  onSwitchToLogin,
-}) => {
+export const SignupForm: React.FC<SignupFormProps> = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,10 +35,13 @@ export const SignupForm: React.FC<SignupFormProps> = ({
 
     setErrors({});
     setIsLoading(true);
+    setName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
 
     // Simulate API call
     setTimeout(() => {
-      onSignup(name, email, password);
       setIsLoading(false);
     }, 1500);
   };
@@ -209,12 +210,13 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           <div className="mt-6 text-center">
             <p className="text-gray-600">
               Already have an account?{" "}
-              <button
-                onClick={onSwitchToLogin}
+              <Link
+                to={"/"}
+                type="button"
                 className="text-teal-600 hover:text-teal-700 font-medium transition-colors"
               >
                 Sign in here
-              </button>
+              </Link>
             </p>
           </div>
         </div>
