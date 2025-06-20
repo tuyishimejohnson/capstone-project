@@ -1,8 +1,8 @@
 import type { FormErrors } from "../types";
 
-export const validateEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+export const validatePhone = (phone: string): boolean => {
+  const phoneRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return phoneRegex.test(phone);
 };
 
 export const validatePassword = (password: string): boolean => {
@@ -14,15 +14,15 @@ export const validateName = (name: string): boolean => {
 };
 
 export const validateLoginForm = (
-  email: string,
+  phone: string,
   password: string
 ): FormErrors => {
   const errors: FormErrors = {};
 
-  if (!email.trim()) {
-    errors.email = "Email is required";
-  } else if (!validateEmail(email)) {
-    errors.email = "Please enter a valid email address";
+  if (!phone.trim()) {
+    errors.phone = "Phone is required";
+  } else if (!validatePhone(phone)) {
+    errors.phone = "Pleas enter a valid phone";
   }
 
   if (!password) {
@@ -36,9 +36,13 @@ export const validateLoginForm = (
 
 export const validateSignupForm = (
   name: string,
-  email: string,
+  phone: string,
   password: string,
-  confirmPassword: string
+  confirmPassword: string,
+  district: string,
+  sector: string,
+  cell: string,
+  village: string
 ): FormErrors => {
   const errors: FormErrors = {};
 
@@ -48,10 +52,22 @@ export const validateSignupForm = (
     errors.name = "Name must be at least 2 characters long";
   }
 
-  if (!email.trim()) {
-    errors.email = "Email is required";
-  } else if (!validateEmail(email)) {
-    errors.email = "Please enter a valid email address";
+  if (!phone.trim()) {
+    errors.phone = "Email is required";
+  } else if (!validatePhone(phone)) {
+    errors.phone = "Please enter a phone number";
+  }
+  if (!district.trim()) {
+    errors.district = "District is required";
+  }
+  if (!sector.trim()) {
+    errors.sector = "Sector is required";
+  }
+  if (!cell.trim()) {
+    errors.cell = "Cell is required";
+  }
+  if (!village.trim()) {
+    errors.village = "Village is required";
   }
 
   if (!password) {

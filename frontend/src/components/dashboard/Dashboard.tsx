@@ -24,31 +24,31 @@ interface DashboardProps {
 const defaultSchedule: WeeklySchedule = {
   monday: {
     day: "monday",
-    isAvailable: true,
-    startTime: "08:00",
+    isAvailable: false,
+    startTime: "05:00",
     endTime: "17:00",
   },
   tuesday: {
     day: "tuesday",
-    isAvailable: true,
+    isAvailable: false,
     startTime: "08:00",
     endTime: "17:00",
   },
   wednesday: {
     day: "wednesday",
-    isAvailable: true,
+    isAvailable: false,
     startTime: "08:00",
     endTime: "17:00",
   },
   thursday: {
     day: "thursday",
-    isAvailable: true,
+    isAvailable: false,
     startTime: "08:00",
     endTime: "17:00",
   },
   friday: {
     day: "friday",
-    isAvailable: true,
+    isAvailable: false,
     startTime: "08:00",
     endTime: "17:00",
   },
