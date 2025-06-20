@@ -1,7 +1,7 @@
 import type { FormErrors } from "../types";
 
 export const validatePhone = (phone: string): boolean => {
-  const phoneRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /[0-9]/;
   return phoneRegex.test(phone);
 };
 
