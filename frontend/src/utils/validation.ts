@@ -20,7 +20,7 @@ export const validateLoginForm = (
   const errors: FormErrors = {};
 
   if (!phone.trim()) {
-    errors.phone = "Phone is required";
+    errors.phone = "Phone number is required";
   } else if (!validatePhone(phone)) {
     errors.phone = "Pleas enter a valid phone";
   }

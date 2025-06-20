@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, Heart } from "lucide-react";
+import { Eye, EyeOff, Phone, Lock, Heart } from "lucide-react";
 import { validateLoginForm } from "../../utils/validation";
 import type { FormErrors } from "../../types";
 import { Link } from "react-router-dom";
@@ -10,12 +10,9 @@ interface LoginFormProps {
   onSwitchToSignup: () => void;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({
-  onLogin,
-  onSwitchToSignup,
-}) => {
+export const LoginForm: React.FC<LoginFormProps> = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
@@ -23,7 +20,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const validationErrors = validateLoginForm(email, password);
+    const validationErrors = validateLoginForm(phone, password);
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -32,7 +29,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
     setErrors({});
     setIsLoading(true);
-    setEmail("");
+    setPhone("");
     setPassword("");
 
     // Simulate API call
@@ -40,10 +37,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       //onLogin(email, password);
       console.log(
         "=============================================>",
-        `${email} and ${password}`
+        `${phone} and ${password}`
       );
-      navigate("/dashboard");
+
       setIsLoading(false);
+      navigate("/dashboard");
     }, 1500);
   };
 
@@ -64,28 +62,28 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
-                htmlFor="email"
+                htmlFor="phone"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Email Address
+                PHone number
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="tel"
+                  id="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                   className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all ${
-                    errors.email
+                    errors.phone
                       ? "border-red-300 bg-red-50"
                       : "border-gray-300"
                   }`}
-                  placeholder="Enter your email"
+                  placeholder="Enter your phone number"
                 />
               </div>
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+              {errors.phone && (
+                <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
               )}
             </div>
 
@@ -148,7 +146,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               Don't have an account?{" "}
               <Link
                 to={"/signup"}
-                onClick={onSwitchToSignup}
                 className="text-teal-600 hover:text-teal-700 font-medium transition-colors"
               >
                 Sign up here
