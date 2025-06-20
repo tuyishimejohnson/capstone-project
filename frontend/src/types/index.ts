@@ -43,7 +43,6 @@ export interface WeeklySchedule {
 export interface User {
   id: string;
   name: string;
-  email: string;
   role: "admin" | "health_worker";
 }
 

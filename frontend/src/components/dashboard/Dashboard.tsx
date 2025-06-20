@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   LogOut,
   Bell,
@@ -15,6 +15,7 @@ import { AvailabilityModal } from "./AvailabilityModal";
 import { AvailabilityDisplay } from "./AvailabilityDisplay";
 import { healthMetrics, suggestions } from "../../data/mockData";
 import type { User, WeeklySchedule } from "../../types";
+import axios from "axios";
 
 interface DashboardProps {
   user: User;
@@ -59,6 +60,7 @@ const defaultSchedule: WeeklySchedule = {
 export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
   const [schedule, setSchedule] = useState<WeeklySchedule>(defaultSchedule);
+  const [userName, setUserName] = useState("");
 
   const criticalMetrics = healthMetrics.filter(
     (m: any) => m.status === "critical"
@@ -89,6 +91,16 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   };
 
   const availabilityStatus = getAvailabilityStatus();
+
+  useEffect(() => {
+    const getUserName = async () => {
+      const response = localStorage.getItem("name"); // Replace with your API endpoint
+      if (response) {
+        setUserName(response);
+      }
+    };
+    getUserName();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -140,12 +152,16 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 <div className="flex items-center">
                   <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
                     <span className="text-sm font-medium text-teal-600">
-                      {/* {user.name.charAt(0).toUpperCase()} */}
+                      {userName
+                        .split(" ")
+                        .map((name) => name[0])
+                        .join("")
+                        .toUpperCase()}
                     </span>
                   </div>
                   <div className="ml-2">
                     <p className="text-sm font-medium text-gray-900">
-                      {/* {user.name} */}
+                      {userName || "user"}
                     </p>
                     <p className="text-xs text-gray-500 capitalize">
                       {/* {user.role.replace("_", " ")} */}
@@ -172,7 +188,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
         <div className="mb-8 flex justify-between">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              {/* Welcome back, {user.name} */} Welcomee!!!!!!!!
+              {" "}
+              Welcome back
+              {` ${userName}`}
             </h2>
             <p className="text-gray-600">
               Here is an overview of your availability customization and

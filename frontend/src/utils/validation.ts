@@ -14,21 +14,19 @@ export const validateName = (name: string): boolean => {
 };
 
 export const validateLoginForm = (
-  phone: string,
+  name: string,
   password: string
 ): FormErrors => {
   const errors: FormErrors = {};
 
-  if (!phone.trim()) {
-    errors.phone = "Phone number is required";
-  } else if (!validatePhone(phone)) {
-    errors.phone = "Pleas enter a valid phone";
+  if (!name.trim()) {
+    errors.name = "Name is required";
   }
 
   if (!password) {
     errors.password = "Password is required";
   } else if (!validatePassword(password)) {
-    errors.password = "Password must be at least 8 characters long";
+    errors.password = "Password must be at least 5 characters long";
   }
 
   return errors;
