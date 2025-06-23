@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { LoginForm } from "./components/auth/LoginForm";
-import { SignupForm } from "./components/auth/SignUpForm";
+import { SignupForm } from "./components/auth/SignupForm";
 import { Dashboard } from "./components/dashboard/Dashboard";
 import type { User } from "./types";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { PatientDataForm } from "./components/forms/PatientData";
 
 type AuthView = "login" | "signup";
 
@@ -49,6 +50,7 @@ function App() {
           <Route path="/" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/add-patient" element={<PatientDataForm />} />
         </Routes>
       </Router>
 
