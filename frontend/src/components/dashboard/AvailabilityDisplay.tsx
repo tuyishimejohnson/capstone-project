@@ -58,12 +58,14 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
             </p>
           </div>
         </div>
-        <button
-          onClick={onEditClick}
-          className="px-4 py-2 text-teal-600 hover:text-teal-700 hover:bg-teal-50 rounded-lg transition-all duration-200 text-sm font-medium"
-        >
-          Edit Schedule
-        </button>
+        <div>
+          <button
+            onClick={onEditClick}
+            className="px-4 py-2 text-teal-600 hover:text-teal-700 hover:bg-teal-50 rounded-lg transition-all duration-200 text-sm font-medium"
+          >
+            Edit Schedule
+          </button>
+        </div>
       </div>
 
       {/* Weekly Schedule Grid */}

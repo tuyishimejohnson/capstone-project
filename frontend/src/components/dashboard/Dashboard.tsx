@@ -17,6 +17,7 @@ import { healthMetrics, suggestions } from "../../data/mockData";
 import type { User, WeeklySchedule } from "../../types";
 import { CHWUsersModal } from "./ChwModal";
 import { PredictionUploadModal } from "./PredictionModel";
+
 import axios from "axios";
 
 interface DashboardProps {
@@ -121,18 +122,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
               </div>
             </div>
 
-            <div className="bg-amber-300"> </div>
-
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                />
-              </div>
-
+            <div className="flex justify-center items-center space-x-4">
               {/* Availability Button */}
               <button
                 onClick={() => setIsAvailabilityModalOpen(true)}
@@ -187,6 +177,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       </header>
 
       {/* Main Content */}
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-12">
         {/* Welcome Section */}
         <div className="mb-8 flex justify-between">
