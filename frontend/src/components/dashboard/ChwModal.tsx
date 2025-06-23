@@ -44,7 +44,7 @@ const mockCHWUsers = [
 ];
 
 // CHW Users Modal
-const CHWUsersModal = ({ isOpen, onClose }) => {
+export const CHWUsersModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
