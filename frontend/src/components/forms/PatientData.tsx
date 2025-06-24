@@ -8,12 +8,12 @@ import type { PatientFormData } from "../../types";
 import { validatePatientForm } from "../../utils/patientValidation";
 
 interface PatientDataFormProps {
-  onSave: (data: PatientFormData) => void;
+  // onSave: (data: PatientFormData) => void;
   currentUser: string;
 }
 
 export const PatientDataForm: React.FC<PatientDataFormProps> = ({
-  onSave,
+  // onSave,
   currentUser,
 }) => {
   const [formType, setFormType] = useState<
@@ -70,9 +70,9 @@ export const PatientDataForm: React.FC<PatientDataFormProps> = ({
     };
 
     setTimeout(() => {
-      onSave(baseRecord as PatientFormData);
+      //onSave(baseRecord as PatientFormData);
       setIsSaving(false);
-      navigate("/"); // Redirect to home or another page after save
+      navigate("/dashboard");
     }, 1500);
   };
 

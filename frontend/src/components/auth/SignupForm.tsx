@@ -11,7 +11,8 @@ import {
 } from "lucide-react";
 import { validateSignupForm } from "../../utils/validation";
 import type { FormErrors } from "../../types";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 interface SignupFormProps {
   onSignup: (
@@ -58,25 +59,50 @@ export const SignupForm: React.FC<SignupFormProps> = () => {
       setErrors(validationErrors);
       return;
     }
-
     setErrors({});
     setIsLoading(true);
 
-    // Reset form fields
-    setName("");
-    setPhone("");
-    setDistrict("");
-    setSector("");
-    setCell("");
-    setVillage("");
-    setPassword("");
-    setConfirmPassword("");
-
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      await axios.post("http://localhost:8000/api/auth/signup", {
+        name,
+        phone,
+        district,
+        sector,
+        cell,
+        village,
+        password,
+      });
+      console.log("==========signup successful============");
+      setName("");
+      setPhone("");
+      setDistrict("");
+      setSector("");
+      setCell("");
+      setVillage("");
+      setPassword("");
+      setConfirmPassword("");
       navigate("/");
-    }, 1500);
+    } catch (error) {
+      console.log("===============> Error while signing up");
+    } finally {
+      setIsLoading(false);
+    }
+
+    // Reset form fields
+    // setName("");
+    // setPhone("");
+    // setDistrict("");
+    // setSector("");
+    // setCell("");
+    // setVillage("");
+    // setPassword("");
+    // setConfirmPassword("");
+
+    // // Simulate API call
+    // setTimeout(() => {
+    //   setIsLoading(false);
+    //   navigate("/");
+    // }, 1500);
   };
 
   return (

@@ -238,26 +238,6 @@ export const MalariaForm: React.FC<MalariaFormProps> = ({
         </div>
       </div>
 
-      {/* Complications */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-3">
-          Complications (if any)
-        </label>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          {complications.map((complication) => (
-            <label key={complication} className="flex items-center">
-              <input
-                type="checkbox"
-                checked={formData.complications.includes(complication)}
-                onChange={() => handleComplicationToggle(complication)}
-                className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
-              />
-              <span className="ml-2 text-sm text-gray-700">{complication}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
       {/* Submit Button */}
       <div className="flex justify-end pt-6 border-t">
         <button

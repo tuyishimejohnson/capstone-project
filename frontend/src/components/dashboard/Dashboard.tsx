@@ -107,10 +107,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
 
   useEffect(() => {
     const getUserName = async () => {
-      const response = localStorage.getItem("name"); // Replace with your API endpoint
-      if (response) {
-        setUserName(response);
-      }
+      const userToken = await localStorage.getItem("name");
+      setUserName(userToken || "");
     };
     getUserName();
   }, []);

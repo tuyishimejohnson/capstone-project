@@ -4,6 +4,7 @@ import { validateLoginForm } from "../../utils/validation";
 import type { FormErrors } from "../../types";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 interface LoginFormProps {
   onLogin: (name: string, password: string) => void;
@@ -20,6 +21,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const validationErrors = validateLoginForm(name, password);
 
     if (Object.keys(validationErrors).length > 0) {
@@ -30,17 +32,28 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
     setErrors({});
     setIsLoading(true);
 
-    // Store name in localStorage
-    localStorage.setItem("name", name);
-
-    setName("");
-    setPassword("");
+    try {
+      const res = await axios.post("http://localhost:8000/api/auth/login", {
+        name,
+        password,
+      });
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("name", name);
+      console.log("======Login successful======");
+      setName("");
+      setPassword("");
+      navigate("/dashboard");
+    } catch (error) {
+      console.log("Error while trying to login======>", error);
+    } finally {
+      setIsLoading(false);
+    }
 
     // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate("/dashboard");
-    }, 1500);
+    // setTimeout(() => {
+    //   setIsLoading(false);
+    //   navigate("/dashboard");
+    // }, 1500);
   };
 
   return (
