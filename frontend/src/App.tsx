@@ -5,6 +5,7 @@ import { Dashboard } from "./components/dashboard/Dashboard";
 import type { User } from "./types";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { PatientDataForm } from "./components/forms/PatientData";
+import { PredictionUploadPage } from "./components/dashboard/PredictionModel";
 
 type AuthView = "login" | "signup";
 
@@ -51,6 +52,7 @@ function App() {
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/add-patient" element={<PatientDataForm />} />
+          <Route path="/predict" element={<PredictionUploadPage />} />
         </Routes>
       </Router>
 

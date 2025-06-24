@@ -1,14 +1,14 @@
 import { X, FileText, Upload } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-// Prediction Upload Modal
-export const PredictionUploadModal = ({ isOpen, onClose }) => {
-  const [selectedFile, setSelectedFile] = useState(null);
+// Prediction Upload Page
+export const PredictionUploadPage = () => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
+  const navigate = useNavigate();
 
-  if (!isOpen) return null;
-
-  const handleDrag = (e) => {
+  const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     if (e.type === "dragenter" || e.type === "dragover") {
@@ -18,7 +18,7 @@ export const PredictionUploadModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
@@ -28,7 +28,7 @@ export const PredictionUploadModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleFileSelect = (e) => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
     }
@@ -42,13 +42,17 @@ export const PredictionUploadModal = ({ isOpen, onClose }) => {
         `File "${selectedFile.name}" uploaded successfully! Predictions will be processed.`
       );
       setSelectedFile(null);
-      onClose();
+      navigate("/dashboard"); // or wherever you want to go after upload
     }
   };
 
+  const handleCancel = () => {
+    navigate("/dashboard"); // or wherever you want to go on cancel
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl p-6 w-full max-w-md">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h3 className="text-xl font-semibold text-gray-900">
@@ -59,7 +63,7 @@ export const PredictionUploadModal = ({ isOpen, onClose }) => {
             </p>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleCancel}
             className="text-gray-400 hover:text-gray-600"
           >
             <X className="w-6 h-6" />
@@ -114,7 +118,7 @@ export const PredictionUploadModal = ({ isOpen, onClose }) => {
 
         <div className="flex justify-end space-x-3 mt-6">
           <button
-            onClick={onClose}
+            onClick={handleCancel}
             className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
           >
             Cancel
