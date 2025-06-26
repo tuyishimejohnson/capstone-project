@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
 import { Save, TestTube, Thermometer, Calendar } from "lucide-react";
+import axios from "axios";
 
 interface MalariaFormProps {
   onSubmit: (data: any) => void;
@@ -27,49 +29,58 @@ const complications = [
   "Shock",
 ];
 
+type FormValues = {
+  symptoms: string[];
+  testResult: "positive" | "negative" | "pending";
+  testType: "rapid_diagnostic" | "microscopy" | "clinical_diagnosis";
+  severity: "mild" | "moderate" | "severe";
+  treatmentGiven: string;
+  treatmentDate: string;
+  followUpDate: string;
+  complications: string[];
+};
+
 export const MalariaForm: React.FC<MalariaFormProps> = ({
   onSubmit,
   isSaving,
 }) => {
-  const [formData, setFormData] = useState({
-    symptoms: [] as string[],
-    testResult: "pending" as "positive" | "negative" | "pending",
-    testType: "rapid_diagnostic" as
-      | "rapid_diagnostic"
-      | "microscopy"
-      | "clinical_diagnosis",
-    severity: "mild" as "mild" | "moderate" | "severe",
-    treatmentGiven: "",
-    treatmentDate: new Date().toISOString().split("T")[0],
-    followUpDate: "",
-    complications: [] as string[],
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      symptoms: [],
+      testResult: "pending",
+      testType: "rapid_diagnostic",
+      severity: "mild",
+      treatmentGiven: "",
+      treatmentDate: new Date().toISOString().split("T")[0],
+      followUpDate: "",
+      complications: [],
+    },
   });
 
-  const handleSymptomToggle = (symptom: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      symptoms: prev.symptoms.includes(symptom)
-        ? prev.symptoms.filter((s) => s !== symptom)
-        : [...prev.symptoms, symptom],
-    }));
-  };
-
-  const handleComplicationToggle = (complication: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      complications: prev.complications.includes(complication)
-        ? prev.complications.filter((c) => c !== complication)
-        : [...prev.complications, complication],
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
+  const watchedSymptoms = watch("symptoms");
+  const watchedTreatmentGiven = watch("treatmentGiven");
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form
+      onSubmit={handleSubmit(async (data) => {
+        console.log("Submitted data=====================>", data);
+
+        try {
+          await axios.post("http://localhost:8000/api/malaria", data);
+          onSubmit(data);
+        } catch (error) {
+          console.error("Failed to submit nutrition data:", error);
+        }
+        onSubmit(data);
+      })}
+      className="space-y-6"
+    >
       <h3 className="text-lg font-semibold text-gray-900 flex items-center">
         <TestTube className="w-5 h-5 mr-2 text-blue-600" />
         Malaria Case Details
@@ -81,19 +92,39 @@ export const MalariaForm: React.FC<MalariaFormProps> = ({
           <Thermometer className="w-4 h-4 inline mr-2" />
           Symptoms Observed *
         </label>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {symptoms.map((symptom) => (
-            <label key={symptom} className="flex items-center">
-              <input
-                type="checkbox"
-                checked={formData.symptoms.includes(symptom)}
-                onChange={() => handleSymptomToggle(symptom)}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-              />
-              <span className="ml-2 text-sm text-gray-700">{symptom}</span>
-            </label>
-          ))}
-        </div>
+        <Controller
+          name="symptoms"
+          control={control}
+          rules={{ required: true, validate: (v) => v.length > 0 }}
+          render={({ field }) => (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {symptoms.map((symptom) => (
+                <label key={symptom} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value={symptom}
+                    checked={field.value?.includes(symptom)}
+                    onChange={(e) => {
+                      const selected = field.value || [];
+                      if (e.target.checked) {
+                        field.onChange([...selected, symptom]);
+                      } else {
+                        field.onChange(selected.filter((s) => s !== symptom));
+                      }
+                    }}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">{symptom}</span>
+                </label>
+              ))}
+            </div>
+          )}
+        />
+        {errors.symptoms && (
+          <span className="text-xs text-red-600">
+            Select at least one symptom.
+          </span>
+        )}
       </div>
 
       {/* Test Information */}
@@ -103,14 +134,8 @@ export const MalariaForm: React.FC<MalariaFormProps> = ({
             Test Type *
           </label>
           <select
-            value={formData.testType}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                testType: e.target.value as any,
-              }))
-            }
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            {...register("testType", { required: "Test type is required" })}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           >
             <option value="rapid_diagnostic">
               Rapid Diagnostic Test (RDT)
@@ -118,6 +143,11 @@ export const MalariaForm: React.FC<MalariaFormProps> = ({
             <option value="microscopy">Microscopy</option>
             <option value="clinical_diagnosis">Clinical Diagnosis</option>
           </select>
+          {errors.testType && (
+            <span className="text-xs text-red-600">
+              {errors.testType.message}
+            </span>
+          )}
         </div>
 
         <div>
@@ -125,19 +155,18 @@ export const MalariaForm: React.FC<MalariaFormProps> = ({
             Test Result *
           </label>
           <select
-            value={formData.testResult}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                testResult: e.target.value as any,
-              }))
-            }
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            {...register("testResult", { required: "Test result is required" })}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           >
             <option value="pending">Pending</option>
             <option value="positive">Positive</option>
             <option value="negative">Negative</option>
           </select>
+          {errors.testResult && (
+            <span className="text-xs text-red-600">
+              {errors.testResult.message}
+            </span>
+          )}
         </div>
       </div>
 
@@ -151,15 +180,8 @@ export const MalariaForm: React.FC<MalariaFormProps> = ({
             <label key={level} className="flex items-center">
               <input
                 type="radio"
-                name="severity"
                 value={level}
-                checked={formData.severity === level}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    severity: e.target.value as any,
-                  }))
-                }
+                {...register("severity", { required: true })}
                 className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
               />
               <span
@@ -176,6 +198,11 @@ export const MalariaForm: React.FC<MalariaFormProps> = ({
             </label>
           ))}
         </div>
+        {errors.severity && (
+          <span className="text-xs text-red-600">
+            Please select severity level.
+          </span>
+        )}
       </div>
 
       {/* Treatment */}
@@ -185,18 +212,16 @@ export const MalariaForm: React.FC<MalariaFormProps> = ({
             Treatment Given *
           </label>
           <textarea
-            value={formData.treatmentGiven}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                treatmentGiven: e.target.value,
-              }))
-            }
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-            placeholder="Describe treatment provided"
+            {...register("treatmentGiven", { required: true })}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
             rows={3}
-            required
+            placeholder="Describe treatment provided"
           />
+          {errors.treatmentGiven && (
+            <span className="text-xs text-red-600">
+              This field is required.
+            </span>
+          )}
         </div>
 
         <div className="space-y-4">
@@ -207,16 +232,12 @@ export const MalariaForm: React.FC<MalariaFormProps> = ({
             </label>
             <input
               type="date"
-              value={formData.treatmentDate}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  treatmentDate: e.target.value,
-                }))
-              }
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
+              {...register("treatmentDate", { required: true })}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
+            {errors.treatmentDate && (
+              <span className="text-xs text-red-600">Required field.</span>
+            )}
           </div>
 
           <div>
@@ -225,29 +246,44 @@ export const MalariaForm: React.FC<MalariaFormProps> = ({
             </label>
             <input
               type="date"
-              value={formData.followUpDate}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  followUpDate: e.target.value,
-                }))
-              }
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              {...register("followUpDate")}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
       </div>
 
-      {/* Submit Button */}
+      {/* Complications */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Complications (if any)
+        </label>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+          {complications.map((complication) => (
+            <label key={complication} className="flex items-center">
+              <input
+                type="checkbox"
+                value={complication}
+                {...register("complications")}
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <span className="ml-2 text-sm text-gray-700">{complication}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Submit */}
       <div className="flex justify-end pt-6 border-t">
         <button
           type="submit"
           disabled={
             isSaving ||
-            !formData.treatmentGiven ||
-            formData.symptoms.length === 0
+            !watchedTreatmentGiven ||
+            !watchedSymptoms ||
+            watchedSymptoms.length === 0
           }
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
         >
           {isSaving ? (
             <>
