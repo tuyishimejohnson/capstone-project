@@ -14,11 +14,11 @@ import { SuggestionCard } from "./SuggestionCard";
 import { AvailabilityModal } from "./AvailabilityModal";
 import { AvailabilityDisplay } from "./AvailabilityDisplay";
 import { healthMetrics, suggestions } from "../../data/mockData";
-import type { User, WeeklySchedule, PatientFormData } from "../../types";
+import type { User, WeeklySchedule } from "../../types";
 import { Link } from "react-router";
-
-import { PatientDataForm } from "../forms/PatientData";
 import axios from "axios";
+import { PatientDetailsModal } from "./PatientDetail";
+import { useNavigate } from "react-router-dom";
 
 interface DashboardProps {
   user: User;
@@ -62,12 +62,12 @@ const defaultSchedule: WeeklySchedule = {
 
 export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
-  const [isCHWModalOpen, setIsCHWModalOpen] = useState(false);
-
+  const [bookings, setBookings] = useState([]);
   const [schedule, setSchedule] = useState<WeeklySchedule>(defaultSchedule);
   const [userName, setUserName] = useState("");
-  const [isPatientFormOpen, setIsPatientFormOpen] = useState(false);
-  const [patientRecords, setPatientRecords] = useState<PatientFormData[]>([]);
+  const [patientDetail, setPatientDetail] = useState(false);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const navigate = useNavigate();
 
   const criticalMetrics = healthMetrics.filter(
     (m: any) => m.status === "critical"
@@ -84,12 +84,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     setSchedule(newSchedule);
     // Here you would typically save to your backend
     console.log("Schedule saved:", newSchedule);
-  };
-
-  const handlePatientDataSave = (data: PatientFormData) => {
-    setPatientRecords((prev) => [...prev, data]);
-    console.log("Patient data saved:", data);
-    // Here you would typically save to your backend
   };
 
   const getAvailabilityStatus = () => {
@@ -120,6 +114,24 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       setUserName(userToken || "");
     };
     getUserName();
+  }, []);
+
+  useEffect(() => {
+    const handleBookings = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/appointments"
+        );
+        setBookings(response.data);
+        console.log("=========================> received data", response.data);
+      } catch (error) {
+        console.log(
+          "=====+++++++++++++++++++++++0 error while receiving data",
+          error
+        );
+      }
+    };
+    handleBookings();
   }, []);
 
   return (
@@ -178,13 +190,41 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                   </div>
                 </div>
 
+                {/* Logout Button with Custom Dialog */}
                 <button
-                  onClick={onLogout}
+                  onClick={() => setShowLogoutDialog(true)}
                   className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
                   title="Logout"
                 >
                   <LogOut className="w-5 h-5" />
                 </button>
+                {showLogoutDialog && (
+                  <div className="fixed inset-0 flex items-center justify-center z-50 bg-white bg-opacity-30">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-80">
+                      <h2 className="text-lg font-semibold mb-2">Logout</h2>
+                      <p className="mb-4">Are you sure you want to logout?</p>
+                      <div className="flex justify-end space-x-2">
+                        <button
+                          className="px-4 py-2 rounded bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          onClick={() => setShowLogoutDialog(false)}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700"
+                          onClick={() => {
+                            localStorage.clear();
+                            setShowLogoutDialog(false);
+                            navigate("/");
+                            onLogout();
+                          }}
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -211,14 +251,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
           <div className="gap-7 border-gray-200 flex items-center justify-center">
             <Link
               to={"/predict"}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-sm"
+              className="flex items-center px-4 py-2 shadow-sm text-gray-600 rounded-lg hover:bg-teal-600 hover:text-white transition-all duration-200 border border-gray-300"
             >
               Predict Recommendations
             </Link>
             {/* Add Patient Data Button */}
             <Link
               to={"/add-patient"}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-sm"
+              className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:border hover:border-gray-300 hover:bg-transparent hover:text-gray-400 transition-all duration-200 shadow-sm"
             >
               <Plus className="w-4 h-4 mr-2" />
               <span className="text-sm font-medium">Add Patient</span>
@@ -229,24 +269,28 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
         {/* Availability Display */}
         {
           <AvailabilityDisplay
-            schedule={schedule}
             onEditClick={() => setIsAvailabilityModalOpen(true)}
           />
         }
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+            onClick={() => setPatientDetail(true)}
+          >
             <div className="flex items-center">
               <div className="p-2 bg-teal-100 rounded-lg">
                 <Users className="w-6 h-6 text-teal-600" />
               </div>
-              <div className="ml-4">
+              <p className="ml-4">
                 <p className="text-sm font-medium text-gray-600">
                   Total Patients
                 </p>
-                <p className="text-2xl font-bold text-gray-900">500</p>
-              </div>
+                <p className="text-2xl font-bold text-gray-900">
+                  {bookings.length}
+                </p>
+              </p>
             </div>
           </div>
 
@@ -314,6 +358,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
           <h3 className="text-lg font-semibold text-gray-900 mb-6">
             Recommended Actions
           </h3>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {suggestions.map((suggestion) => (
               <SuggestionCard key={suggestion.id} suggestion={suggestion} />
@@ -332,6 +377,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       }
 
       {/* CHW Users Component */}
+
+      <PatientDetailsModal
+        isOpen={patientDetail}
+        onClose={() => setPatientDetail(false)}
+        bookings={bookings}
+      />
 
       {/* Prediction Component */}
     </div>

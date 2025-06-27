@@ -225,7 +225,7 @@ export const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="fixed inset-0 bg-gray-200 bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-teal-600 to-teal-700 px-6 py-4 text-white">

@@ -103,14 +103,14 @@ export const PredictionUploadPage = () => {
                   type="file"
                   className="hidden"
                   onChange={handleFileSelect}
-                  accept=".csv,.xlsx,.xls,.json,.txt"
+                  accept=".csv,.json"
                 />
                 <span className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 cursor-pointer transition-colors">
                   Browse Files
                 </span>
               </label>
               <p className="text-xs text-gray-500 mt-2">
-                Supported formats: CSV, Excel, JSON, TXT
+                Supported formats: CSV, JSON
               </p>
             </div>
           )}
