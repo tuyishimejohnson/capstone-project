@@ -199,7 +199,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                   <LogOut className="w-5 h-5" />
                 </button>
                 {showLogoutDialog && (
-                  <div className="fixed inset-0 flex items-center justify-center z-50 bg-white bg-opacity-30">
+                  <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-200 bg-opacity-30">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-80">
                       <h2 className="text-lg font-semibold mb-2">Logout</h2>
                       <p className="mb-4">Are you sure you want to logout?</p>
