@@ -106,6 +106,9 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
             </p>
           </div>
         </div>
+        <button className="shadow-md hover:translate-x-0.5 transition-all duration-200 hover:transform px-3 py-3 rounded-md">
+          View registered CHW
+        </button>
         <button
           onClick={onEditClick}
           className="px-4 py-2 text-teal-600 hover:text-teal-700 hover:bg-teal-50 rounded-lg text-sm font-medium"
