@@ -1,17 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Clock, Save, Calendar } from "lucide-react";
 import type { DayAvailability, WeeklySchedule } from "../../types";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-
-interface AvailabilityModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (schedule: WeeklySchedule) => void;
-  currentSchedule: WeeklySchedule;
-}
+import type { AvailabilityModalProps } from "../../types";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const daysOfWeek = [
   { key: "monday", label: "Monday" },
@@ -31,6 +27,16 @@ export const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
 }) => {
   const [schedule, setSchedule] = useState<WeeklySchedule>(currentSchedule);
   const [isSaving, setIsSaving] = useState(false);
+  const navigate = useNavigate();
+  const [saveMessage, setSaveMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+
+  // Update local schedule when currentSchedule prop changes
+  useEffect(() => {
+    setSchedule(currentSchedule);
+  }, [currentSchedule]);
 
   if (!isOpen) return null;
 
@@ -70,14 +76,115 @@ export const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
     return dayjs(`2023-01-01 ${timeString}`);
   };
 
+  const validateSchedule = (): string | null => {
+    for (const [dayKey, dayData] of Object.entries(schedule)) {
+      if (dayData.isAvailable) {
+        if (!dayData.startTime || !dayData.endTime) {
+          return `Please set both start and end times for ${dayKey}`;
+        }
+
+        const startTime = dayjs(`2023-01-01 ${dayData.startTime}`);
+        const endTime = dayjs(`2023-01-01 ${dayData.endTime}`);
+
+        if (endTime.isBefore(startTime) || endTime.isSame(startTime)) {
+          return `End time must be after start time for ${dayKey}`;
+        }
+      }
+    }
+    return null;
+  };
+
   const handleSave = async () => {
+    // Validate schedule first
+    const validationError = validateSchedule();
+    if (validationError) {
+      setSaveMessage({ type: "error", text: validationError });
+      setTimeout(() => setSaveMessage(null), 3000);
+      return;
+    }
+
     setIsSaving(true);
-    // Simulate API call
-    setTimeout(() => {
+    setSaveMessage(null);
+
+    try {
+      // Get user data from localStorage
+      const userData = localStorage.getItem("userData");
+      if (!userData) {
+        throw new Error("Please log in again");
+      }
+
+      const user = JSON.parse(userData);
+      if (!user || !user._id) {
+        throw new Error("User information is missing. Please log in again");
+      }
+
+      const userId = user._id;
+
+      // Prepare availability data - only include available days
+      const availabilities = Object.entries(schedule)
+        .filter(
+          ([_, value]) => value.isAvailable && value.startTime && value.endTime
+        )
+        .map(([dayKey, value]) => ({
+          userId,
+          day: dayKey,
+          availableFrom: value.startTime,
+          availableTo: value.endTime,
+        }));
+
+      // Save availabilities to localStorage
+      localStorage.setItem("availabilities", JSON.stringify(availabilities));
+
+      console.log("Sending availability data:============>", {
+        availabilities,
+      });
+
+      // Send to backend
+      const response = await axios.post(
+        "http://localhost:8000/api/availability",
+        { availabilities },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          timeout: 10000, // 10 second timeout
+        }
+      );
+
+      console.log("Availability saved successfully:", response.data);
+
+      setSaveMessage({ type: "success", text: "Schedule saved successfully!" });
+
+      // Call parent onSave callback
       onSave(schedule);
+
+      // Close modal after a brief delay to show success message
+      setTimeout(() => {
+        onClose();
+        setSaveMessage(null);
+      }, 1500);
+    } catch (error) {
+      console.error("Failed to save schedule:", error);
+
+      let errorMessage = "Failed to save schedule. Please try again.";
+
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data?.message) {
+          errorMessage = error.response.data.message;
+        } else if (error.code === "ECONNABORTED") {
+          errorMessage = "Request timed out. Please check your connection.";
+        } else if (error.code === "ERR_NETWORK") {
+          errorMessage = "Network error. Please check your connection.";
+        }
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      setSaveMessage({ type: "error", text: errorMessage });
+      setTimeout(() => setSaveMessage(null), 5000);
+    } finally {
       setIsSaving(false);
-      onClose();
-    }, 1000);
+    }
   };
 
   const setQuickSchedule = (type: "weekdays" | "fullWeek" | "clear") => {
@@ -112,6 +219,7 @@ export const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
       }
     });
 
+    console.log("This is the schedule===================>>>>>", newSchedule);
     setSchedule(newSchedule);
   };
 
@@ -142,6 +250,19 @@ export const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
 
           {/* Content */}
           <div className="p-6 max-h-[calc(90vh-200px)] overflow-y-auto">
+            {/* Save Message */}
+            {saveMessage && (
+              <div
+                className={`mb-4 p-3 rounded-lg text-sm ${
+                  saveMessage.type === "success"
+                    ? "bg-green-50 text-green-700 border border-green-200"
+                    : "bg-red-50 text-red-700 border border-red-200"
+                }`}
+              >
+                {saveMessage.text}
+              </div>
+            )}
+
             {/* Quick Actions */}
             <div className="mb-6">
               <h3 className="text-sm font-medium text-gray-700 mb-3">
@@ -254,12 +375,16 @@ export const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
             <div className="flex space-x-3">
               <button
                 onClick={onClose}
-                className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                disabled={isSaving}
+                className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>
               <button
-                onClick={handleSave}
+                onClick={async () => {
+                  await handleSave();
+                  navigate("/dashboard");
+                }}
                 disabled={isSaving}
                 className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
               >

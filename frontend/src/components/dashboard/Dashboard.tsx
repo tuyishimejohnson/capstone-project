@@ -107,7 +107,16 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
 
   useEffect(() => {
     const getUserName = async () => {
-      const userToken = await localStorage.getItem("name");
+      const userDataString = localStorage.getItem("userData");
+      let userToken = "";
+      if (userDataString) {
+        try {
+          const userData = JSON.parse(userDataString);
+          userToken = userData?.name || "";
+        } catch (e) {
+          userToken = "";
+        }
+      }
       setUserName(userToken || "");
     };
     getUserName();

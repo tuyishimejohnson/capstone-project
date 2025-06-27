@@ -37,8 +37,13 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
         name,
         password,
       });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("name", name);
+
+      console.log("==================0", res);
+      //localStorage.setItem("token", res.data.token);
+      //localStorage.setItem("user", res.data.user.name);
+      //localStorage.setItem("user", res.data.user.name);
+      localStorage.setItem("userData", JSON.stringify(res.data.user));
+
       console.log("======Login successful======");
       setName("");
       setPassword("");

@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Clock, Calendar, CheckCircle2, XCircle } from "lucide-react";
-import type { WeeklySchedule } from "../../types";
+
+interface AvailabilityItem {
+  userId: string;
+  day: string;
+  availableFrom: string;
+  availableTo: string;
+}
+
+interface DaySchedule {
+  isAvailable: boolean;
+  startTime: string;
+  endTime: string;
+}
+
+interface WeeklySchedule {
+  [key: string]: DaySchedule;
+}
 
 interface AvailabilityDisplayProps {
-  schedule: WeeklySchedule;
   onEditClick: () => void;
 }
 
@@ -27,18 +42,51 @@ const formatTime = (time: string) => {
 };
 
 export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
-  schedule,
   onEditClick,
 }) => {
+  const [schedule, setSchedule] = useState<WeeklySchedule>({});
+
+  useEffect(() => {
+    const rawData = localStorage.getItem("availabilities");
+    let parsed: AvailabilityItem[] = [];
+
+    try {
+      parsed = rawData ? JSON.parse(rawData) : [];
+    } catch (e) {
+      console.error("Failed to parse localStorage availability data", e);
+    }
+
+    const formatted: WeeklySchedule = {};
+
+    daysOfWeek.forEach(({ key }) => {
+      const match = parsed.find((item) => item.day === key);
+      if (match) {
+        formatted[key] = {
+          isAvailable: true,
+          startTime: match.availableFrom,
+          endTime: match.availableTo,
+        };
+      } else {
+        formatted[key] = {
+          isAvailable: false,
+          startTime: "",
+          endTime: "",
+        };
+      }
+    });
+
+    setSchedule(formatted);
+  }, []);
+
   const availableDays = Object.values(schedule).filter(
     (day) => day.isAvailable
   );
+
   const totalHours = availableDays.reduce((total, day) => {
     if (!day.startTime || !day.endTime) return total;
     const start = new Date(`2000-01-01T${day.startTime}:00`);
     const end = new Date(`2000-01-01T${day.endTime}:00`);
-    const hours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
-    return total + hours;
+    return total + (end.getTime() - start.getTime()) / (1000 * 60 * 60);
   }, 0);
 
   return (
@@ -58,14 +106,12 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
             </p>
           </div>
         </div>
-        <div>
-          <button
-            onClick={onEditClick}
-            className="px-4 py-2 text-teal-600 hover:text-teal-700 hover:bg-teal-50 rounded-lg transition-all duration-200 text-sm font-medium"
-          >
-            Edit Schedule
-          </button>
-        </div>
+        <button
+          onClick={onEditClick}
+          className="px-4 py-2 text-teal-600 hover:text-teal-700 hover:bg-teal-50 rounded-lg text-sm font-medium"
+        >
+          Edit Schedule
+        </button>
       </div>
 
       {/* Weekly Schedule Grid */}
@@ -77,7 +123,7 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
           return (
             <div
               key={key}
-              className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+              className={`p-4 rounded-lg border-2 ${
                 isAvailable
                   ? "border-green-200 bg-green-50 hover:border-green-300"
                   : "border-gray-200 bg-gray-50 hover:border-gray-300"
@@ -155,7 +201,7 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
                 Next Available:{" "}
                 {(() => {
                   const today = new Date().getDay();
-                  const dayNames = [
+                  const dayKeys = [
                     "sunday",
                     "monday",
                     "tuesday",
@@ -165,20 +211,19 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
                     "saturday",
                   ];
 
-                  // Find next available day
                   for (let i = 0; i < 7; i++) {
                     const dayIndex = (today + i) % 7;
-                    const dayKey = dayNames[dayIndex];
-                    const daySchedule = schedule[dayKey];
+                    const dayKey = dayKeys[dayIndex];
+                    const scheduleItem = schedule[dayKey];
 
-                    if (daySchedule?.isAvailable && daySchedule.startTime) {
-                      const dayLabel = daysOfWeek.find(
+                    if (scheduleItem?.isAvailable && scheduleItem.startTime) {
+                      const label = daysOfWeek.find(
                         (d) => d.key === dayKey
                       )?.label;
-                      const timeLabel = formatTime(daySchedule.startTime);
+                      const timeLabel = formatTime(scheduleItem.startTime);
                       return i === 0
                         ? `Today at ${timeLabel}`
-                        : `${dayLabel} at ${timeLabel}`;
+                        : `${label} at ${timeLabel}`;
                     }
                   }
                   return "No upcoming availability";
