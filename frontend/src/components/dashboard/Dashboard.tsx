@@ -67,6 +67,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   const [userName, setUserName] = useState("");
   const [patientDetail, setPatientDetail] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+
   const navigate = useNavigate();
 
   const criticalMetrics = healthMetrics.filter(
@@ -232,9 +233,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
           </div>
         </div>
       </header>
-
       {/* Main Content */}
-
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-12">
         {/* Welcome Section */}
         <div className="mb-8 flex justify-between">
@@ -377,9 +376,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
           currentSchedule={schedule}
         />
       }
-
       {/* CHW Users Component */}
-
       <PatientDetailsModal
         isOpen={patientDetail}
         onClose={() => setPatientDetail(false)}
