@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, Clock, Save, Calendar } from "lucide-react";
-import type { DayAvailability, WeeklySchedule } from "../../types";
+import type { WeeklySchedule } from "../../types";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";

@@ -60,7 +60,7 @@ const defaultSchedule: WeeklySchedule = {
   sunday: { day: "sunday", isAvailable: false, startTime: "", endTime: "" },
 };
 
-export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [schedule, setSchedule] = useState<WeeklySchedule>(defaultSchedule);
