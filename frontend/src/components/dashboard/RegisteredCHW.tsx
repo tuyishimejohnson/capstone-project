@@ -21,9 +21,11 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
   }
 
   const [showUsers, setShowUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const getAllUsers = async () => {
+      setLoading(true);
       try {
         const response = await axios.get("http://localhost:8000/api/users");
         setShowUsers(response.data);
@@ -36,6 +38,10 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
           "=====+++++++++++++++++++++++0 error while receiving data",
           error
         );
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
       }
     };
     getAllUsers();
@@ -58,7 +64,11 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
           </button>
         </div>
         <div className="p-6">
-          {showUsers.length === 0 ? (
+          {loading ? (
+            <div className="flex justify-center items-center py-8">
+              <span className="text-gray-500">Loading...</span>
+            </div>
+          ) : showUsers.length === 0 ? (
             <p className="text-gray-500">No registered users available.</p>
           ) : (
             <div>
@@ -70,7 +80,6 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
                 <div className="flex-1 p-2">Sector</div>
                 <div className="flex-1 p-2">Cell</div>
                 <div className="flex-1 p-2">Village</div>
-                {/* Add more headers here if User has more properties */}
               </div>
               {/* Data Rows */}
               {showUsers.map((user, index) => (
@@ -88,7 +97,6 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
                   <div className="flex-1 p-2">{user.sector}</div>
                   <div className="flex-1 p-2">{user.cell}</div>
                   <div className="flex-1 p-2">{user.village}</div>
-                  {/* Add more cells here if User has more properties */}
                 </div>
               ))}
             </div>
