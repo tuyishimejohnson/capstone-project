@@ -99,7 +99,10 @@ export const NutritionForm: React.FC<NutritionFormProps> = ({
     };
 
     try {
-      await axios.post("http://localhost:8000/api/nutrition", parsedData);
+      await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/nutrition`,
+        parsedData
+      );
       onSubmit(parsedData);
     } catch (error) {
       console.error("Failed to submit nutrition data:", error);

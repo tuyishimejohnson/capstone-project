@@ -63,7 +63,7 @@ export const SignupForm: React.FC<SignupFormProps> = () => {
     setIsLoading(true);
 
     try {
-      await axios.post("http://localhost:8000/api/auth/signup", {
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/auth/signup`, {
         name,
         phone,
         district,

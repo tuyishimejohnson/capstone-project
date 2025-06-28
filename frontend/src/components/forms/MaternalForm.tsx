@@ -91,7 +91,10 @@ export const MaternalForm: React.FC<MaternalFormProps> = ({
       },
     };
     try {
-      await axios.post("http://localhost:8000/api/maternal", submitData);
+      await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/maternal`,
+        submitData
+      );
       onSubmit(submitData);
     } catch (error) {
       console.error("Failed to submit maternal data:", error);

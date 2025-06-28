@@ -33,10 +33,13 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
     setIsLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:8000/api/auth/login", {
-        name,
-        password,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
+        {
+          name,
+          password,
+        }
+      );
 
       console.log("==================0", res);
       //localStorage.setItem("token", res.data.token);

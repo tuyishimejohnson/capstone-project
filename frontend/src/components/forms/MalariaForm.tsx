@@ -72,7 +72,10 @@ export const MalariaForm: React.FC<MalariaFormProps> = ({
         console.log("Submitted data=====================>", data);
 
         try {
-          await axios.post("http://localhost:8000/api/malaria", data);
+          await axios.post(
+            `${import.meta.env.VITE_BASE_URL}/api/malaria`,
+            data
+          );
           onSubmit(data);
         } catch (error) {
           console.error("Failed to submit nutrition data:", error);
