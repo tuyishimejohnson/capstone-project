@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { X } from "lucide-react";
 
 interface Booking {
@@ -28,7 +28,7 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
   if (!isOpen) return null;
 
   const headers = [
-    "CHW Name",
+    "Patient Name",
     "Phone",
     "Date",
     "District",
@@ -37,6 +37,8 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
     "Village",
     "Status",
   ];
+
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="fixed inset-0 bg-gray-200 bg-opacity-40 flex justify-center items-center z-50">

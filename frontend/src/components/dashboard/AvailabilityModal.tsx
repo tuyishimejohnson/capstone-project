@@ -141,7 +141,7 @@ export const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
 
       // Send to backend
       const response = await axios.post(
-        "http://localhost:8000/api/availability",
+        `${import.meta.env.VITE_BASE_URL}/api/availability`,
         { availabilities },
         {
           headers: {

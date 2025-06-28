@@ -121,7 +121,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     const handleBookings = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/appointments"
+          `${import.meta.env.VITE_BASE_URL}/api/appointments`
         );
         setBookings(response.data);
         console.log("=========================> received data", response.data);

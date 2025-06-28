@@ -27,7 +27,9 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
     const getAllUsers = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("http://localhost:8000/api/users");
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/api/users`
+        );
         setShowUsers(response.data);
         console.log(
           "=========================> received users data data",
@@ -54,7 +56,7 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
           className="flex justify-between items-center mb-0 px-6 py-4 rounded-t-lg"
           style={{ backgroundColor: "#0d9488" }}
         >
-          <h2 className="text-xl font-semibold text-white">Available Users</h2>
+          <h2 className="text-xl font-semibold text-white">Available CHWs</h2>
           <button
             onClick={onClose}
             className="text-white hover:text-gray-200"
