@@ -50,7 +50,7 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-gray-200 bg-opacity-40 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-opacity-50 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
       <div className="bg-white w-full mx-20 rounded-lg shadow-lg overflow-y-auto max-h-[80vh]">
         <div
           className="flex justify-between items-center mb-0 px-6 py-4 rounded-t-lg"
