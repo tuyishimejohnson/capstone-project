@@ -232,9 +232,7 @@ export const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Calendar className="w-6 h-6 mr-3" />
-                <h2 className="text-xl font-bold font-changed">
-                  Set Your Availability
-                </h2>
+                <h2 className="text-xl font-bold">Set Your Availability</h2>
               </div>
               <button
                 onClick={onClose}

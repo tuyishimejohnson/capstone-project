@@ -19,6 +19,7 @@ import { Link } from "react-router";
 import axios from "axios";
 import { PatientDetailsModal } from "./PatientDetail";
 import { useNavigate } from "react-router-dom";
+import PatientDataForm from "../forms/PatientData";
 
 interface DashboardProps {
   user: User;
@@ -67,6 +68,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [userName, setUserName] = useState("");
   const [patientDetail, setPatientDetail] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   const navigate = useNavigate();
 
@@ -257,13 +259,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               Predict Recommendations
             </Link>
             {/* Add Patient Data Button */}
-            <Link
-              to={"/add-patient"}
+            <button
+              onClick={() => setShowForm(true)}
               className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:border hover:border-gray-300 hover:bg-transparent hover:text-gray-400 transition-all duration-200 shadow-sm"
             >
               <Plus className="w-4 h-4 mr-2" />
               <span className="text-sm font-medium">Add Patient</span>
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -384,6 +386,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       />
 
       {/* Prediction Component */}
+
+      <PatientDataForm
+        isOpen={showForm}
+        onClose={() => setShowForm(false)}
+        currentUser={userName}
+      />
     </div>
   );
 };
