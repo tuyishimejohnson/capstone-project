@@ -238,7 +238,7 @@ export const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
               </div>
               <button
                 onClick={onClose}
-                className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+                className="p-2 hover:text-gray-200 hover:bg-opacity-20 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
