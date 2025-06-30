@@ -39,6 +39,7 @@ export const SignupForm: React.FC<SignupFormProps> = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [specialization, setSpecialization] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -52,7 +53,8 @@ export const SignupForm: React.FC<SignupFormProps> = () => {
       district,
       sector,
       cell,
-      village
+      village,
+      specialization
     );
 
     if (Object.keys(validationErrors).length > 0) {
@@ -70,6 +72,7 @@ export const SignupForm: React.FC<SignupFormProps> = () => {
         sector,
         cell,
         village,
+        specialization,
         password,
       });
       console.log("==========signup successful============");
@@ -79,6 +82,7 @@ export const SignupForm: React.FC<SignupFormProps> = () => {
       setSector("");
       setCell("");
       setVillage("");
+      setSpecialization("");
       setPassword("");
       setConfirmPassword("");
       navigate("/");
@@ -87,22 +91,6 @@ export const SignupForm: React.FC<SignupFormProps> = () => {
     } finally {
       setIsLoading(false);
     }
-
-    // Reset form fields
-    // setName("");
-    // setPhone("");
-    // setDistrict("");
-    // setSector("");
-    // setCell("");
-    // setVillage("");
-    // setPassword("");
-    // setConfirmPassword("");
-
-    // // Simulate API call
-    // setTimeout(() => {
-    //   setIsLoading(false);
-    //   navigate("/");
-    // }, 1500);
   };
 
   return (
@@ -275,6 +263,35 @@ export const SignupForm: React.FC<SignupFormProps> = () => {
               </div>
               {errors.village && (
                 <p className="mt-1 text-sm text-red-600">{errors.village}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="specialization"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Specialization
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  id="specialization"
+                  value={specialization}
+                  onChange={(e) => setSpecialization(e.target.value)}
+                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all ${
+                    errors.specialization
+                      ? "border-red-300 bg-red-50"
+                      : "border-gray-300"
+                  }`}
+                  placeholder="What are you specialized in?"
+                />
+              </div>
+              {errors.specialization && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.specialization}
+                </p>
               )}
             </div>
 

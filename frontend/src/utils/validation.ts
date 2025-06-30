@@ -40,7 +40,8 @@ export const validateSignupForm = (
   district: string,
   sector: string,
   cell: string,
-  village: string
+  village: string,
+  specialization: string
 ): FormErrors => {
   const errors: FormErrors = {};
 
