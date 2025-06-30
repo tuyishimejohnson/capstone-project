@@ -48,20 +48,21 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
       localStorage.setItem("userData", JSON.stringify(res.data.user));
 
       console.log("======Login successful======");
-      setName("");
-      setPassword("");
-      navigate("/dashboard");
+      setTimeout(() => {
+        setName("");
+        setPassword("");
+        navigate("/dashboard");
+      }, 1000);
     } catch (error) {
       console.log("Error while trying to login======>", error);
+      if (axios.isAxiosError(error) && error.response?.status === 400) {
+        setErrors({
+          password: "Incorrect name or password. Please try again.",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
-
-    // Simulate API call
-    // setTimeout(() => {
-    //   setIsLoading(false);
-    //   navigate("/dashboard");
-    // }, 1500);
   };
 
   return (
