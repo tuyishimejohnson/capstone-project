@@ -63,7 +63,7 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
           <h2 className="text-xl font-semibold text-white">Patient Details</h2>
           <div className="flex gap-5">
             <button
-              className="text-white flex border border-gray-300 rounded-xl px-2 py-1"
+              className="text-teal-700 flex  bg-teal-200 rounded-md px-2 py-1"
               onClick={() => getFilteredPatients()}
             >
               Filter your patients <Funnel className="" />
@@ -92,27 +92,65 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
                 ))}
               </div>
               {/* Data Rows */}
-              {(filteredBookings ?? bookings).map((booking, index) => (
-                <div
-                  key={index}
-                  className={`flex items-center ${
-                    index !== (filteredBookings ?? bookings).length - 1
-                      ? "border-b border-gray-200"
-                      : ""
-                  } hover:bg-gray-50`}
-                >
-                  <div className="flex-1 p-2">{booking.patientName}</div>
-                  <div className="flex-1 p-2">{booking.patientPhoneNumber}</div>
-                  <div className="flex-1 p-2">
-                    {new Date(booking.appointmentDate).toLocaleString()}
+              {filteredBookings !== null ? (
+                filteredBookings.length === 0 ? (
+                  <div className="text-gray-500 p-4 text-center">
+                    No patients booked you
                   </div>
-                  <div className="flex-1 p-2">{booking.district}</div>
-                  <div className="flex-1 p-2">{booking.sector}</div>
-                  <div className="flex-1 p-2">{booking.cell}</div>
-                  <div className="flex-1 p-2">{booking.village}</div>
-                  <div className="flex-1 p-2 capitalize">{booking.status}</div>
-                </div>
-              ))}
+                ) : (
+                  filteredBookings.map((booking, index) => (
+                    <div
+                      key={index}
+                      className={`flex items-center ${
+                        index !== filteredBookings.length - 1
+                          ? "border-b border-gray-200"
+                          : ""
+                      } hover:bg-gray-50`}
+                    >
+                      <div className="flex-1 p-2">{booking.patientName}</div>
+                      <div className="flex-1 p-2">
+                        {booking.patientPhoneNumber}
+                      </div>
+                      <div className="flex-1 p-2">
+                        {new Date(booking.appointmentDate).toLocaleString()}
+                      </div>
+                      <div className="flex-1 p-2">{booking.district}</div>
+                      <div className="flex-1 p-2">{booking.sector}</div>
+                      <div className="flex-1 p-2">{booking.cell}</div>
+                      <div className="flex-1 p-2">{booking.village}</div>
+                      <div className="flex-1 p-2 capitalize">
+                        {booking.status}
+                      </div>
+                    </div>
+                  ))
+                )
+              ) : (
+                bookings.map((booking, index) => (
+                  <div
+                    key={index}
+                    className={`flex items-center ${
+                      index !== bookings.length - 1
+                        ? "border-b border-gray-200"
+                        : ""
+                    } hover:bg-gray-50`}
+                  >
+                    <div className="flex-1 p-2">{booking.patientName}</div>
+                    <div className="flex-1 p-2">
+                      {booking.patientPhoneNumber}
+                    </div>
+                    <div className="flex-1 p-2">
+                      {new Date(booking.appointmentDate).toLocaleString()}
+                    </div>
+                    <div className="flex-1 p-2">{booking.district}</div>
+                    <div className="flex-1 p-2">{booking.sector}</div>
+                    <div className="flex-1 p-2">{booking.cell}</div>
+                    <div className="flex-1 p-2">{booking.village}</div>
+                    <div className="flex-1 p-2 capitalize">
+                      {booking.status}
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           )}
         </div>
