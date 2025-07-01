@@ -10,15 +10,7 @@ export const healthMetrics: HealthMetric[] = [
     status: "good",
     trend: "up",
   },
-  {
-    id: "2",
-    title: "High-Risk Pregnancies",
-    value: 24,
-    total: 156,
-    percentage: 15.4,
-    status: "warning",
-    trend: "stable",
-  },
+
   {
     id: "3",
     title: "Malaria Cases (This Month)",
@@ -33,7 +25,7 @@ export const healthMetrics: HealthMetric[] = [
     title: "Children with Malnutrition",
     value: 18,
     total: 320,
-    percentage: 5.6,
+    percentage: 90.6,
     status: "critical",
     trend: "up",
   },
@@ -42,18 +34,9 @@ export const healthMetrics: HealthMetric[] = [
     title: "Vaccination Coverage",
     value: 298,
     total: 320,
-    percentage: 93.1,
+    percentage: 40.1,
     status: "good",
     trend: "up",
-  },
-  {
-    id: "6",
-    title: "Maternal Deaths",
-    value: 2,
-    total: 156,
-    percentage: 1.3,
-    status: "critical",
-    trend: "stable",
   },
 ];
 

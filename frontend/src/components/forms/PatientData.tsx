@@ -8,14 +8,14 @@ import type { PatientFormData } from "../../types";
 import { validatePatientForm } from "../../utils/patientValidation";
 
 interface PatientDataFormProps {
-  // onSave: (data: PatientFormData) => void;
+  onSave: (data: PatientFormData) => void;
   isOpen: boolean;
   onClose: () => void;
   currentUser: string;
 }
 
 export const PatientDataForm: React.FC<PatientDataFormProps> = ({
-  // onSave,
+  onSave,
   isOpen,
   onClose,
   currentUser,
@@ -76,7 +76,7 @@ export const PatientDataForm: React.FC<PatientDataFormProps> = ({
     };
 
     setTimeout(() => {
-      //onSave(baseRecord as PatientFormData);
+      onSave(baseRecord);
       setIsSaving(false);
       navigate("/dashboard");
     }, 1500);
@@ -116,7 +116,7 @@ export const PatientDataForm: React.FC<PatientDataFormProps> = ({
                   : "bg-white text-gray-600 hover:bg-gray-100"
               }`}
             >
-              🦟 Malaria Case
+              Malaria Case
             </button>
             <button
               onClick={() => handleFormTypeChange("nutrition")}
@@ -126,7 +126,7 @@ export const PatientDataForm: React.FC<PatientDataFormProps> = ({
                   : "bg-white text-gray-600 hover:bg-gray-100"
               }`}
             >
-              🍎 Child Nutrition
+              Child Nutrition
             </button>
             <button
               onClick={() => handleFormTypeChange("maternal")}
@@ -136,7 +136,7 @@ export const PatientDataForm: React.FC<PatientDataFormProps> = ({
                   : "bg-white text-gray-600 hover:bg-gray-100"
               }`}
             >
-              🤱 Maternal Health
+              Maternal Health
             </button>
           </div>
         </div>
