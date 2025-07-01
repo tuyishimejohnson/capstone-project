@@ -63,10 +63,10 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
           <h2 className="text-xl font-semibold text-white">Patient Details</h2>
           <div className="flex gap-5">
             <button
-              className="text-teal-700 flex  bg-teal-200 rounded-md px-2 py-1"
+              className="text-teal-700 flex shadow-md shadow-gray-500 bg-teal-200 rounded-md px-2 py-1"
               onClick={() => getFilteredPatients()}
             >
-              Filter your patients <Funnel className="" />
+              Your patients <Funnel className="" />
             </button>
 
             <button

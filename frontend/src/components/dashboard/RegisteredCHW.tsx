@@ -18,6 +18,7 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
     sector: string;
     cell: string;
     village: string;
+    specialization: string;
   }
 
   const [showUsers, setShowUsers] = useState<User[]>([]);
@@ -49,6 +50,9 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
     getAllUsers();
   }, []);
 
+  const userDataString = localStorage.getItem("userData");
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+
   return (
     <div className="fixed inset-0 bg-opacity-50 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
       <div className="bg-white w-full mx-20 rounded-lg shadow-lg overflow-y-auto max-h-[80vh]">
@@ -71,7 +75,7 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
               <span className="text-gray-500">Loading...</span>
             </div>
           ) : showUsers.length === 0 ? (
-            <p className="text-gray-500">No registered users available.</p>
+            <p className="text-gray-500">No registered CHWs available.</p>
           ) : (
             <div>
               {/* Header Row */}
@@ -82,25 +86,38 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
                 <div className="flex-1 p-2">Sector</div>
                 <div className="flex-1 p-2">Cell</div>
                 <div className="flex-1 p-2">Village</div>
+                <div className="flex-1 p-2">Specialization</div>
               </div>
               {/* Data Rows */}
-              {showUsers.map((user, index) => (
-                <div
-                  key={index}
-                  className={`flex items-center ${
-                    index !== showUsers.length - 1
-                      ? "border-b border-gray-200"
-                      : ""
-                  } hover:bg-gray-50`}
-                >
-                  <div className="flex-1 p-2">{user.name}</div>
-                  <div className="flex-1 p-2">{user.phone}</div>
-                  <div className="flex-1 p-2">{user.district}</div>
-                  <div className="flex-1 p-2">{user.sector}</div>
-                  <div className="flex-1 p-2">{user.cell}</div>
-                  <div className="flex-1 p-2">{user.village}</div>
-                </div>
-              ))}
+              {showUsers.map((user, index) => {
+                const isCurrentUser =
+                  userData &&
+                  userData.name === user.name &&
+                  userData.phone === user.phone;
+                return (
+                  <div
+                    key={index}
+                    className={`flex items-center ${
+                      index !== showUsers.length - 1
+                        ? "border-b border-gray-200"
+                        : ""
+                    } hover:bg-gray-50`}
+                  >
+                    <div className="flex-1 p-2">
+                      {user.name}
+                      {isCurrentUser && (
+                        <span className="text-teal-600">(You)</span>
+                      )}
+                    </div>
+                    <div className="flex-1 p-2">{user.phone}</div>
+                    <div className="flex-1 p-2">{user.district}</div>
+                    <div className="flex-1 p-2">{user.sector}</div>
+                    <div className="flex-1 p-2">{user.cell}</div>
+                    <div className="flex-1 p-2">{user.village}</div>
+                    <div className="flex-1 p-2">{user.specialization}</div>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
