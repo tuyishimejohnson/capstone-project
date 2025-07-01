@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { X } from "lucide-react";
+import { X, Funnel } from "lucide-react";
 
 interface Booking {
   appointmentDate: string;
   chwId: string;
-  chwName: string;
+  userName: string;
   patientPhoneNumber: string;
+  patientName: string;
   district: string;
   sector: string;
   cell: string;
@@ -38,6 +39,20 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
     "Status",
   ];
 
+  const [filteredBookings, setFilteredBookings] = useState<Booking[] | null>(
+    null
+  );
+
+  const getFilteredPatients = () => {
+    const userDataString = localStorage.getItem("userData");
+    const userData = userDataString ? JSON.parse(userDataString) : null;
+    setFilteredBookings(
+      bookings.filter(
+        (booking) => userData && booking.userName === userData.name
+      )
+    );
+  };
+
   return (
     <div className="fixed inset-0 bg-opacity-50 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
       <div className="bg-white w-full mx-20 rounded-lg shadow-lg overflow-y-auto max-h-[80vh]">
@@ -46,9 +61,21 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
           style={{ backgroundColor: "#0d9488" }}
         >
           <h2 className="text-xl font-semibold text-white">Patient Details</h2>
-          <button onClick={onClose} className="text-white hover:text-gray-200">
-            <X />
-          </button>
+          <div className="flex gap-5">
+            <button
+              className="text-white flex border border-gray-300 rounded-xl px-2 py-1"
+              onClick={() => getFilteredPatients()}
+            >
+              Filter your patients <Funnel className="" />
+            </button>
+
+            <button
+              onClick={onClose}
+              className="text-white hover:text-gray-200"
+            >
+              <X />
+            </button>
+          </div>
         </div>
 
         <div className="p-6">
@@ -65,16 +92,16 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
                 ))}
               </div>
               {/* Data Rows */}
-              {bookings.map((booking, index) => (
+              {(filteredBookings ?? bookings).map((booking, index) => (
                 <div
                   key={index}
                   className={`flex items-center ${
-                    index !== bookings.length - 1
+                    index !== (filteredBookings ?? bookings).length - 1
                       ? "border-b border-gray-200"
                       : ""
                   } hover:bg-gray-50`}
                 >
-                  <div className="flex-1 p-2">{booking.chwName}</div>
+                  <div className="flex-1 p-2">{booking.patientName}</div>
                   <div className="flex-1 p-2">{booking.patientPhoneNumber}</div>
                   <div className="flex-1 p-2">
                     {new Date(booking.appointmentDate).toLocaleString()}
