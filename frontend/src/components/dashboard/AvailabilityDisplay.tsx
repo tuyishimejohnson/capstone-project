@@ -109,7 +109,7 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
           </div>
         </div>
         <button
-          className="shadow-md hover:translate-x-0.5 transition-all duration-200 hover:transform px-3 py-3 rounded-md"
+          className="shadow-md text-gray-600 border border-gray-300 hover:translate-x-0.5 transition-all duration-200 hover:transform px-3 py-3 rounded-md"
           onClick={() => setShowRegistered(true)}
         >
           View registered CHW

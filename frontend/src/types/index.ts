@@ -11,7 +11,6 @@ export interface HealthMetric {
   total: number;
   percentage: number;
   status: "critical" | "warning" | "good";
-  trend: "up" | "down" | "stable";
 }
 
 export interface Suggestion {

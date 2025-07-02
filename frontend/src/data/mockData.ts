@@ -8,7 +8,6 @@ export const healthMetrics: HealthMetric[] = [
     total: 200,
     percentage: 78,
     status: "good",
-    trend: "up",
   },
 
   {
@@ -18,7 +17,6 @@ export const healthMetrics: HealthMetric[] = [
     total: 1200,
     percentage: 3.5,
     status: "warning",
-    trend: "down",
   },
   {
     id: "4",
@@ -27,16 +25,6 @@ export const healthMetrics: HealthMetric[] = [
     total: 320,
     percentage: 90.6,
     status: "critical",
-    trend: "up",
-  },
-  {
-    id: "5",
-    title: "Vaccination Coverage",
-    value: 298,
-    total: 320,
-    percentage: 40.1,
-    status: "good",
-    trend: "up",
   },
 ];
 
