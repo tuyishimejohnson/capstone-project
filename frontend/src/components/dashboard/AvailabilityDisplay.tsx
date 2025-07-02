@@ -109,7 +109,7 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
           </div>
         </div>
         <button
-          className="shadow-md text-gray-600 border border-gray-300 hover:translate-x-0.5 transition-all duration-200 hover:transform px-3 py-3 rounded-md"
+          className="px-4 py-2 text-teal-600 hover:text-teal-700 hover:bg-teal-50 rounded-lg text-sm font-medium"
           onClick={() => setShowRegistered(true)}
         >
           View registered CHW
@@ -117,7 +117,7 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
 
         <button
           onClick={onEditClick}
-          className="px-4 py-2 text-teal-600 hover:text-teal-700 hover:bg-teal-50 rounded-lg text-sm font-medium"
+          className="shadow-md text-gray-600 border border-gray-300 hover:translate-x-0.5 transition-all duration-200 hover:transform px-5 py-2 rounded-md"
         >
           Edit Schedule
         </button>

@@ -37,12 +37,23 @@ type NutritionFormFields = {
   caregiverEducation: boolean;
   referralMade: boolean;
   referralLocation: string;
+  id?: string;
+  patientId: string;
+  patientName: string;
+  age: number;
+  gender: string;
+  address: string;
+  contactNumber: string;
+  notes: string;
 };
 
-export const NutritionForm: React.FC<NutritionFormProps> = ({
-  onSubmit,
-  isSaving,
-}) => {
+export const NutritionForm: React.FC<
+  NutritionFormProps & {
+    patientData: any;
+    defaultValues?: Partial<NutritionFormFields>;
+  }
+> = ({ onSubmit, isSaving, defaultValues = {}, patientData }) => {
+  console.log(patientData.patientName);
   const {
     register,
     handleSubmit,
@@ -62,6 +73,14 @@ export const NutritionForm: React.FC<NutritionFormProps> = ({
       caregiverEducation: false,
       referralMade: false,
       referralLocation: "",
+      patientId: "",
+      patientName: "",
+      age: 0,
+      gender: "",
+      address: "",
+      contactNumber: "",
+      notes: "",
+      ...defaultValues,
     },
   });
 
@@ -90,23 +109,31 @@ export const NutritionForm: React.FC<NutritionFormProps> = ({
   const nutritionStatus = watch("nutritionStatus");
 
   const onFormSubmit = async (data: NutritionFormFields) => {
-    const parsedData = {
+    const dataToSubmit = {
       ...data,
-      childAge: parseInt(data.childAge),
-      weight: parseFloat(data.weight),
-      height: parseFloat(data.height),
-      muac: parseFloat(data.muac),
+      patientName: patientData?.patientName,
+      age: patientData?.age,
+      gender: patientData?.gender,
+      patientId: patientData?.patientId,
+      address: patientData?.address,
+      contactNumber: patientData?.contactNumber,
+      notes: patientData?.notes,
     };
 
+    console.log(
+      "Submitted data==========================================>",
+      dataToSubmit
+    );
     try {
       await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/nutrition`,
-        parsedData
+        dataToSubmit
       );
-      onSubmit(parsedData);
+      onSubmit(dataToSubmit);
     } catch (error) {
       console.error("Failed to submit nutrition data:", error);
     }
+    onSubmit(dataToSubmit);
   };
 
   return (

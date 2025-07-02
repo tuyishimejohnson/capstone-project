@@ -394,7 +394,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         onSave={(data) => {
           // handle save logic here, e.g., send data to backend or update state
           setShowForm(false);
-          console.log("Patient data saved:", data);
+          console.log("Patient saved data........>>>>>>>>>>>>>>>>>>>>>.", data);
         }}
       />
     </div>

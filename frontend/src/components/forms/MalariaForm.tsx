@@ -30,6 +30,13 @@ const complications = [
 ];
 
 type FormValues = {
+  id?: string;
+  patientId: string;
+  patientName: string;
+  age: number;
+  gender: string;
+  address: string;
+  contactNumber: string;
   symptoms: string[];
   testResult: "positive" | "negative" | "pending";
   testType: "rapid_diagnostic" | "microscopy" | "clinical_diagnosis";
@@ -38,12 +45,20 @@ type FormValues = {
   treatmentDate: string;
   followUpDate: string;
   complications: string[];
+  notes: string;
+  recordType?: string;
+  recordedBy?: string;
+  dateRecorded?: string;
+  status?: string;
 };
 
-export const MalariaForm: React.FC<MalariaFormProps> = ({
-  onSubmit,
-  isSaving,
-}) => {
+export const MalariaForm: React.FC<
+  MalariaFormProps & {
+    patientData: any;
+    defaultValues?: Partial<FormValues>;
+  }
+> = ({ onSubmit, isSaving, defaultValues = {}, patientData }) => {
+  //console.log(patientData.patientName);
   const {
     register,
     handleSubmit,
@@ -60,6 +75,14 @@ export const MalariaForm: React.FC<MalariaFormProps> = ({
       treatmentDate: new Date().toISOString().split("T")[0],
       followUpDate: "",
       complications: [],
+      patientId: "",
+      patientName: "",
+      age: 0,
+      gender: "",
+      address: "",
+      contactNumber: "",
+      notes: "",
+      ...defaultValues,
     },
   });
 
@@ -69,18 +92,28 @@ export const MalariaForm: React.FC<MalariaFormProps> = ({
   return (
     <form
       onSubmit={handleSubmit(async (data) => {
-        console.log("Submitted data=====================>", data);
+        const dataToSubmit = {
+          ...data,
+          patientName: patientData?.patientName,
+          age: patientData?.age,
+          gender: patientData?.gender,
+          patientId: patientData.patientId,
+          address: patientData?.address,
+          contactNumber: patientData?.contactNumber,
+          notes: patientData?.notes,
+        };
+        console.log("Submitted data=====================>", dataToSubmit);
 
         try {
           await axios.post(
             `${import.meta.env.VITE_BASE_URL}/api/malaria`,
-            data
+            dataToSubmit
           );
-          onSubmit(data);
+          onSubmit(dataToSubmit);
         } catch (error) {
           console.error("Failed to submit nutrition data:", error);
         }
-        onSubmit(data);
+        onSubmit(dataToSubmit);
       })}
       className="space-y-6"
     >

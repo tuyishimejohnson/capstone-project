@@ -10,8 +10,14 @@ interface MaternalFormProps {
 }
 
 interface FormData {
-  name: string;
+  id?: string;
+  patientName: string;
   age: number;
+  gender: string;
+  patientId: string;
+  address: string;
+  contactNumber: string;
+  notes: string;
   pregnancyStatus: "pregnant" | "postpartum";
   gestationWeeks: string;
   gravida: string;
@@ -49,14 +55,19 @@ const complications = [
   "Placental problems",
 ];
 
-export const MaternalForm: React.FC<MaternalFormProps> = ({
-  onSubmit,
-  isSaving,
-}) => {
+export const MaternalForm: React.FC<
+  MaternalFormProps & { patientData: any; defaultValues?: Partial<FormData> }
+> = ({ onSubmit, isSaving, defaultValues = {}, patientData }) => {
+  console.log(patientData.patientName);
   const { control, handleSubmit, setValue, watch } = useForm<FormData>({
     defaultValues: {
-      name: "",
-      age: undefined,
+      patientName: "",
+      age: 0,
+      gender: "",
+      patientId: "",
+      address: "",
+      contactNumber: "",
+      notes: "",
       pregnancyStatus: "pregnant",
       gestationWeeks: "",
       gravida: "",
@@ -70,12 +81,23 @@ export const MaternalForm: React.FC<MaternalFormProps> = ({
         hemoglobin: "",
       },
       nextVisitDate: "",
+      ...defaultValues,
     },
   });
 
   const onSubmitForm = async (data: FormData) => {
-    const submitData = {
+    // You need to add these fields to your FormData interface and form defaultValues:
+    // patientName, gender, patientId, address, contactNumber, notes
+
+    const dataToSubmit = {
       ...data,
+      patientName: patientData?.patientName,
+      age: patientData?.age,
+      gender: patientData?.gender,
+      patientId: patientData?.patientId,
+      address: patientData?.address,
+      contactNumber: patientData?.contactNumber,
+      notes: patientData?.notes,
       gestationWeeks: data.gestationWeeks
         ? parseInt(data.gestationWeeks)
         : undefined,
@@ -90,16 +112,20 @@ export const MaternalForm: React.FC<MaternalFormProps> = ({
           : undefined,
       },
     };
+
+    console.log("Submitted data=====================>", dataToSubmit);
+
     try {
       await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/maternal`,
-        submitData
+        dataToSubmit
       );
-      onSubmit(submitData);
+      onSubmit(dataToSubmit);
     } catch (error) {
       console.error("Failed to submit maternal data:", error);
       // Optionally, handle error UI here
     }
+    onSubmit(dataToSubmit);
   };
 
   return (

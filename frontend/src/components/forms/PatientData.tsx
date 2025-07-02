@@ -282,13 +282,25 @@ export const PatientDataForm: React.FC<PatientDataFormProps> = ({
           {/* Specific Form Based on Type */}
           <div className="border-t pt-6 w-full min-w-0">
             {formType === "malaria" && (
-              <MalariaForm onSubmit={handleSubmit} isSaving={isSaving} />
+              <MalariaForm
+                onSubmit={handleSubmit}
+                isSaving={isSaving}
+                patientData={basicInfo}
+              />
             )}
             {formType === "nutrition" && (
-              <NutritionForm onSubmit={handleSubmit} isSaving={isSaving} />
+              <NutritionForm
+                onSubmit={handleSubmit}
+                isSaving={isSaving}
+                patientData={basicInfo}
+              />
             )}
             {formType === "maternal" && (
-              <MaternalForm onSubmit={handleSubmit} isSaving={isSaving} />
+              <MaternalForm
+                onSubmit={handleSubmit}
+                isSaving={isSaving}
+                patientData={basicInfo}
+              />
             )}
           </div>
         </div>
