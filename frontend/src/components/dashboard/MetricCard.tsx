@@ -1,71 +1,58 @@
 import React from "react";
-import {
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  AlertTriangle,
-  CheckCircle2,
-  AlertCircle,
-} from "lucide-react";
 import type { HealthMetric } from "../../types";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { healthMetrics } from "../../data/mockData";
 
 interface MetricCardProps {
   metric: HealthMetric;
 }
 
 export const MetricCard: React.FC<MetricCardProps> = ({ metric }) => {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "critical":
-        return "text-red-600 bg-red-50 border-red-200";
-      case "warning":
-        return "text-yellow-600 bg-yellow-50 border-yellow-200";
-      case "good":
-        return "text-green-600 bg-green-50 border-green-200";
-      default:
-        return "text-gray-600 bg-gray-50 border-gray-200";
-    }
-  };
+  const [maternal, setMaternal] = useState<any[]>([]);
+  const [malaria, setMalaria] = useState<any[]>([]);
+  const [nutrition, setNutrition] = useState<any[]>([]);
+  useEffect(() => {
+    const getMaternalData = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/api/maternal`
+        );
+        setMaternal(response.data);
+      } catch (error) {
+        console.log("Error while receiving maternal data", error);
+      }
+    };
+    getMaternalData();
+  }, []);
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "critical":
-        return <AlertCircle className="w-5 h-5" />;
-      case "warning":
-        return <AlertTriangle className="w-5 h-5" />;
-      case "good":
-        return <CheckCircle2 className="w-5 h-5" />;
-      default:
-        return <Minus className="w-5 h-5" />;
-    }
-  };
+  useEffect(() => {
+    const getNutritionData = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/api/nutrition`
+        );
+        setNutrition(response.data);
+      } catch (error) {
+        console.log("Error while receiving nutrition data", error);
+      }
+    };
+    getNutritionData();
+  }, []);
 
-  const getTrendIcon = (trend: string) => {
-    switch (trend) {
-      case "up":
-        return <TrendingUp className="w-4 h-4" />;
-      case "down":
-        return <TrendingDown className="w-4 h-4" />;
-      default:
-        return <Minus className="w-4 h-4" />;
-    }
-  };
-
-  const getTrendColor = (trend: string, status: string) => {
-    if (status === "critical" || status === "warning") {
-      return trend === "up"
-        ? "text-red-500"
-        : trend === "down"
-        ? "text-green-500"
-        : "text-gray-500";
-    }
-    return trend === "up"
-      ? "text-green-500"
-      : trend === "down"
-      ? "text-red-500"
-      : "text-gray-500";
-  };
-
+  useEffect(() => {
+    const getMalariaData = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/api/malaria`
+        );
+        setMalaria(response.data);
+      } catch (error) {
+        console.log("Error while receiving malaria data", error);
+      }
+    };
+    getMalariaData();
+  }, []);
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200">
       <div className="flex items-start justify-between mb-4">
@@ -73,32 +60,27 @@ export const MetricCard: React.FC<MetricCardProps> = ({ metric }) => {
           <h3 className="text-sm font-medium text-gray-600 mb-1">
             {metric.title}
           </h3>
-          <div className="flex items-baseline">
-            <span className="text-2xl font-bold text-gray-900">
-              {metric.value}
+          <div className="flex items-baseline space-x-4">
+            <span className="text-2xl font-bold">
+              {" "}
+              {metric.title.toLowerCase() === "pregnant women under care"
+                ? maternal.length
+                : metric.title.toLowerCase() === "malaria cases"
+                ? malaria.length
+                : metric.title.toLowerCase() === "children with malnutrition"
+                ? nutrition.length
+                : 0}
             </span>
-            <span className="text-sm text-gray-500 ml-1">/ {metric.total}</span>
           </div>
-        </div>
-        <div
-          className={`flex items-center px-2 py-1 rounded-full border ${getStatusColor(
-            metric.status
-          )}`}
-        >
-          {getStatusIcon(metric.status)}
+          {/* Display details for each category */}
+          <div className="mt-2 space-y-1"></div>
         </div>
       </div>
 
       <div className="space-y-3">
         <div className="flex items-center justify-between text-sm">
           <span className="text-gray-600">Progress</span>
-          <div
-            className={`flex items-center ${getTrendColor(
-              metric.trend,
-              metric.status
-            )}`}
-          >
-            {getTrendIcon(metric.trend)}
+          <div className={`flex items-center`}>
             <span className="ml-1 font-medium">{metric.percentage}%</span>
           </div>
         </div>

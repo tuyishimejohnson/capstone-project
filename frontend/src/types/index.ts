@@ -7,7 +7,6 @@ export interface User {
 export interface HealthMetric {
   id: string;
   title: string;
-  value: number;
   total: number;
   percentage: number;
   status: "critical" | "warning" | "good";

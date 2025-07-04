@@ -353,6 +353,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             {healthMetrics.map((metric) => (
               <MetricCard key={metric.id} metric={metric} />
             ))}
+
+            {}
           </div>
         </div>
 

@@ -4,7 +4,6 @@ export const healthMetrics: HealthMetric[] = [
   {
     id: "1",
     title: "Pregnant Women Under Care",
-    value: 156,
     total: 200,
     percentage: 78,
     status: "good",
@@ -12,8 +11,7 @@ export const healthMetrics: HealthMetric[] = [
 
   {
     id: "3",
-    title: "Malaria Cases (This Month)",
-    value: 42,
+    title: "Malaria Cases",
     total: 1200,
     percentage: 3.5,
     status: "warning",
@@ -21,7 +19,6 @@ export const healthMetrics: HealthMetric[] = [
   {
     id: "4",
     title: "Children with Malnutrition",
-    value: 18,
     total: 320,
     percentage: 90.6,
     status: "critical",
