@@ -69,6 +69,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [patientDetail, setPatientDetail] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -132,6 +133,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           "=====+++++++++++++++++++++++0 error while receiving data",
           error
         );
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
       }
     };
     handleBookings();
@@ -243,7 +248,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               {" "}
               Welcome back
-              {` ${userName}`}
+              {` ${userName.split(" ")[0]}`}
             </h2>
             <p className="text-gray-600">
               Here is an overview of your availability customization and
