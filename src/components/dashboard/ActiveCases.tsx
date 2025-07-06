@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { X } from "lucide-react";
 
 interface MalariaCase {
@@ -19,77 +20,126 @@ interface MalariaCase {
   recordedBy: string;
 }
 
+interface Pregnancy {
+  _id: string;
+  patientName: string;
+  age: string;
+  gender: string;
+  address: string;
+  contactNumber: string;
+  notes: string;
+  pregnancyStatus: string;
+  gestationWeeks: number;
+  gravida: number;
+  para: number;
+  antenatalVisits: number;
+  riskFactors: string[];
+  complications: string[];
+  vitals: Record<string, any>;
+  nextVisitDate: string;
+  recordedBy: string;
+}
+
 interface ActiveCasesModalProps {
   isOpen: boolean;
   onClose: () => void;
-  activeCases: MalariaCase[];
+  malariaCases: MalariaCase[];
+  pregnancyCases: Pregnancy[];
 }
 
-export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
+export const ActiveCases: React.FC<ActiveCasesModalProps> = ({
   isOpen,
   onClose,
-  activeCases,
+  malariaCases,
+  pregnancyCases,
 }) => {
+  const [selectedType, setSelectedType] = useState<"malaria" | "pregnancy">(
+    "malaria"
+  );
+
   if (!isOpen) return null;
+
+  const cases = selectedType === "malaria" ? malariaCases : pregnancyCases;
 
   return (
     <div className="fixed inset-0 bg-opacity-50 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
       <div className="bg-white w-full mx-20 rounded-lg shadow-lg overflow-y-auto max-h-[80vh]">
         <div
-          className="flex justify-between items-center mb-0 px-6 py-4 rounded-t-lg"
+          className="flex justify-between mb-0 px-6 rounded-t-lg py-3"
           style={{ backgroundColor: "#0d9488" }}
         >
-          <h2 className="text-xl font-semibold text-white">Malaria Cases</h2>
-          <div className="flex gap-5">
-            {/* Add filter or other action buttons here if needed */}
+          <h2 className="text-xl font-semibold text-white">Active Cases</h2>
+          <div className="flex gap-2">
+            <div className="text-white flex gap-1">
+              <button
+                className={`px-7 ${
+                  selectedType === "malaria" ? "bg-teal-700 " : ""
+                }`}
+                onClick={() => setSelectedType("malaria")}
+              >
+                Malaria
+              </button>
+              <button
+                className={`px-7 ${
+                  selectedType === "pregnancy" ? "bg-teal-700" : ""
+                }`}
+                onClick={() => setSelectedType("pregnancy")}
+              >
+                Maternal Case
+              </button>
+            </div>
             <button
-              onClick={onClose}
               className="text-white hover:text-gray-200"
+              onClick={onClose}
             >
               <X />
             </button>
           </div>
         </div>
+
         <div className="p-6">
-          {activeCases.length === 0 ? (
-            <p className="text-gray-500 text-center">
-              No active malaria cases available.
-            </p>
+          {cases.length === 0 ? (
+            <div>No active cases.</div>
           ) : (
             <div>
-              {/* Header Row */}
-              <div className="flex font-semibold bg-gray-100">
-                <div className="flex-1 p-2">Patient Name</div>
-                <div className="flex-1 p-2">Contact Number</div>
-                <div className="flex-1 p-2">Age</div>
-                <div className="flex-1 p-2">Gender</div>
-                <div className="flex-1 p-2">Address</div>
-                <div className="flex-1 p-2">Test Result</div>
-                <div className="flex-1 p-2">Severity</div>
-                <div className="flex-1 p-2">Treatment Given</div>
-                <div className="flex-1 p-2">Collected by</div>
-              </div>
-              {/* Data Rows */}
-              {activeCases.map((malariaCase: MalariaCase, index: number) => (
-                <div
-                  key={malariaCase._id}
-                  className={`flex items-center ${
-                    index !== activeCases.length - 1
-                      ? "border-b border-gray-200"
-                      : ""
-                  } hover:bg-gray-50`}
-                >
-                  <div className="flex-1 p-2">{malariaCase.patientName}</div>
-                  <div className="flex-1 p-2">{malariaCase.contactNumber}</div>
-                  <div className="flex-1 p-2">{malariaCase.age}</div>
-                  <div className="flex-1 p-2">{malariaCase.gender}</div>
-                  <div className="flex-1 p-2">{malariaCase.address}</div>
-                  <div className="flex-1 p-2">{malariaCase.testResult}</div>
-                  <div className="flex-1 p-2">{malariaCase.severity}</div>
-                  <div className="flex-1 p-2">{malariaCase.treatmentGiven}</div>
-                  <div className="flex-1 p-2">{malariaCase.recordedBy}</div>
-                </div>
-              ))}
+              {selectedType === "malaria"
+                ? (cases as MalariaCase[])
+                    .filter((c) => c.testResult.toLowerCase() === "positive")
+                    .map((c) => (
+                      <div
+                        key={c._id}
+                        className="mb-4 border-gray-300 border-b pb-2"
+                      >
+                        <div>
+                          <h2 className="text-xl font-medium text-teal-700">
+                            Name: {c.patientName}
+                          </h2>
+                        </div>
+                        <div>Age: {c.age}</div>
+                        <div>Status: {c.testResult}</div>
+                        <div>Severity: {c.severity}</div>
+                      </div>
+                    ))
+                : (cases as Pregnancy[])
+                    .filter(
+                      (c) => c.pregnancyStatus.toLowerCase() === "pregnant"
+                    )
+                    .map((c) => (
+                      <div
+                        key={c._id}
+                        className="mb-4 border-gray-300 border-b pb-2"
+                      >
+                        <div>
+                          <h2 className="text-xl font-medium text-teal-700">
+                            Name: {c.patientName}
+                          </h2>
+                        </div>
+                        <div>Age: {c.age}</div>
+                        <div>Pregnancy Status: {c.pregnancyStatus}</div>
+                        <div>Gestation Weeks: {c.gestationWeeks}</div>
+                        <div>Antenatal visits: {c.antenatalVisits}</div>
+                      </div>
+                    ))}
             </div>
           )}
         </div>

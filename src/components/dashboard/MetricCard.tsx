@@ -2,7 +2,6 @@ import React from "react";
 import type { HealthMetric } from "../../types";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { healthMetrics } from "../../data/mockData";
 
 interface MetricCardProps {
   metric: HealthMetric;

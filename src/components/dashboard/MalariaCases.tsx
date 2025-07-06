@@ -1,37 +1,34 @@
-import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 
-interface Nutrition {
+interface MalariaCase {
   _id: string;
   patientName: string;
   age: string;
   gender: string;
   address: string;
   contactNumber: string;
-  childAge: string;
-  weight: string;
-  height: string;
-  muac: string;
-  nutritionStatus: string;
-  feedingPractices: string[];
-  interventionProvided: string[];
-  caregiverEducation: boolean;
-  referralMade: boolean;
-  referralLocation: string;
   notes: string;
+  symptoms: string[];
+  testResult: string;
+  testType: string;
+  severity: string;
+  treatmentGiven: string;
+  treatmentDate: string;
+  followUpDate: string;
+  complications: string[];
   recordedBy: string;
 }
 
 interface ActiveCasesModalProps {
   isOpen: boolean;
   onClose: () => void;
-  nutritionCase: Nutrition[];
+  activeCases: MalariaCase[];
 }
 
-export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
+export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
   isOpen,
   onClose,
-  nutritionCase,
+  activeCases,
 }) => {
   if (!isOpen) return null;
 
@@ -42,9 +39,7 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
           className="flex justify-between items-center mb-0 px-6 py-4 rounded-t-lg"
           style={{ backgroundColor: "#0d9488" }}
         >
-          <h2 className="text-xl font-semibold text-white">
-            Child Nutrition Cases
-          </h2>
+          <h2 className="text-xl font-semibold text-white">Malaria Cases</h2>
           <div className="flex gap-5">
             {/* Add filter or other action buttons here if needed */}
             <button
@@ -56,43 +51,43 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
           </div>
         </div>
         <div className="p-6">
-          {nutritionCase.length === 0 ? (
+          {activeCases.length === 0 ? (
             <p className="text-gray-500 text-center">
-              No active cases available.
+              No active malaria cases available.
             </p>
           ) : (
             <div>
               {/* Header Row */}
               <div className="flex font-semibold bg-gray-100">
-                <div className="flex-1 p-2">Names</div>
+                <div className="flex-1 p-2">Patient Name</div>
+                <div className="flex-1 p-2">Contact Number</div>
                 <div className="flex-1 p-2">Age</div>
                 <div className="flex-1 p-2">Gender</div>
                 <div className="flex-1 p-2">Address</div>
-                <div className="flex-1 p-2">Weight</div>
-                <div className="flex-1 p-2">Height</div>
-                <div className="flex-1 p-2">Nutrition status</div>
-                <div className="flex-1 p-2">Notes</div>
+                <div className="flex-1 p-2">Test Result</div>
+                <div className="flex-1 p-2">Severity</div>
+                <div className="flex-1 p-2">Treatment Given</div>
                 <div className="flex-1 p-2">Collected by</div>
               </div>
               {/* Data Rows */}
-              {nutritionCase.map((nutrition: Nutrition, index: number) => (
+              {activeCases.map((malariaCase: MalariaCase, index: number) => (
                 <div
-                  key={nutrition._id}
+                  key={malariaCase._id}
                   className={`flex items-center ${
-                    index !== nutritionCase.length - 1
+                    index !== activeCases.length - 1
                       ? "border-b border-gray-200"
                       : ""
                   } hover:bg-gray-50`}
                 >
-                  <div className="flex-1 p-2">{nutrition.patientName}</div>
-                  <div className="flex-1 p-2">{nutrition.age}</div>
-                  <div className="flex-1 p-2">{nutrition.gender}</div>
-                  <div className="flex-1 p-2">{nutrition.address}</div>
-                  <div className="flex-1 p-2">{nutrition.weight}</div>
-                  <div className="flex-1 p-2">{nutrition.height}</div>
-                  <div className="flex-1 p-2">{nutrition.nutritionStatus}</div>
-                  <div className="flex-1 p-2">{nutrition.notes}</div>
-                  <div className="flex-1 p-2">{nutrition.recordedBy}</div>
+                  <div className="flex-1 p-2">{malariaCase.patientName}</div>
+                  <div className="flex-1 p-2">{malariaCase.contactNumber}</div>
+                  <div className="flex-1 p-2">{malariaCase.age}</div>
+                  <div className="flex-1 p-2">{malariaCase.gender}</div>
+                  <div className="flex-1 p-2">{malariaCase.address}</div>
+                  <div className="flex-1 p-2">{malariaCase.testResult}</div>
+                  <div className="flex-1 p-2">{malariaCase.severity}</div>
+                  <div className="flex-1 p-2">{malariaCase.treatmentGiven}</div>
+                  <div className="flex-1 p-2">{malariaCase.recordedBy}</div>
                 </div>
               ))}
             </div>

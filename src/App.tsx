@@ -3,7 +3,7 @@ import { SignupForm } from "./components/auth/SignupForm";
 import { Dashboard } from "./components/dashboard/Dashboard";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { PredictionUploadPage } from "./components/dashboard/PredictionModel";
-import { ActiveCasesModal } from "./components/dashboard/ActiveCases";
+import { ActiveCasesModal } from "./components/dashboard/MalariaCases";
 
 function App() {
   return (

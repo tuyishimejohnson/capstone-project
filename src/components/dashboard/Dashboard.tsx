@@ -19,10 +19,11 @@ import axios from "axios";
 import { PatientDetailsModal } from "./PatientDetail";
 import { useNavigate } from "react-router-dom";
 import PatientDataForm from "../forms/PatientData";
-import { ActiveCasesModal } from "./ActiveCases";
+import { ActiveCasesModal } from "./MalariaCases";
 import { NutritionCases } from "./NutritionCases";
 import { PregnancyModal } from "./PregnancyStatus";
 import { defaultSchedule } from "../../data/defaultSchedule";
+import { ActiveCases } from "./ActiveCases";
 
 interface DashboardProps {
   user: User;
@@ -44,6 +45,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [nutrition, setNutrition] = useState<any[]>([]);
   const [nutritionCase, setNutritionCase] = useState(false);
   const [maternalCase, setMaternalCase] = useState(false);
+  const [displayActiveCases, setDisplayActiveCases] = useState(false);
 
   const navigate = useNavigate();
 
@@ -137,6 +139,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         const response = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/maternal`
         );
+        localStorage.setItem("maternalCase", JSON.stringify(response.data));
         setMaternal(response.data);
       } catch (error) {
         console.log("Error while receiving maternal data", error);
@@ -333,7 +336,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+            onClick={() => setDisplayActiveCases(true)}
+          >
             <div className="flex items-center">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Activity className="w-6 h-6 text-blue-600" />
@@ -343,7 +349,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                   Active Cases
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {criticalMetrics.length + warningMetrics.length}
+                  {malaria.length + maternal.length}
                 </p>
               </div>
             </div>
@@ -466,6 +472,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         onSave={() => {
           setShowForm(false);
         }}
+      />
+
+      <ActiveCases
+        isOpen={displayActiveCases}
+        onClose={() => setDisplayActiveCases(false)}
+        malariaCases={malaria}
+        pregnancyCases={maternal}
       />
     </div>
   );
