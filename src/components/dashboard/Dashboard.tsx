@@ -22,46 +22,12 @@ import PatientDataForm from "../forms/PatientData";
 import { ActiveCasesModal } from "./ActiveCases";
 import { NutritionCases } from "./NutritionCases";
 import { PregnancyModal } from "./PregnancyStatus";
+import { defaultSchedule } from "../../data/defaultSchedule";
 
 interface DashboardProps {
   user: User;
   onLogout: () => void;
 }
-
-const defaultSchedule: WeeklySchedule = {
-  monday: {
-    day: "monday",
-    isAvailable: false,
-    startTime: "05:00",
-    endTime: "17:00",
-  },
-  tuesday: {
-    day: "tuesday",
-    isAvailable: false,
-    startTime: "08:00",
-    endTime: "17:00",
-  },
-  wednesday: {
-    day: "wednesday",
-    isAvailable: false,
-    startTime: "08:00",
-    endTime: "17:00",
-  },
-  thursday: {
-    day: "thursday",
-    isAvailable: false,
-    startTime: "08:00",
-    endTime: "17:00",
-  },
-  friday: {
-    day: "friday",
-    isAvailable: false,
-    startTime: "08:00",
-    endTime: "17:00",
-  },
-  saturday: { day: "saturday", isAvailable: false, startTime: "", endTime: "" },
-  sunday: { day: "sunday", isAvailable: false, startTime: "", endTime: "" },
-};
 
 export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
@@ -94,7 +60,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
   const handleScheduleSave = (newSchedule: WeeklySchedule) => {
     setSchedule(newSchedule);
-    // Here you would typically save to your backend
     console.log("Schedule saved:", newSchedule);
   };
 
