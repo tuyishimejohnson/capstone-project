@@ -19,6 +19,7 @@ interface Nutrition {
   referralMade: boolean;
   referralLocation: string;
   notes: string;
+  recordedBy: string;
 }
 
 interface ActiveCasesModalProps {
@@ -72,6 +73,7 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
                 <div className="flex-1 p-2">Height</div>
                 <div className="flex-1 p-2">Nutrition status</div>
                 <div className="flex-1 p-2">Notes</div>
+                <div className="flex-1 p-2">Collected by</div>
               </div>
               {/* Data Rows */}
               {nutritionCase.map((nutrition: Nutrition, index: number) => (
@@ -92,6 +94,7 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
                   <div className="flex-1 p-2">{nutrition.height}</div>
                   <div className="flex-1 p-2">{nutrition.nutritionStatus}</div>
                   <div className="flex-1 p-2">{nutrition.notes}</div>
+                  <div className="flex-1 p-2">{nutrition.recordedBy}</div>
                 </div>
               ))}
             </div>

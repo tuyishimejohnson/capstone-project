@@ -17,6 +17,7 @@ interface Pregnancy {
   complications: string[];
   vitals: Record<string, any>;
   nextVisitDate: string;
+  recordedBy: string;
 }
 
 interface PregnancyModalProps {
@@ -66,6 +67,7 @@ export const PregnancyModal: React.FC<PregnancyModalProps> = ({
                 <div className="flex-1 p-2">Status</div>
                 <div className="flex-1 p-2">Antenatal Visits</div>
                 <div className="flex-1 p-2">Next Visit</div>
+                <div className="flex-1 p-2">Collected by</div>
               </div>
               {/* Data Rows */}
               {pregnancyStatus.map((pregnancy: Pregnancy, index: number) => (
@@ -84,6 +86,7 @@ export const PregnancyModal: React.FC<PregnancyModalProps> = ({
                   <div className="flex-1 p-2">{pregnancy.pregnancyStatus}</div>
                   <div className="flex-1 p-2">{pregnancy.antenatalVisits}</div>
                   <div className="flex-1 p-2">{pregnancy.nextVisitDate}</div>
+                  <div className="flex-1 p-2">{pregnancy.recordedBy}</div>
                 </div>
               ))}
             </div>

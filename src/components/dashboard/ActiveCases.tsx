@@ -1,17 +1,4 @@
-import React, { useState, useEffect } from "react";
-import {
-  X,
-  Filter,
-  AlertCircle,
-  Calendar,
-  User,
-  Phone,
-  MapPin,
-  Activity,
-  Stethoscope,
-  Pill,
-} from "lucide-react";
-import axios from "axios";
+import { X } from "lucide-react";
 
 interface MalariaCase {
   _id: string;
@@ -29,6 +16,7 @@ interface MalariaCase {
   treatmentDate: string;
   followUpDate: string;
   complications: string[];
+  recordedBy: string;
 }
 
 interface ActiveCasesModalProps {
@@ -42,12 +30,6 @@ export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
   onClose,
   activeCases,
 }) => {
-  //   const [error, setError] = useState<string | null>(null);
-  //   const [filteredCases, setFilteredCases] = useState<MalariaCase[] | null>(
-  //     null
-  //   );
-  //   const [selectedCase, setSelectedCase] = useState<MalariaCase | null>(null);
-
   if (!isOpen) return null;
 
   return (
@@ -85,6 +67,7 @@ export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
                 <div className="flex-1 p-2">Test Result</div>
                 <div className="flex-1 p-2">Severity</div>
                 <div className="flex-1 p-2">Treatment Given</div>
+                <div className="flex-1 p-2">Collected by</div>
               </div>
               {/* Data Rows */}
               {activeCases.map((malariaCase: MalariaCase, index: number) => (
@@ -104,6 +87,7 @@ export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
                   <div className="flex-1 p-2">{malariaCase.testResult}</div>
                   <div className="flex-1 p-2">{malariaCase.severity}</div>
                   <div className="flex-1 p-2">{malariaCase.treatmentGiven}</div>
+                  <div className="flex-1 p-2">{malariaCase.recordedBy}</div>
                 </div>
               ))}
             </div>
