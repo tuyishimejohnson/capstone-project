@@ -9,7 +9,6 @@ import {
   Clock,
   Plus,
 } from "lucide-react";
-import { MetricCard } from "./MetricCard";
 import { SuggestionCard } from "./SuggestionCard";
 import { AvailabilityModal } from "./AvailabilityModal";
 import { AvailabilityDisplay } from "./AvailabilityDisplay";
@@ -22,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import PatientDataForm from "../forms/PatientData";
 import { ActiveCasesModal } from "./ActiveCases";
 import { NutritionCases } from "./NutritionCases";
+import { PregnancyModal } from "./PregnancyStatus";
 
 interface DashboardProps {
   user: User;
@@ -72,12 +72,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [activeCases, setActiveCases] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [cases, setCases] = useState([]);
   const [maternal, setMaternal] = useState<any[]>([]);
   const [malaria, setMalaria] = useState<any[]>([]);
   const [nutrition, setNutrition] = useState<any[]>([]);
   const [nutritionCase, setNutritionCase] = useState(false);
+  const [maternalCase, setMaternalCase] = useState(false);
 
   const navigate = useNavigate();
 
@@ -141,10 +141,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           "=====+++++++++++++++++++++++0 error while receiving data",
           error
         );
-      } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 1000);
       }
     };
     handleBookings();
@@ -165,8 +161,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           "=====+++++++++++++++++++++++0 error while receiving data",
           error
         );
-      } finally {
-        setLoading(false);
       }
     };
     handleActiveCases();
@@ -427,7 +421,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             Health Metrics Overview
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-white h-24 text-center text-2xl ">
-            <div className="bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all">
+            <div
+              className="bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all"
+              onClick={() => setMaternalCase(true)}
+            >
               <h2>Pregnant Women Under Care</h2>
               <span>{maternal.length}</span>
             </div>
@@ -472,7 +469,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           currentSchedule={schedule}
         />
       }
-      {/* CHW Users Component */}
+
       <PatientDetailsModal
         isOpen={patientDetail}
         onClose={() => setPatientDetail(false)}
@@ -483,22 +480,26 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         onClose={() => {
           setActiveCases(false);
         }}
-        activeCases={cases} // Replace [] with your actual MalariaCase array if available
+        activeCases={cases}
       />
       <NutritionCases
         isOpen={nutritionCase}
         onClose={() => setNutritionCase(false)}
         nutritionCase={nutrition}
       />
-      {/* Prediction Component */}
+
+      <PregnancyModal
+        isOpen={maternalCase}
+        onClose={() => setMaternalCase(false)}
+        pregnancyStatus={maternal}
+      />
+      {/* Patient data form Component */}
       <PatientDataForm
         isOpen={showForm}
         onClose={() => setShowForm(false)}
         currentUser={userName}
-        onSave={(data) => {
-          // handle save logic here, e.g., send data to backend or update state
+        onSave={() => {
           setShowForm(false);
-          console.log("Patient saved data........>>>>>>>>>>>>>>>>>>>>>.", data);
         }}
       />
     </div>

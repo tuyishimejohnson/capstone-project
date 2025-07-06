@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import axios from "axios";
 
 interface Nutrition {
   _id: string;
@@ -42,7 +41,9 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
           className="flex justify-between items-center mb-0 px-6 py-4 rounded-t-lg"
           style={{ backgroundColor: "#0d9488" }}
         >
-          <h2 className="text-xl font-semibold text-white">Malaria Cases</h2>
+          <h2 className="text-xl font-semibold text-white">
+            Child Nutrition Cases
+          </h2>
           <div className="flex gap-5">
             {/* Add filter or other action buttons here if needed */}
             <button
@@ -56,7 +57,7 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
         <div className="p-6">
           {nutritionCase.length === 0 ? (
             <p className="text-gray-500 text-center">
-              No active malaria cases available.
+              No active cases available.
             </p>
           ) : (
             <div>
