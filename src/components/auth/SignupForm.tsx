@@ -5,7 +5,7 @@ import {
   Phone,
   Lock,
   User,
-  Heart,
+  HeartPulse,
   MapPin,
   Building,
 } from "lucide-react";
@@ -99,10 +99,10 @@ export const SignupForm: React.FC<SignupFormProps> = () => {
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-100 rounded-full mb-4">
-              <Heart className="w-8 h-8 text-teal-600" />
+              <HeartPulse className="w-8 h-8 text-teal-600" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Join Our Team
+              Join Our Community
             </h1>
             <p className="text-gray-600">Create your account</p>
           </div>

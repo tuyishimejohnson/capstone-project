@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, User, Lock, Heart } from "lucide-react";
+import { Eye, EyeOff, User, Lock, HeartPulse } from "lucide-react";
 import { validateLoginForm } from "../../utils/validation";
 import type { FormErrors } from "../../types";
 import { Link } from "react-router-dom";
@@ -42,9 +42,6 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
       );
 
       console.log("==================0", res);
-      //localStorage.setItem("token", res.data.token);
-      //localStorage.setItem("user", res.data.user.name);
-      //localStorage.setItem("user", res.data.user.name);
       localStorage.setItem("userData", JSON.stringify(res.data.user));
 
       console.log("======Login successful======");
@@ -71,7 +68,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-100 rounded-full mb-4">
-              <Heart className="w-8 h-8 text-teal-600" />
+              <HeartPulse className="w-8 h-8 text-teal-600" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
               Welcome Back
