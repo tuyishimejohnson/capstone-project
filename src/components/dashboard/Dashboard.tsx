@@ -420,23 +420,23 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           <h3 className="text-lg font-semibold text-gray-900 mb-6">
             Health Metrics Overview
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-white h-24 text-center text-2xl ">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-white font-bold h-24 text-center text-2xl">
             <div
-              className="bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all"
+              className="bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all pt-3 hover:bg-transparent hover:text-gray-500"
               onClick={() => setMaternalCase(true)}
             >
               <h2>Pregnant Women Under Care</h2>
               <span>{maternal.length}</span>
             </div>
             <div
-              className="bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all"
+              className="bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all pt-3 hover:bg-transparent hover:text-gray-500"
               onClick={() => setActiveCases(true)}
             >
               <h2>Malaria Cases</h2>
               <span>{malaria.length}</span>
             </div>
             <div
-              className="bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all"
+              className="bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all pt-3 hover:bg-transparent hover:text-gray-500"
               onClick={() => setNutritionCase(true)}
             >
               <h2>Children Nutrition</h2>

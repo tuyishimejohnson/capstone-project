@@ -31,6 +31,7 @@ interface FormData {
     hemoglobin: string;
   };
   nextVisitDate: string;
+  recordedBy: string;
 }
 
 const riskFactors = [
@@ -58,6 +59,8 @@ const complications = [
 export const MaternalForm: React.FC<
   MaternalFormProps & { patientData: any; defaultValues?: Partial<FormData> }
 > = ({ onSubmit, isSaving, defaultValues = {}, patientData }) => {
+  let savedData = JSON.parse(localStorage.getItem("userData") || "{}");
+  console.log("----------------------------..>", savedData);
   console.log(patientData.patientName);
   const { control, handleSubmit, setValue, watch } = useForm<FormData>({
     defaultValues: {
@@ -81,6 +84,7 @@ export const MaternalForm: React.FC<
         hemoglobin: "",
       },
       nextVisitDate: "",
+      recordedBy: "",
       ...defaultValues,
     },
   });
@@ -98,6 +102,7 @@ export const MaternalForm: React.FC<
       address: patientData?.address,
       contactNumber: patientData?.contactNumber,
       notes: patientData?.notes,
+      recordedBy: savedData.name,
       gestationWeeks: data.gestationWeeks
         ? parseInt(data.gestationWeeks)
         : undefined,

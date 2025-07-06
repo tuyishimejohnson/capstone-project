@@ -6,6 +6,7 @@ import axios from "axios";
 interface MalariaFormProps {
   onSubmit: (data: any) => void;
   isSaving: boolean;
+  user: { _id: string; name?: string };
 }
 
 const symptoms = [
@@ -58,7 +59,7 @@ export const MalariaForm: React.FC<
     defaultValues?: Partial<FormValues>;
   }
 > = ({ onSubmit, isSaving, defaultValues = {}, patientData }) => {
-  //console.log(patientData.patientName);
+  let savedData = JSON.parse(localStorage.getItem("userData") || "{}");
   const {
     register,
     handleSubmit,
@@ -82,6 +83,7 @@ export const MalariaForm: React.FC<
       address: "",
       contactNumber: "",
       notes: "",
+      recordedBy: "",
       ...defaultValues,
     },
   });
@@ -101,6 +103,7 @@ export const MalariaForm: React.FC<
           address: patientData?.address,
           contactNumber: patientData?.contactNumber,
           notes: patientData?.notes,
+          recordedBy: savedData.name,
         };
         console.log("Submitted data=====================>", dataToSubmit);
 

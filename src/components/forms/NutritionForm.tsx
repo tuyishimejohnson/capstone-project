@@ -45,6 +45,7 @@ type NutritionFormFields = {
   address: string;
   contactNumber: string;
   notes: string;
+  recordedBy: string;
 };
 
 export const NutritionForm: React.FC<
@@ -53,6 +54,7 @@ export const NutritionForm: React.FC<
     defaultValues?: Partial<NutritionFormFields>;
   }
 > = ({ onSubmit, isSaving, defaultValues = {}, patientData }) => {
+  let savedData = JSON.parse(localStorage.getItem("userData") || "{}");
   console.log(patientData.patientName);
   const {
     register,
@@ -80,6 +82,7 @@ export const NutritionForm: React.FC<
       address: "",
       contactNumber: "",
       notes: "",
+      recordedBy: "",
       ...defaultValues,
     },
   });
@@ -118,6 +121,7 @@ export const NutritionForm: React.FC<
       address: patientData?.address,
       contactNumber: patientData?.contactNumber,
       notes: patientData?.notes,
+      recordedBy: savedData.name,
     };
 
     console.log(
