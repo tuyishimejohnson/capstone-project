@@ -20,6 +20,8 @@ import axios from "axios";
 import { PatientDetailsModal } from "./PatientDetail";
 import { useNavigate } from "react-router-dom";
 import PatientDataForm from "../forms/PatientData";
+import { ActiveCasesModal } from "./ActiveCases";
+import { NutritionCases } from "./NutritionCases";
 
 interface DashboardProps {
   user: User;
@@ -69,7 +71,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [patientDetail, setPatientDetail] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [activeCases, setActiveCases] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [cases, setCases] = useState([]);
+  const [maternal, setMaternal] = useState<any[]>([]);
+  const [malaria, setMalaria] = useState<any[]>([]);
+  const [nutrition, setNutrition] = useState<any[]>([]);
+  const [nutritionCase, setNutritionCase] = useState(false);
 
   const navigate = useNavigate();
 
@@ -140,6 +148,70 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       }
     };
     handleBookings();
+  }, []);
+
+  useEffect(() => {
+    const handleActiveCases = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/api/malaria`
+        );
+
+        localStorage.setItem("malariaCase", JSON.stringify(response.data));
+        setCases(response.data);
+        console.log("=========================> received data", response.data);
+      } catch (error) {
+        console.log(
+          "=====+++++++++++++++++++++++0 error while receiving data",
+          error
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+    handleActiveCases();
+  }, []);
+
+  useEffect(() => {
+    const getMaternalData = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/api/maternal`
+        );
+        setMaternal(response.data);
+      } catch (error) {
+        console.log("Error while receiving maternal data", error);
+      }
+    };
+    getMaternalData();
+  }, []);
+
+  useEffect(() => {
+    const getNutritionData = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/api/nutrition`
+        );
+        setNutrition(response.data);
+      } catch (error) {
+        console.log("Error while receiving nutrition data", error);
+      }
+    };
+    getNutritionData();
+  }, []);
+
+  useEffect(() => {
+    const getMalariaData = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/api/malaria`
+        );
+        setMalaria(response.data);
+      } catch (error) {
+        console.log("Error while receiving malaria data", error);
+      }
+    };
+    getMalariaData();
   }, []);
 
   return (
@@ -354,10 +426,25 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           <h3 className="text-lg font-semibold text-gray-900 mb-6">
             Health Metrics Overview
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {healthMetrics.map((metric) => (
-              <MetricCard key={metric.id} metric={metric} />
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-white h-24 text-center text-2xl ">
+            <div className="bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all">
+              <h2>Pregnant Women Under Care</h2>
+              <span>{maternal.length}</span>
+            </div>
+            <div
+              className="bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all"
+              onClick={() => setActiveCases(true)}
+            >
+              <h2>Malaria Cases</h2>
+              <span>{malaria.length}</span>
+            </div>
+            <div
+              className="bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all"
+              onClick={() => setNutritionCase(true)}
+            >
+              <h2>Children Nutrition</h2>
+              <span>{nutrition.length}</span>
+            </div>
 
             {}
           </div>
@@ -391,9 +478,19 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         onClose={() => setPatientDetail(false)}
         bookings={bookings}
       />
-
+      <ActiveCasesModal
+        isOpen={activeCases}
+        onClose={() => {
+          setActiveCases(false);
+        }}
+        activeCases={cases} // Replace [] with your actual MalariaCase array if available
+      />
+      <NutritionCases
+        isOpen={nutritionCase}
+        onClose={() => setNutritionCase(false)}
+        nutritionCase={nutrition}
+      />
       {/* Prediction Component */}
-
       <PatientDataForm
         isOpen={showForm}
         onClose={() => setShowForm(false)}

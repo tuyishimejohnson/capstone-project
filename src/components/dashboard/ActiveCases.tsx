@@ -1,0 +1,115 @@
+import React, { useState, useEffect } from "react";
+import {
+  X,
+  Filter,
+  AlertCircle,
+  Calendar,
+  User,
+  Phone,
+  MapPin,
+  Activity,
+  Stethoscope,
+  Pill,
+} from "lucide-react";
+import axios from "axios";
+
+interface MalariaCase {
+  _id: string;
+  patientName: string;
+  age: string;
+  gender: string;
+  address: string;
+  contactNumber: string;
+  notes: string;
+  symptoms: string[];
+  testResult: string;
+  testType: string;
+  severity: string;
+  treatmentGiven: string;
+  treatmentDate: string;
+  followUpDate: string;
+  complications: string[];
+}
+
+interface ActiveCasesModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  activeCases: MalariaCase[];
+}
+
+export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
+  isOpen,
+  onClose,
+  activeCases,
+}) => {
+  //   const [error, setError] = useState<string | null>(null);
+  //   const [filteredCases, setFilteredCases] = useState<MalariaCase[] | null>(
+  //     null
+  //   );
+  //   const [selectedCase, setSelectedCase] = useState<MalariaCase | null>(null);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-opacity-50 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
+      <div className="bg-white w-full mx-20 rounded-lg shadow-lg overflow-y-auto max-h-[80vh]">
+        <div
+          className="flex justify-between items-center mb-0 px-6 py-4 rounded-t-lg"
+          style={{ backgroundColor: "#0d9488" }}
+        >
+          <h2 className="text-xl font-semibold text-white">Malaria Cases</h2>
+          <div className="flex gap-5">
+            {/* Add filter or other action buttons here if needed */}
+            <button
+              onClick={onClose}
+              className="text-white hover:text-gray-200"
+            >
+              <X />
+            </button>
+          </div>
+        </div>
+        <div className="p-6">
+          {activeCases.length === 0 ? (
+            <p className="text-gray-500 text-center">
+              No active malaria cases available.
+            </p>
+          ) : (
+            <div>
+              {/* Header Row */}
+              <div className="flex font-semibold bg-gray-100">
+                <div className="flex-1 p-2">Patient Name</div>
+                <div className="flex-1 p-2">Contact Number</div>
+                <div className="flex-1 p-2">Age</div>
+                <div className="flex-1 p-2">Gender</div>
+                <div className="flex-1 p-2">Address</div>
+                <div className="flex-1 p-2">Test Result</div>
+                <div className="flex-1 p-2">Severity</div>
+                <div className="flex-1 p-2">Treatment Given</div>
+              </div>
+              {/* Data Rows */}
+              {activeCases.map((malariaCase: MalariaCase, index: number) => (
+                <div
+                  key={malariaCase._id}
+                  className={`flex items-center ${
+                    index !== activeCases.length - 1
+                      ? "border-b border-gray-200"
+                      : ""
+                  } hover:bg-gray-50`}
+                >
+                  <div className="flex-1 p-2">{malariaCase.patientName}</div>
+                  <div className="flex-1 p-2">{malariaCase.contactNumber}</div>
+                  <div className="flex-1 p-2">{malariaCase.age}</div>
+                  <div className="flex-1 p-2">{malariaCase.gender}</div>
+                  <div className="flex-1 p-2">{malariaCase.address}</div>
+                  <div className="flex-1 p-2">{malariaCase.testResult}</div>
+                  <div className="flex-1 p-2">{malariaCase.severity}</div>
+                  <div className="flex-1 p-2">{malariaCase.treatmentGiven}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
