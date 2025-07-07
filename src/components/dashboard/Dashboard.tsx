@@ -9,7 +9,6 @@ import {
   Clock,
   Plus,
 } from "lucide-react";
-import { SuggestionCard } from "./SuggestionCard";
 import { AvailabilityModal } from "./AvailabilityModal";
 import { AvailabilityDisplay } from "./AvailabilityDisplay";
 import { healthMetrics, suggestions } from "../../data/mockData";
@@ -24,6 +23,11 @@ import { NutritionCases } from "./NutritionCases";
 import { PregnancyModal } from "./PregnancyStatus";
 import { defaultSchedule } from "../../data/defaultSchedule";
 import { ActiveCases } from "./ActiveCases";
+import { ImprovingCases } from "./improvingCases";
+import {
+  getImprovingMalariaCases,
+  getImprovingPregnancyCases,
+} from "./props/patientData";
 
 interface DashboardProps {
   user: User;
@@ -46,6 +50,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [nutritionCase, setNutritionCase] = useState(false);
   const [maternalCase, setMaternalCase] = useState(false);
   const [displayActiveCases, setDisplayActiveCases] = useState(false);
+  const [improving, setImproving] = useState(false);
 
   const navigate = useNavigate();
 
@@ -206,11 +211,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 </span>
               </button>
 
-              <button className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </button>
-
               <div className="flex items-center space-x-3">
                 <div className="flex items-center">
                   <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
@@ -355,7 +355,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+            onClick={() => setImproving(true)}
+          >
             <div className="flex items-center">
               <div className="p-2 bg-green-100 rounded-lg">
                 <TrendingUp className="w-6 h-6 text-green-600" />
@@ -363,7 +366,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Improving</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {goodMetrics.length}
+                  {getImprovingMalariaCases.length +
+                    getImprovingPregnancyCases.length}
                 </p>
               </div>
             </div>
@@ -417,19 +421,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             {}
           </div>
         </div>
-
-        {/* Recommended Actions */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">
-            Recommended Actions
-          </h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {suggestions.map((suggestion) => (
-              <SuggestionCard key={suggestion.id} suggestion={suggestion} />
-            ))}
-          </div>
-        </div>
       </main>
       {/* Availability Component */}
       {
@@ -477,6 +468,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       <ActiveCases
         isOpen={displayActiveCases}
         onClose={() => setDisplayActiveCases(false)}
+        malariaCases={malaria}
+        pregnancyCases={maternal}
+      />
+
+      <ImprovingCases
+        isOpen={improving}
+        onClose={() => setImproving(false)}
         malariaCases={malaria}
         pregnancyCases={maternal}
       />

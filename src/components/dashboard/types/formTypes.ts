@@ -36,3 +36,24 @@ export interface Pregnancy {
   nextVisitDate: string;
   recordedBy: string;
 }
+
+export interface Nutrition {
+  _id: string;
+  patientName: string;
+  age: string;
+  gender: string;
+  address: string;
+  contactNumber: string;
+  childAge: string;
+  weight: string;
+  height: string;
+  muac: string;
+  nutritionStatus: string;
+  feedingPractices: string[];
+  interventionProvided: string[];
+  caregiverEducation: boolean;
+  referralMade: boolean;
+  referralLocation: string;
+  notes: string;
+  recordedBy: string;
+}

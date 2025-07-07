@@ -1,26 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-
-interface Nutrition {
-  _id: string;
-  patientName: string;
-  age: string;
-  gender: string;
-  address: string;
-  contactNumber: string;
-  childAge: string;
-  weight: string;
-  height: string;
-  muac: string;
-  nutritionStatus: string;
-  feedingPractices: string[];
-  interventionProvided: string[];
-  caregiverEducation: boolean;
-  referralMade: boolean;
-  referralLocation: string;
-  notes: string;
-  recordedBy: string;
-}
+import type { Nutrition } from "./types/formTypes";
 
 interface ActiveCasesModalProps {
   isOpen: boolean;
