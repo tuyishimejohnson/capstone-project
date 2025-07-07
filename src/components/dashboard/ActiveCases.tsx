@@ -1,44 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-
-interface MalariaCase {
-  _id: string;
-  patientName: string;
-  age: string;
-  gender: string;
-  address: string;
-  contactNumber: string;
-  notes: string;
-  symptoms: string[];
-  testResult: string;
-  testType: string;
-  severity: string;
-  treatmentGiven: string;
-  treatmentDate: string;
-  followUpDate: string;
-  complications: string[];
-  recordedBy: string;
-}
-
-interface Pregnancy {
-  _id: string;
-  patientName: string;
-  age: string;
-  gender: string;
-  address: string;
-  contactNumber: string;
-  notes: string;
-  pregnancyStatus: string;
-  gestationWeeks: number;
-  gravida: number;
-  para: number;
-  antenatalVisits: number;
-  riskFactors: string[];
-  complications: string[];
-  vitals: Record<string, any>;
-  nextVisitDate: string;
-  recordedBy: string;
-}
+import type { MalariaCase } from "./types/formTypes";
+import type { Pregnancy } from "./types/formTypes";
 
 interface ActiveCasesModalProps {
   isOpen: boolean;
@@ -56,10 +19,22 @@ export const ActiveCases: React.FC<ActiveCasesModalProps> = ({
   const [selectedType, setSelectedType] = useState<"malaria" | "pregnancy">(
     "malaria"
   );
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isOpen) {
+      setLoading(true);
+      const timer = setTimeout(() => setLoading(false), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setLoading(true);
+    }
+  }, [isOpen, selectedType]);
 
   if (!isOpen) return null;
 
   const cases = selectedType === "malaria" ? malariaCases : pregnancyCases;
+  let userLogged = JSON.parse(localStorage.getItem("userData") || "{}");
 
   return (
     <div className="fixed inset-0 bg-opacity-50 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
@@ -98,13 +73,21 @@ export const ActiveCases: React.FC<ActiveCasesModalProps> = ({
         </div>
 
         <div className="p-6">
-          {cases.length === 0 ? (
+          {loading ? (
+            <div className="flex justify-center items-center h-32">
+              <span>Loading...</span>
+            </div>
+          ) : cases.length === 0 ? (
             <div>No active cases.</div>
           ) : (
             <div>
               {selectedType === "malaria"
                 ? (cases as MalariaCase[])
-                    .filter((c) => c.testResult.toLowerCase() === "positive")
+                    .filter(
+                      (c) =>
+                        c.testResult.toLowerCase() === "positive" &&
+                        c.recordedBy === userLogged.name
+                    )
                     .map((c) => (
                       <div
                         key={c._id}
@@ -122,7 +105,9 @@ export const ActiveCases: React.FC<ActiveCasesModalProps> = ({
                     ))
                 : (cases as Pregnancy[])
                     .filter(
-                      (c) => c.pregnancyStatus.toLowerCase() === "pregnant"
+                      (c) =>
+                        c.pregnancyStatus.toLowerCase() === "pregnant" &&
+                        c.recordedBy === userLogged.name
                     )
                     .map((c) => (
                       <div
