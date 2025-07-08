@@ -28,6 +28,7 @@ import {
   getImprovingMalariaCases,
   getImprovingPregnancyCases,
 } from "./props/patientData";
+import { UrgentActions } from "./UrgentActions";
 
 interface DashboardProps {
   user: User;
@@ -51,6 +52,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [maternalCase, setMaternalCase] = useState(false);
   const [displayActiveCases, setDisplayActiveCases] = useState(false);
   const [improving, setImproving] = useState(false);
+  const [urgentActions, setUrgentActions] = useState(false);
 
   const navigate = useNavigate();
 
@@ -373,7 +375,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+            onClick={() => setUrgentActions(true)}
+          >
             <div className="flex items-center">
               <div className="p-2 bg-red-100 rounded-lg">
                 <Bell className="w-6 h-6 text-red-600" />
@@ -475,6 +480,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       <ImprovingCases
         isOpen={improving}
         onClose={() => setImproving(false)}
+        malariaCases={malaria}
+        pregnancyCases={maternal}
+      />
+
+      <UrgentActions
+        isOpen={urgentActions}
+        onClose={() => setUrgentActions(false)}
         malariaCases={malaria}
         pregnancyCases={maternal}
       />
