@@ -1,4 +1,5 @@
 import { X } from "lucide-react";
+import React, { useState, useEffect } from "react";
 
 interface MalariaCase {
   _id: string;
@@ -30,6 +31,14 @@ export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
   onClose,
   activeCases,
 }) => {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (isOpen) {
+      setLoading(true);
+      const timer = setTimeout(() => setLoading(false), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
   if (!isOpen) return null;
 
   return (
@@ -51,7 +60,11 @@ export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
           </div>
         </div>
         <div className="p-6">
-          {activeCases.length === 0 ? (
+          {loading ? (
+            <div className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+              Loading malaria cases...
+            </div>
+          ) : activeCases.length === 0 ? (
             <p className="text-gray-500 text-center">
               No active malaria cases available.
             </p>

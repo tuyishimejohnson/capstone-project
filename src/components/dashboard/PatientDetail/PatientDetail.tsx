@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Funnel } from "lucide-react";
 
 interface Booking {
@@ -26,6 +26,17 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
   onClose,
   bookings,
 }) => {
+  const [filteredBookings, setFilteredBookings] = useState<Booking[] | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isOpen) {
+      setLoading(true);
+      const timer = setTimeout(() => setLoading(false), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const headers = [
@@ -38,10 +49,6 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
     "Village",
     "Status",
   ];
-
-  const [filteredBookings, setFilteredBookings] = useState<Booking[] | null>(
-    null
-  );
 
   const getFilteredPatients = () => {
     const userDataString = localStorage.getItem("userData");
@@ -79,7 +86,11 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
         </div>
 
         <div className="p-6">
-          {bookings.length === 0 ? (
+          {loading ? (
+            <div className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+              Loading patient details...
+            </div>
+          ) : bookings.length === 0 ? (
             <p className="text-gray-500">No patient bookings available.</p>
           ) : (
             <div>

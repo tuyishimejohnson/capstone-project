@@ -1,16 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import type { MalariaCase } from "./types/formTypes";
-import type { Pregnancy } from "./types/formTypes";
+import type { MalariaCase } from "../../../types/formTypes";
+import type { Pregnancy } from "../../../types/formTypes";
+import { useMalariaCases } from '../../../hooks/useMalariaCases';
+import { useMaternalData } from '../../../hooks/useMaternalData';
 
-interface ImprovingCasesModalProps {
+interface ActiveCasesModalProps {
   isOpen: boolean;
   onClose: () => void;
   malariaCases: MalariaCase[];
   pregnancyCases: Pregnancy[];
 }
 
-export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
+export function useImprovingCasesCount(userName: string) {
+  const { malariaCases } = useMalariaCases();
+  const { maternalData } = useMaternalData();
+  const improvingMalariaCount = (malariaCases as MalariaCase[]).filter(
+    (c) => c.testResult && c.testResult.toLowerCase() === "negative"
+  ).length;
+  const improvingPregnancyCount = (maternalData as Pregnancy[]).filter(
+    (c) => c.pregnancyStatus && c.pregnancyStatus.toLowerCase() === "postpartum"
+  ).length;
+  return improvingMalariaCount + improvingPregnancyCount;
+}
+
+export const ActiveCases: React.FC<ActiveCasesModalProps> = ({
   isOpen,
   onClose,
   malariaCases,
@@ -75,7 +89,7 @@ export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
         <div className="p-6">
           {loading ? (
             <div className="flex justify-center items-center h-32">
-              <span>Loading...</span>
+              <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">Loading active cases...</span>
             </div>
           ) : cases.length === 0 ? (
             <div>No active cases.</div>
@@ -84,8 +98,9 @@ export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
               {selectedType === "malaria"
                 ? (cases as MalariaCase[])
                     .filter(
-                      (c) => c.testResult.toLowerCase() === "negative" /* &&
-                        c.recordedBy === userLogged.name */
+                      (c) =>
+                        c.testResult.toLowerCase() === "positive" &&
+                        c.recordedBy === userLogged.name
                     )
                     .map((c) => (
                       <div
@@ -105,8 +120,8 @@ export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
                 : (cases as Pregnancy[])
                     .filter(
                       (c) =>
-                        c.pregnancyStatus.toLowerCase() === "postpartum" /* &&
-                        c.recordedBy === userLogged.name */
+                        c.pregnancyStatus.toLowerCase() === "pregnant" &&
+                        c.recordedBy === userLogged.name
                     )
                     .map((c) => (
                       <div

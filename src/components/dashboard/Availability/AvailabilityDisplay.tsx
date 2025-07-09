@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Clock, Calendar, CheckCircle2, XCircle } from "lucide-react";
-import RegisteredCHW from "./RegisteredCHW";
+import RegisteredCHW from "../RegisteredCHW";
 
 interface AvailabilityItem {
   userId: string;

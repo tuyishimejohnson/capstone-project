@@ -9,26 +9,28 @@ import {
   Clock,
   Plus,
 } from "lucide-react";
-import { AvailabilityModal } from "./AvailabilityModal";
-import { AvailabilityDisplay } from "./AvailabilityDisplay";
+import { AvailabilityModal } from "./Availability/AvailabilityModal";
+import { AvailabilityDisplay } from "./Availability/AvailabilityDisplay";
 import { healthMetrics, suggestions } from "../../data/mockData";
 import type { User, WeeklySchedule } from "../../types";
 import { Link } from "react-router";
-import axios from "axios";
-import { PatientDetailsModal } from "./PatientDetail";
+import { PatientDetailsModal } from "./PatientDetail/PatientDetail";
 import { useNavigate } from "react-router-dom";
 import PatientDataForm from "../forms/PatientData";
-import { ActiveCasesModal } from "./MalariaCases";
-import { NutritionCases } from "./NutritionCases";
+import { ActiveCasesModal } from "./MalariaCases/MalariaCases";
+import { NutritionCases } from "./NutritionCases/NutritionCases";
 import { PregnancyModal } from "./PregnancyStatus";
 import { defaultSchedule } from "../../data/defaultSchedule";
-import { ActiveCases } from "./ActiveCases";
-import { ImprovingCases } from "./improvingCases";
-import {
-  getImprovingMalariaCases,
-  getImprovingPregnancyCases,
-} from "./props/patientData";
-import { UrgentActions } from "./UrgentActions";
+import { ActiveCases, useImprovingCasesCount } from "./ActiveCases/ActiveCases";
+import { ImprovingCases } from "./ImprovingCases/ImprovingCases";
+
+import { UrgentActions } from "./UrgentActions/UrgentActions";
+import { useUserName } from "../../hooks/useUserName";
+import { useBookings } from "../../hooks/useBookings";
+import { useMalariaCases } from "../../hooks/useMalariaCases";
+import { useMaternalData } from "../../hooks/useMaternalData";
+import { useNutritionData } from "../../hooks/useNutritionData";
+import { useUrgentActions } from "./UrgentActions/UrgentActions";
 
 interface DashboardProps {
   user: User;
@@ -37,17 +39,12 @@ interface DashboardProps {
 
 export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
-  const [bookings, setBookings] = useState([]);
   const [schedule, setSchedule] = useState<WeeklySchedule>(defaultSchedule);
-  const [userName, setUserName] = useState("");
   const [patientDetail, setPatientDetail] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [activeCases, setActiveCases] = useState(false);
-  const [cases, setCases] = useState([]);
-  const [maternal, setMaternal] = useState<any[]>([]);
-  const [malaria, setMalaria] = useState<any[]>([]);
-  const [nutrition, setNutrition] = useState<any[]>([]);
+  
   const [nutritionCase, setNutritionCase] = useState(false);
   const [maternalCase, setMaternalCase] = useState(false);
   const [displayActiveCases, setDisplayActiveCases] = useState(false);
@@ -55,6 +52,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [urgentActions, setUrgentActions] = useState(false);
 
   const navigate = useNavigate();
+
+  // Use custom hooks
+  const { userName, loading: loadingUser } = useUserName();
+  const { bookings, loading: loadingBookings } = useBookings();
+  const { malariaCases, loading: loadingMalaria } = useMalariaCases();
+  const { maternalData, loading: loadingMaternal } = useMaternalData();
+  const { nutritionData, loading: loadingNutrition } = useNutritionData();
 
   const criticalMetrics = healthMetrics.filter(
     (m: any) => m.status === "critical"
@@ -84,105 +88,21 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   };
 
   const availabilityStatus = getAvailabilityStatus();
+  
+  // Use improving cases count from ActiveCases hook
+  const improvingTotal = useImprovingCasesCount(userName);
+  const urgentTotal = useUrgentActions(userName);
 
-  useEffect(() => {
-    const getUserName = async () => {
-      const userDataString = localStorage.getItem("userData");
-      let userToken = "";
-      if (userDataString) {
-        try {
-          const userData = JSON.parse(userDataString);
-          userToken = userData?.name || "";
-        } catch (e) {
-          userToken = "";
-        }
-      }
-      setUserName(userToken || "");
-    };
-    getUserName();
-  }, []);
-
-  useEffect(() => {
-    const handleBookings = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/api/appointments`
-        );
-        setBookings(response.data);
-        console.log("=========================> received data", response.data);
-      } catch (error) {
-        console.log(
-          "=====+++++++++++++++++++++++0 error while receiving data",
-          error
-        );
-      }
-    };
-    handleBookings();
-  }, []);
-
-  useEffect(() => {
-    const handleActiveCases = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/api/malaria`
-        );
-
-        localStorage.setItem("malariaCase", JSON.stringify(response.data));
-        setCases(response.data);
-        console.log("=========================> received data", response.data);
-      } catch (error) {
-        console.log(
-          "=====+++++++++++++++++++++++0 error while receiving data",
-          error
-        );
-      }
-    };
-    handleActiveCases();
-  }, []);
-
-  useEffect(() => {
-    const getMaternalData = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/api/maternal`
-        );
-        localStorage.setItem("maternalCase", JSON.stringify(response.data));
-        setMaternal(response.data);
-      } catch (error) {
-        console.log("Error while receiving maternal data", error);
-      }
-    };
-    getMaternalData();
-  }, []);
-
-  useEffect(() => {
-    const getNutritionData = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/api/nutrition`
-        );
-        setNutrition(response.data);
-      } catch (error) {
-        console.log("Error while receiving nutrition data", error);
-      }
-    };
-    getNutritionData();
-  }, []);
-
-  useEffect(() => {
-    const getMalariaData = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/api/malaria`
-        );
-        setMalaria(response.data);
-      } catch (error) {
-        console.log("Error while receiving malaria data", error);
-      }
-    };
-    getMalariaData();
-  }, []);
-
+  // Show loading indicator until all data is loaded
+  if (loadingUser || loadingBookings || loadingMalaria || loadingMaternal || loadingNutrition) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-xl text-teal-600 font-semibold">Loading dashboard...</div>
+      </div>
+    );
+  }
+  
+  
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -262,7 +182,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                               setShowLogoutDialog(false);
                               navigate("/");
                               onLogout();
-                            }, 1500);
+                            }, 1000);
                           }}
                         >
                           Logout
@@ -351,7 +271,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                   Active Cases
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {malaria.length + maternal.length}
+                  {malariaCases.length + maternalData.length}
                 </p>
               </div>
             </div>
@@ -368,8 +288,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Improving</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {getImprovingMalariaCases.length +
-                    getImprovingPregnancyCases.length}
+                  {improvingTotal}
                 </p>
               </div>
             </div>
@@ -388,7 +307,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                   Urgent Actions
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {highPrioritySuggestions.length}
+                  {urgentTotal}
                 </p>
               </div>
             </div>
@@ -406,21 +325,21 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               onClick={() => setMaternalCase(true)}
             >
               <h2>Pregnant Women Under Care</h2>
-              <span>{maternal.length}</span>
+              <span>{maternalData.length}</span>
             </div>
             <div
               className="border border-teal-600 bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all pt-3 hover:bg-transparent hover:text-gray-500"
               onClick={() => setActiveCases(true)}
             >
               <h2>Malaria Cases</h2>
-              <span>{malaria.length}</span>
+              <span>{malariaCases.length}</span>
             </div>
             <div
               className="border border-teal-600 bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all pt-3 hover:bg-transparent hover:text-gray-500"
               onClick={() => setNutritionCase(true)}
             >
               <h2>Children Nutrition</h2>
-              <span>{nutrition.length}</span>
+              <span>{nutritionData.length}</span>
             </div>
 
             {}
@@ -447,18 +366,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         onClose={() => {
           setActiveCases(false);
         }}
-        activeCases={cases}
+        activeCases={malariaCases}
       />
       <NutritionCases
         isOpen={nutritionCase}
         onClose={() => setNutritionCase(false)}
-        nutritionCase={nutrition}
+        nutritionCase={nutritionData}
       />
 
       <PregnancyModal
         isOpen={maternalCase}
         onClose={() => setMaternalCase(false)}
-        pregnancyStatus={maternal}
+        pregnancyStatus={maternalData}
       />
       {/* Patient data form Component */}
       <PatientDataForm
@@ -473,22 +392,22 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       <ActiveCases
         isOpen={displayActiveCases}
         onClose={() => setDisplayActiveCases(false)}
-        malariaCases={malaria}
-        pregnancyCases={maternal}
+        malariaCases={malariaCases}
+        pregnancyCases={maternalData}
       />
 
       <ImprovingCases
         isOpen={improving}
         onClose={() => setImproving(false)}
-        malariaCases={malaria}
-        pregnancyCases={maternal}
+        malariaCases={malariaCases}
+        pregnancyCases={maternalData}
       />
 
       <UrgentActions
         isOpen={urgentActions}
         onClose={() => setUrgentActions(false)}
-        malariaCases={malaria}
-        pregnancyCases={maternal}
+        malariaCases={malariaCases}
+        nutritionCases={nutritionData}
       />
     </div>
   );

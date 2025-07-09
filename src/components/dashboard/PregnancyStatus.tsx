@@ -1,4 +1,5 @@
 import { X } from "lucide-react";
+import React, { useState, useEffect } from "react";
 
 interface Pregnancy {
   _id: string;
@@ -31,6 +32,14 @@ export const PregnancyModal: React.FC<PregnancyModalProps> = ({
   onClose,
   pregnancyStatus,
 }) => {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (isOpen) {
+      setLoading(true);
+      const timer = setTimeout(() => setLoading(false), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
   if (!isOpen) return null;
 
   return (
@@ -52,7 +61,11 @@ export const PregnancyModal: React.FC<PregnancyModalProps> = ({
           </div>
         </div>
         <div className="p-6">
-          {pregnancyStatus.length === 0 ? (
+          {loading ? (
+            <div className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+              Loading maternal cases...
+            </div>
+          ) : pregnancyStatus.length === 0 ? (
             <p className="text-gray-500 text-center">
               No active cases available.
             </p>

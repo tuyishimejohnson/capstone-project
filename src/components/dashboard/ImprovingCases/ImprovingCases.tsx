@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import type { MalariaCase } from "./types/formTypes";
-import type { Nutrition } from "./types/formTypes";
+import type { MalariaCase } from "../../../types/formTypes";
+import type { Pregnancy } from "../../../types/formTypes";
 
-interface UrgentActionsModalProps {
+interface ImprovingCasesModalProps {
   isOpen: boolean;
   onClose: () => void;
   malariaCases: MalariaCase[];
-  nutritionCases: Nutrition[];
+  pregnancyCases: Pregnancy[];
 }
 
-export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
+export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
   isOpen,
   onClose,
   malariaCases,
-  nutritionCases,
+  pregnancyCases,
 }) => {
-  const [selectedType, setSelectedType] = useState<"malaria" | "nutrition">(
+  const [selectedType, setSelectedType] = useState<"malaria" | "pregnancy">(
     "malaria"
   );
   const [loading, setLoading] = useState(true);
@@ -33,14 +33,7 @@ export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
 
   if (!isOpen) return null;
 
-  const cases = Array.isArray(
-    selectedType === "malaria" ? malariaCases : nutritionCases
-  )
-    ? selectedType === "malaria"
-      ? malariaCases
-      : nutritionCases
-    : [];
-
+  const cases = selectedType === "malaria" ? malariaCases : pregnancyCases;
   let userLogged = JSON.parse(localStorage.getItem("userData") || "{}");
 
   return (
@@ -50,7 +43,7 @@ export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
           className="flex justify-between mb-0 px-6 rounded-t-lg py-3"
           style={{ backgroundColor: "#0d9488" }}
         >
-          <h2 className="text-xl font-semibold text-white">Urgent Actions</h2>
+          <h2 className="text-xl font-semibold text-white">Improving Cases</h2>
           <div className="flex gap-2">
             <div className="text-white flex gap-1">
               <button
@@ -63,11 +56,11 @@ export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
               </button>
               <button
                 className={`px-7 ${
-                  selectedType === "nutrition" ? "bg-teal-700" : ""
+                  selectedType === "pregnancy" ? "bg-teal-700" : ""
                 }`}
-                onClick={() => setSelectedType("nutrition")}
+                onClick={() => setSelectedType("pregnancy")}
               >
-                Nutrition
+                Maternal Case
               </button>
             </div>
             <button
@@ -82,18 +75,17 @@ export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
         <div className="p-6">
           {loading ? (
             <div className="flex justify-center items-center h-32">
-              <span>Loading...</span>
+              <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">Loading improving cases...</span>
             </div>
           ) : cases.length === 0 ? (
-            <div className="text-center">No urgent actions.</div>
+            <div>No active cases.</div>
           ) : (
             <div>
               {selectedType === "malaria"
                 ? (cases as MalariaCase[])
                     .filter(
-                      (c) =>
-                        c.severity.toLowerCase() === "severe" &&
-                        c.recordedBy === userLogged.name
+                      (c) => c.testResult.toLowerCase() === "negative" /* &&
+                        c.recordedBy === userLogged.name */
                     )
                     .map((c) => (
                       <div
@@ -110,12 +102,11 @@ export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
                         <div>Severity: {c.severity}</div>
                       </div>
                     ))
-                : (cases as Nutrition[])
+                : (cases as Pregnancy[])
                     .filter(
                       (c) =>
-                        c.nutritionStatus.toLowerCase() ===
-                          "severe malnutrition" &&
-                        c.recordedBy === userLogged.name
+                        c.pregnancyStatus.toLowerCase() === "postpartum" /* &&
+                        c.recordedBy === userLogged.name */
                     )
                     .map((c) => (
                       <div
@@ -128,9 +119,9 @@ export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
                           </h2>
                         </div>
                         <div>Age: {c.age}</div>
-                        <div>Nutrition status: {c.nutritionStatus}</div>
-                        <div>Feeding Practices: {c.feedingPractices}</div>
-                        <div>MUAC: {c.muac}</div>
+                        <div>Pregnancy Status: {c.pregnancyStatus}</div>
+                        <div>Gestation Weeks: {c.gestationWeeks}</div>
+                        <div>Antenatal visits: {c.antenatalVisits}</div>
                       </div>
                     ))}
             </div>
