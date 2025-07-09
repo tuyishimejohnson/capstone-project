@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   LogOut,
   Bell,
@@ -8,6 +8,7 @@ import {
   Heart,
   Clock,
   Plus,
+  BotMessageSquare 
 } from "lucide-react";
 import { AvailabilityModal } from "./Availability/AvailabilityModal";
 import { AvailabilityDisplay } from "./Availability/AvailabilityDisplay";
@@ -213,12 +214,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           </div>
 
           <div className="gap-7 border-gray-200 flex items-center justify-center">
-            <Link
+              <Link
               to={"/predict"}
               className="flex items-center px-4 py-2 shadow-sm text-gray-600 rounded-lg hover:bg-teal-600 hover:text-white transition-all duration-200 border border-gray-300"
             >
-              Predict Recommendations
-            </Link>
+              <BotMessageSquare className="w-6 h-6 text-teal-600" />
+              Ask Assistant
+            </Link>            
             {/* Add Patient Data Button */}
             <button
               onClick={() => setShowForm(true)}

@@ -72,7 +72,7 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
         <div className="p-6">
           {loading ? (
             <div className="flex justify-center items-center py-8">
-              <span className="text-gray-500">Loading...</span>
+              <span className="flex items-center justify-center text-teal-600 font-semibold text-lg">Loading CHWs...</span>
             </div>
           ) : showUsers.length === 0 ? (
             <p className="text-gray-500">No registered CHWs available.</p>
