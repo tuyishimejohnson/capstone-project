@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { X, Trash2 } from "lucide-react";
 import type { MalariaCase } from "../../../types/formTypes";
 import type { Pregnancy } from "../../../types/formTypes";
+import axios from "axios";
 
 interface ImprovingCasesModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
     "malaria"
   );
   const [loading, setLoading] = useState(true);
+  const [confirmDelete, setConfirmDelete] = useState<{ open: boolean; caseId: string | null; caseType: string | null }>({ open: false, caseId: null, caseType: null });
 
   useEffect(() => {
     if (isOpen) {
@@ -30,6 +32,36 @@ export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
       setLoading(true);
     }
   }, [isOpen, selectedType]);
+
+  const handleDeleteClick = (caseId: string, caseType: string) => {
+    setConfirmDelete({ open: true, caseId, caseType });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!confirmDelete.caseId || !confirmDelete.caseType) return;
+    try {
+      const endpoint = confirmDelete.caseType === "malaria" ? "malaria" : "maternal";
+      // First, get the case by id
+      const getRes = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${confirmDelete.caseId}`);
+      if (!getRes.data || getRes.status !== 200) {
+        alert(`${confirmDelete.caseType} case not found.`);
+        setConfirmDelete({ open: false, caseId: null, caseType: null });
+        return;
+      }
+      // If found, delete it
+      await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${confirmDelete.caseId}`);
+      // Refresh the page or update the list
+      window.location.reload();
+    } catch (error) {
+      alert(`Failed to delete ${confirmDelete.caseType} case.`);
+    } finally {
+      setConfirmDelete({ open: false, caseId: null, caseType: null });
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setConfirmDelete({ open: false, caseId: null, caseType: null });
+  };
 
   if (!isOpen) return null;
 
@@ -90,16 +122,23 @@ export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
                     .map((c) => (
                       <div
                         key={c._id}
-                        className="mb-4 border-gray-300 border-b pb-2"
+                        className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
                       >
                         <div>
                           <h2 className="text-xl font-medium text-teal-700">
                             Name: {c.patientName}
                           </h2>
+                          <div>Age: {c.age}</div>
+                          <div>Status: {c.testResult}</div>
+                          <div>Severity: {c.severity}</div>
                         </div>
-                        <div>Age: {c.age}</div>
-                        <div>Status: {c.testResult}</div>
-                        <div>Severity: {c.severity}</div>
+                        <button
+                          className="text-red-500 hover:text-red-700 ml-4"
+                          onClick={() => handleDeleteClick(c._id, "malaria")}
+                          aria-label="Delete malaria case"
+                        >
+                          <Trash2 size={18} />
+                        </button>
                       </div>
                     ))
                 : (cases as Pregnancy[])
@@ -111,22 +150,50 @@ export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
                     .map((c) => (
                       <div
                         key={c._id}
-                        className="mb-4 border-gray-300 border-b pb-2"
+                        className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
                       >
                         <div>
                           <h2 className="text-xl font-medium text-teal-700">
                             Name: {c.patientName}
                           </h2>
+                          <div>Age: {c.age}</div>
+                          <div>Pregnancy Status: {c.pregnancyStatus}</div>
+                          <div>Gestation Weeks: {c.gestationWeeks}</div>
+                          <div>Antenatal visits: {c.antenatalVisits}</div>
                         </div>
-                        <div>Age: {c.age}</div>
-                        <div>Pregnancy Status: {c.pregnancyStatus}</div>
-                        <div>Gestation Weeks: {c.gestationWeeks}</div>
-                        <div>Antenatal visits: {c.antenatalVisits}</div>
+                        <button
+                          className="text-red-500 hover:text-red-700 ml-4"
+                          onClick={() => handleDeleteClick(c._id, "maternal")}
+                          aria-label="Delete maternal case"
+                        >
+                          <Trash2 size={18} />
+                        </button>
                       </div>
                     ))}
             </div>
           )}
         </div>
+        {confirmDelete.open && (
+          <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)] bg-opacity-40 z-50">
+            <div className="bg-white p-6 rounded shadow-lg flex flex-col items-center">
+              <p className="mb-4 text-lg font-semibold">Are you sure you want to delete this {confirmDelete.caseType} case?</p>
+              <div className="flex gap-4">
+                <button
+                  className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-red-600"
+                  onClick={handleDeleteConfirm}
+                >
+                  Delete
+                </button>
+                <button
+                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+                  onClick={handleDeleteCancel}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
