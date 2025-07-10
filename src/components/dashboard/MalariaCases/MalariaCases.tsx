@@ -33,7 +33,7 @@ export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
   activeCases,
 }) => {
   const [loading, setLoading] = useState(true);
-  const [confirmDelete, setConfirmDelete] = useState<{ open: boolean; caseId: string | null }>({ open: false, caseId: null });
+  // const [confirmDelete, setConfirmDelete] = useState<{ open: boolean; caseId: string | null }>({ open: false, caseId: null });
 
   useEffect(() => {
     if (isOpen) {
@@ -43,34 +43,34 @@ export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
     }
   }, [isOpen]);
 
-  const handleDeleteClick = (caseId: string) => {
-    setConfirmDelete({ open: true, caseId });
-  };
+  // const handleDeleteClick = (caseId: string) => {
+  //   setConfirmDelete({ open: true, caseId });
+  // };
 
-  const handleDeleteConfirm = async () => {
-    if (!confirmDelete.caseId) return;
-    try {
-      // First, get the malaria case by id
-      const getRes = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/malaria/${confirmDelete.caseId}`);
-      if (!getRes.data || getRes.status !== 200) {
-        alert("Malaria case not found.");
-        setConfirmDelete({ open: false, caseId: null });
-        return;
-      }
-      // If found, delete it
-      await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/malaria/${confirmDelete.caseId}`);
-      // Refresh the page or update the list
-      window.location.reload();
-    } catch (error) {
-      alert("Failed to delete malaria case.");
-    } finally {
-      setConfirmDelete({ open: false, caseId: null });
-    }
-  };
+  // const handleDeleteConfirm = async () => {
+  //   if (!confirmDelete.caseId) return;
+  //   try {
+  //     // First, get the malaria case by id
+  //     const getRes = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/malaria/${confirmDelete.caseId}`);
+  //     if (!getRes.data || getRes.status !== 200) {
+  //       alert("Malaria case not found.");
+  //       setConfirmDelete({ open: false, caseId: null });
+  //       return;
+  //     }
+  //     // If found, delete it
+  //     await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/malaria/${confirmDelete.caseId}`);
+  //     // Refresh the page or update the list
+  //     window.location.reload();
+  //   } catch (error) {
+  //     alert("Failed to delete malaria case.");
+  //   } finally {
+  //     setConfirmDelete({ open: false, caseId: null });
+  //   }
+  // };
 
-  const handleDeleteCancel = () => {
-    setConfirmDelete({ open: false, caseId: null });
-  };
+  // const handleDeleteCancel = () => {
+  //   setConfirmDelete({ open: false, caseId: null });
+  // };
 
   if (!isOpen) return null;
 
@@ -136,20 +136,20 @@ export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
                   <div className="flex-1 p-2">{malariaCase.treatmentGiven}</div>
                   <div className="flex-1 p-2">{malariaCase.recordedBy}</div>
                   <div className="p-2 w-8 flex items-center justify-center">
-                    <button
+                    {/* <button
                       className="text-red-500 hover:text-red-700"
                       onClick={() => handleDeleteClick(malariaCase._id)}
                       aria-label="Delete malaria case"
                     >
                       <Trash2 size={18} />
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               ))}
             </div>
           )}
         </div>
-        {confirmDelete.open && (
+        {/* {confirmDelete.open && (
           <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)] bg-opacity-40 z-50">
             <div className="bg-white p-6 rounded shadow-lg flex flex-col items-center">
               <p className="mb-4 text-lg font-semibold">Are you sure you want to delete this malaria case?</p>
@@ -169,7 +169,7 @@ export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
               </div>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
