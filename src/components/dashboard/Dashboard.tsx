@@ -8,16 +8,16 @@ import {
   Heart,
   Clock,
   Plus,
-  BotMessageSquare 
+  BotMessageSquare,
 } from "lucide-react";
 import { AvailabilityModal } from "./Availability/AvailabilityModal";
 import { AvailabilityDisplay } from "./Availability/AvailabilityDisplay";
 import { healthMetrics, suggestions } from "../../data/mockData";
 import type { User, WeeklySchedule } from "../../types";
-import { Link } from "react-router";
 import { PatientDetailsModal } from "./PatientDetail/PatientDetail";
 import { useNavigate } from "react-router-dom";
 import PatientDataForm from "../forms/PatientData";
+
 import { ActiveCasesModal } from "./MalariaCases/MalariaCases";
 import { NutritionCases } from "./NutritionCases/NutritionCases";
 import { PregnancyModal } from "./PregnancyStatus";
@@ -32,6 +32,7 @@ import { useMalariaCases } from "../../hooks/useMalariaCases";
 import { useMaternalData } from "../../hooks/useMaternalData";
 import { useNutritionData } from "../../hooks/useNutritionData";
 import { useUrgentActions } from "./UrgentActions/UrgentActions";
+import { PredictionUploadPage } from "./PredictionModel";
 
 interface DashboardProps {
   user: User;
@@ -45,7 +46,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [activeCases, setActiveCases] = useState(false);
-  
+
+  const [prediction, setPrediction] = useState(false);
   const [nutritionCase, setNutritionCase] = useState(false);
   const [maternalCase, setMaternalCase] = useState(false);
   const [displayActiveCases, setDisplayActiveCases] = useState(false);
@@ -89,21 +91,28 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   };
 
   const availabilityStatus = getAvailabilityStatus();
-  
+
   // Use improving cases count from ActiveCases hook
   const improvingTotal = useImprovingCasesCount(userName);
   const urgentTotal = useUrgentActions(userName);
 
   // Show loading indicator until all data is loaded
-  if (loadingUser || loadingBookings || loadingMalaria || loadingMaternal || loadingNutrition) {
+  if (
+    loadingUser ||
+    loadingBookings ||
+    loadingMalaria ||
+    loadingMaternal ||
+    loadingNutrition
+  ) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-xl text-teal-600 font-semibold">Loading dashboard...</div>
+        <div className="text-xl text-teal-600 font-semibold">
+          Loading dashboard...
+        </div>
       </div>
     );
   }
-  
-  
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -214,13 +223,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           </div>
 
           <div className="gap-7 border-gray-200 flex items-center justify-center">
-              <Link
-              to={"/predict"}
+            <button
               className="flex items-center px-4 py-2 shadow-sm text-gray-600 rounded-lg hover:bg-teal-600 hover:text-white transition-all duration-200 border border-gray-300"
+              onClick={() => setPrediction(true)}
             >
-              <BotMessageSquare className="w-6 h-6 text-teal-600" />
-              Ask Assistant
-            </Link>            
+              <span className="text-teal-600 hover:text-white flex items-center justify-center">
+                <BotMessageSquare className="w-6 h-6 " />
+                Ask Assistant
+              </span>
+            </button>
             {/* Add Patient Data Button */}
             <button
               onClick={() => setShowForm(true)}
@@ -410,6 +421,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         onClose={() => setUrgentActions(false)}
         malariaCases={malariaCases}
         nutritionCases={nutritionData}
+      />
+      <PredictionUploadPage
+        show={prediction}
+        onClose={() => setPrediction(false)}
       />
     </div>
   );

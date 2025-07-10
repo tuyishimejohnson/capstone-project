@@ -1,16 +1,16 @@
-import { X, Send, MessageCircle, Bot, User } from "lucide-react";
+import React from "react";
+import { X, Send, Bot, User } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 interface ChatMessage {
   id: string;
-  type: 'bot' | 'user';
+  type: "bot" | "user";
   content: string;
   timestamp: Date;
 }
 
 interface CaseData {
-  type?: 'malaria' | 'nutrition' | 'maternal';
+  type?: "malaria" | "nutrition" | "maternal";
   patientName?: string;
   age?: string;
   gender?: string;
@@ -21,37 +21,46 @@ interface CaseData {
   [key: string]: any;
 }
 
+interface BotProps {
+  show: boolean;
+  onClose: () => void;
+}
+
 // Prediction Upload Page
-export const PredictionUploadPage = () => {
+export const PredictionUploadPage: React.FC<BotProps> = ({ show, onClose }) => {
+  if (!show) return null;
+
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      id: '1',
-      type: 'bot',
-      content: "Hello! I'm your CHW Assistant. I can help you get recommendations for malaria, nutrition, or maternal cases. What type of case would you like to discuss today?",
-      timestamp: new Date()
-    }
+      id: "1",
+      type: "bot",
+      content:
+        "Hello! I'm your CHW Assistant. I can help you get recommendations for malaria, nutrition, or maternal cases.",
+      timestamp: new Date(),
+    },
   ]);
-  const [currentInput, setCurrentInput] = useState('');
+  const [currentInput, setCurrentInput] = useState("");
   const [caseData, setCaseData] = useState<CaseData>({} as CaseData);
-  const [currentStep, setCurrentStep] = useState<'type' | 'basic' | 'specific' | 'recommendation'>('type');
-  const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState<
+    "type" | "basic" | "specific" | "recommendation"
+  >("type");
 
-  const addMessage = (content: string, type: 'bot' | 'user') => {
+  const addMessage = (content: string, type: "bot" | "user") => {
     const newMessage: ChatMessage = {
       id: Date.now().toString(),
       type,
       content,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
-    setMessages(prev => [...prev, newMessage]);
+    setMessages((prev) => [...prev, newMessage]);
   };
 
   const handleSendMessage = () => {
     if (!currentInput.trim()) return;
 
-    addMessage(currentInput, 'user');
+    addMessage(currentInput, "user");
     const userInput = currentInput.toLowerCase();
-    setCurrentInput('');
+    setCurrentInput("");
 
     // Simulate bot response
     setTimeout(() => {
@@ -60,73 +69,94 @@ export const PredictionUploadPage = () => {
   };
 
   const handleBotResponse = (userInput: string) => {
-    if (currentStep === 'type') {
-      if (userInput.includes('malaria')) {
-        setCaseData({ type: 'malaria' } as CaseData);
-        setCurrentStep('basic');
-        addMessage("Great! Let's gather information about the malaria case. What's the patient's name?", 'bot');
-      } else if (userInput.includes('nutrition')) {
-        setCaseData({ type: 'nutrition' } as CaseData);
-        setCurrentStep('basic');
-        addMessage("Perfect! Let's discuss the nutrition case. What's the patient's name?", 'bot');
-      } else if (userInput.includes('maternal')) {
-        setCaseData({ type: 'maternal' } as CaseData);
-        setCurrentStep('basic');
-        addMessage("Excellent! Let's talk about the maternal case. What's the patient's name?", 'bot');
+    if (currentStep === "type") {
+      if (userInput.includes("malaria")) {
+        setCaseData({ type: "malaria" } as CaseData);
+        setCurrentStep("basic");
+        addMessage(
+          "Great! Let's gather information about the malaria case. What's the patient's name?",
+          "bot"
+        );
+      } else if (userInput.includes("nutrition")) {
+        setCaseData({ type: "nutrition" } as CaseData);
+        setCurrentStep("basic");
+        addMessage(
+          "Perfect! Let's discuss the nutrition case. What's the patient's name?",
+          "bot"
+        );
+      } else if (userInput.includes("maternal")) {
+        setCaseData({ type: "maternal" } as CaseData);
+        setCurrentStep("basic");
+        addMessage(
+          "Excellent! Let's talk about the maternal case. What's the patient's name?",
+          "bot"
+        );
       } else {
-        addMessage("Please specify: malaria, nutrition, or maternal case?", 'bot');
+        addMessage(
+          "Please specify: malaria, nutrition, or maternal case?",
+          "bot"
+        );
       }
-    } else if (currentStep === 'basic') {
+    } else if (currentStep === "basic") {
       if (!caseData.patientName) {
-        setCaseData(prev => ({ ...prev, patientName: userInput }));
-        addMessage(`Thank you, ${userInput}. What's the patient's age?`, 'bot');
+        setCaseData((prev) => ({ ...prev, patientName: userInput }));
+        addMessage(`Thank you, ${userInput}. What's the patient's age?`, "bot");
       } else if (!caseData.age) {
-        setCaseData(prev => ({ ...prev, age: userInput }));
-        addMessage("What's the patient's gender? (male/female)", 'bot');
+        setCaseData((prev) => ({ ...prev, age: userInput }));
+        addMessage("What's the patient's gender? (male/female)", "bot");
       } else if (!caseData.gender) {
-        setCaseData(prev => ({ ...prev, gender: userInput }));
-        setCurrentStep('specific');
+        setCaseData((prev) => ({ ...prev, gender: userInput }));
+        setCurrentStep("specific");
         addSpecificQuestion();
       }
-    } else if (currentStep === 'specific') {
+    } else if (currentStep === "specific") {
       handleSpecificResponse(userInput);
     }
   };
 
   const addSpecificQuestion = () => {
-    if (caseData.type === 'malaria') {
-      addMessage("What are the main symptoms? (fever, headache, chills, etc.)", 'bot');
-    } else if (caseData.type === 'nutrition') {
-      addMessage("What's the child's nutrition status? (normal, moderate_malnutrition, severe_malnutrition)", 'bot');
-    } else if (caseData.type === 'maternal') {
-      addMessage("What's the pregnancy status? (pregnant, postpartum, planning)", 'bot');
+    if (caseData.type === "malaria") {
+      addMessage(
+        "What are the main symptoms? (fever, headache, chills, etc.)",
+        "bot"
+      );
+    } else if (caseData.type === "nutrition") {
+      addMessage(
+        "What's the child's nutrition status? (normal, moderate_malnutrition, severe_malnutrition)",
+        "bot"
+      );
+    } else if (caseData.type === "maternal") {
+      addMessage(
+        "What's the pregnancy status? (pregnant, postpartum, planning)",
+        "bot"
+      );
     }
   };
 
   const handleSpecificResponse = (userInput: string) => {
-    if (caseData.type === 'malaria') {
-      setCaseData(prev => ({ ...prev, symptoms: userInput.split(', ') }));
-      addMessage("What's the test result? (positive/negative)", 'bot');
-    } else if (caseData.type === 'nutrition') {
-      setCaseData(prev => ({ ...prev, nutritionStatus: userInput }));
-      addMessage("What's the child's weight in kg?", 'bot');
-    } else if (caseData.type === 'maternal') {
-      setCaseData(prev => ({ ...prev, pregnancyStatus: userInput }));
-      addMessage("How many weeks of gestation?", 'bot');
+    if (caseData.type === "malaria") {
+      setCaseData((prev) => ({ ...prev, symptoms: userInput.split(", ") }));
+      addMessage("What's the test result? (positive/negative)", "bot");
+    } else if (caseData.type === "nutrition") {
+      setCaseData((prev) => ({ ...prev, nutritionStatus: userInput }));
+      addMessage("What's the child's weight in kg?", "bot");
+    } else if (caseData.type === "maternal") {
+      setCaseData((prev) => ({ ...prev, pregnancyStatus: userInput }));
+      addMessage("How many weeks of gestation?", "bot");
     }
 
     // Add more specific questions based on the case type
     setTimeout(() => {
-      setCurrentStep('recommendation');
+      setCurrentStep("recommendation");
       generateRecommendation();
     }, 1000);
   };
 
   const generateRecommendation = () => {
     let recommendation = "";
-    
-    if (caseData.type === 'malaria') {
-      if (caseData.testResult === 'positive') {
+
+    if (caseData.type === "malaria") {
+      if (caseData.testResult === "positive") {
         recommendation = `Based on the symptoms and positive test result for ${caseData.patientName}, I recommend:
         • Immediate treatment with antimalarial medication
         • Bed rest and hydration
@@ -140,8 +170,8 @@ export const PredictionUploadPage = () => {
         • Maintain preventive measures
         • Re-test if symptoms persist`;
       }
-    } else if (caseData.type === 'nutrition') {
-      if (caseData.nutritionStatus === 'severe_malnutrition') {
+    } else if (caseData.type === "nutrition") {
+      if (caseData.nutritionStatus === "severe_malnutrition") {
         recommendation = `For ${caseData.patientName} with severe malnutrition:
         • Immediate referral to nutrition center
         • Therapeutic feeding program
@@ -155,7 +185,7 @@ export const PredictionUploadPage = () => {
         • Regular check-ups
         • Nutritional education for caregivers`;
       }
-    } else if (caseData.type === 'maternal') {
+    } else if (caseData.type === "maternal") {
       recommendation = `For ${caseData.patientName} (${caseData.pregnancyStatus}):
         • Regular antenatal visits
         • Proper nutrition and supplements
@@ -164,19 +194,22 @@ export const PredictionUploadPage = () => {
         • Birth preparedness plan`;
     }
 
-    addMessage(recommendation, 'bot');
-    addMessage("Would you like to save this case data or discuss another case?", 'bot');
+    addMessage(recommendation, "bot");
+    addMessage(
+      "Would you like to save this case data or discuss another case?",
+      "bot"
+    );
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="min-h-screen fixed inset-0 bg-opacity-50 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
       <div className="bg-white rounded-xl p-6 w-full max-w-2xl shadow-lg h-[600px] flex flex-col">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center space-x-2">
@@ -185,11 +218,8 @@ export const PredictionUploadPage = () => {
               CHW Assistant
             </h3>
           </div>
-          <button
-            onClick={() => navigate("/dashboard")}
-            className="text-gray-400 hover:text-gray-600"
-          >
-            <X className="w-6 h-6" />
+          <button className="text-gray-400 hover:text-gray-600">
+            <X className="w-6 h-6" onClick={onClose} />
           </button>
         </div>
 
@@ -198,23 +228,25 @@ export const PredictionUploadPage = () => {
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${
+                message.type === "user" ? "justify-end" : "justify-start"
+              }`}
             >
               <div
                 className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                  message.type === 'user'
-                    ? 'bg-teal-600 text-white'
-                    : 'bg-white text-gray-900 border border-gray-200'
+                  message.type === "user"
+                    ? "bg-teal-600 text-white"
+                    : "bg-white text-gray-900 border border-gray-200"
                 }`}
               >
                 <div className="flex items-center space-x-2 mb-1">
-                  {message.type === 'user' ? (
+                  {message.type === "user" ? (
                     <User className="w-4 h-4" />
                   ) : (
                     <Bot className="w-4 h-4 text-teal-600" />
                   )}
                   <span className="text-xs opacity-70">
-                    {message.type === 'user' ? 'You' : 'Assistant'}
+                    {message.type === "user" ? "You" : "Assistant"}
                   </span>
                 </div>
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
