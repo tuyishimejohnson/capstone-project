@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { X, Funnel } from "lucide-react";
+import { X, Funnel, Trash2 } from "lucide-react";
+import axios from "axios";
 
 interface Booking {
+  _id: string;
   appointmentDate: string;
   chwId: string;
   userName: string;
@@ -28,6 +30,7 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
 }) => {
   const [filteredBookings, setFilteredBookings] = useState<Booking[] | null>(null);
   const [loading, setLoading] = useState(true);
+  const [confirmDelete, setConfirmDelete] = useState<{ open: boolean; index: number | null; isFiltered: boolean }>({ open: false, index: null, isFiltered: false });
 
   useEffect(() => {
     if (isOpen) {
@@ -36,6 +39,41 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
+
+  const handleDeleteClick = (index: number, isFiltered: boolean) => {
+    setConfirmDelete({ open: true, index, isFiltered });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (confirmDelete.index === null) return;
+    const isFiltered = confirmDelete.isFiltered;
+    const bookingsList = isFiltered && filteredBookings ? filteredBookings : (filteredBookings || bookings);
+    const booking = bookingsList[confirmDelete.index];
+    try {
+      // First, get the appointment by id
+      const getRes = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/appointments/${booking._id}`);
+      if (!getRes.data || getRes.status !== 200) {
+        alert("Appointment not found.");
+        setConfirmDelete({ open: false, index: null, isFiltered: false });
+        return;
+      }
+      // If found, delete it
+      await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/appointments/${booking._id}`);
+      if (isFiltered && filteredBookings) {
+        setFilteredBookings(filteredBookings.filter((_, i) => i !== confirmDelete.index));
+      } else {
+        setFilteredBookings((filteredBookings || bookings).filter((_, i) => i !== confirmDelete.index));
+      }
+    } catch (error) {
+      alert("Failed to delete booking.");
+    } finally {
+      setConfirmDelete({ open: false, index: null, isFiltered: false });
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setConfirmDelete({ open: false, index: null, isFiltered: false });
+  };
 
   if (!isOpen) return null;
 
@@ -48,6 +86,7 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
     "Cell",
     "Village",
     "Status",
+    "",
   ];
 
   const getFilteredPatients = () => {
@@ -96,8 +135,8 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
             <div>
               {/* Header Row */}
               <div className="flex font-semibold bg-gray-100">
-                {headers.map((header) => (
-                  <div key={header} className="flex-1 p-2">
+                {headers.map((header, i) => (
+                  <div key={i} className={i === headers.length - 1 ? "p-2 w-8" : "flex-1 p-2"}>
                     {header}
                   </div>
                 ))}
@@ -132,6 +171,15 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
                       <div className="flex-1 p-2 capitalize">
                         {booking.status}
                       </div>
+                      <div className="p-2 w-8 flex items-center justify-center">
+                        <button
+                          className="text-red-500 hover:text-red-700"
+                          onClick={() => handleDeleteClick(index, true)}
+                          aria-label="Delete patient"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
                     </div>
                   ))
                 )
@@ -159,6 +207,15 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
                     <div className="flex-1 p-2 capitalize">
                       {booking.status}
                     </div>
+                    <div className="p-2 w-8 flex items-center justify-center">
+                      <button
+                        className="text-red-500 hover:text-red-700"
+                        onClick={() => handleDeleteClick(index, false)}
+                        aria-label="Delete patient"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
                   </div>
                 ))
               )}
@@ -166,6 +223,27 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
           )}
         </div>
       </div>
+      {confirmDelete.open && (
+        <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)] bg-opacity-40 z-50">
+          <div className="bg-white p-6 rounded shadow-lg flex flex-col items-center">
+            <p className="mb-4 text-lg font-semibold">Are you sure you want to delete this patient?</p>
+            <div className="flex gap-4">
+              <button
+                className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-red-600"
+                onClick={handleDeleteConfirm}
+              >
+                Delete
+              </button>
+              <button
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+                onClick={handleDeleteCancel}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
