@@ -39,6 +39,7 @@ A portal for Community Health Workers (CHWs) to manage, track, and analyze healt
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/tuyishimejohnson/capstone-project.git
+   cd capstone-project
    ```
 2. **Install dependencies:**
    ```bash
