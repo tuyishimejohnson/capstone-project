@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { X, Send, Bot, User } from "lucide-react";
-import { useState } from "react";
+import axios from "axios";
 
 interface ChatMessage {
   id: string;
@@ -9,24 +9,11 @@ interface ChatMessage {
   timestamp: Date;
 }
 
-interface CaseData {
-  type?: "malaria" | "nutrition" | "maternal";
-  patientName?: string;
-  age?: string;
-  gender?: string;
-  symptoms?: string[];
-  testResult?: string;
-  nutritionStatus?: string;
-  pregnancyStatus?: string;
-  [key: string]: any;
-}
-
 interface BotProps {
   show: boolean;
   onClose: () => void;
 }
 
-// Prediction Upload Page
 export const PredictionUploadPage: React.FC<BotProps> = ({ show, onClose }) => {
   if (!show) return null;
 
@@ -35,15 +22,12 @@ export const PredictionUploadPage: React.FC<BotProps> = ({ show, onClose }) => {
       id: "1",
       type: "bot",
       content:
-        "Hello! I'm your CHW Assistant. I can help you get recommendations for malaria, nutrition, or maternal cases.",
+        "Hello! I'm your CHW Assistant. Ask me anything about malaria, nutrition, or maternal cases.",
       timestamp: new Date(),
     },
   ]);
   const [currentInput, setCurrentInput] = useState("");
-  const [caseData, setCaseData] = useState<CaseData>({} as CaseData);
-  const [currentStep, setCurrentStep] = useState<
-    "type" | "basic" | "specific" | "recommendation"
-  >("type");
+  const [isLoading, setIsLoading] = useState(false);
 
   const addMessage = (content: string, type: "bot" | "user") => {
     const newMessage: ChatMessage = {
@@ -55,150 +39,39 @@ export const PredictionUploadPage: React.FC<BotProps> = ({ show, onClose }) => {
     setMessages((prev) => [...prev, newMessage]);
   };
 
-  const handleSendMessage = () => {
+  const removeLoadingMessage = () => {
+    setMessages((prev) => prev.filter((msg) => msg.content !== "Loading..."));
+  };
+
+  const handleSendMessage = async () => {
     if (!currentInput.trim()) return;
 
-    addMessage(currentInput, "user");
-    const userInput = currentInput.toLowerCase();
+    const userMessage = currentInput.trim();
+    addMessage(userMessage, "user");
     setCurrentInput("");
+    setIsLoading(true);
+    addMessage("Loading...", "bot");
 
-    // Simulate bot response
-    setTimeout(() => {
-      handleBotResponse(userInput);
-    }, 1000);
-  };
-
-  const handleBotResponse = (userInput: string) => {
-    if (currentStep === "type") {
-      if (userInput.includes("malaria")) {
-        setCaseData({ type: "malaria" } as CaseData);
-        setCurrentStep("basic");
-        addMessage(
-          "Great! Let's gather information about the malaria case. What's the patient's name?",
-          "bot"
-        );
-      } else if (userInput.includes("nutrition")) {
-        setCaseData({ type: "nutrition" } as CaseData);
-        setCurrentStep("basic");
-        addMessage(
-          "Perfect! Let's discuss the nutrition case. What's the patient's name?",
-          "bot"
-        );
-      } else if (userInput.includes("maternal")) {
-        setCaseData({ type: "maternal" } as CaseData);
-        setCurrentStep("basic");
-        addMessage(
-          "Excellent! Let's talk about the maternal case. What's the patient's name?",
-          "bot"
-        );
-      } else {
-        addMessage(
-          "Please specify: malaria, nutrition, or maternal case?",
-          "bot"
-        );
-      }
-    } else if (currentStep === "basic") {
-      if (!caseData.patientName) {
-        setCaseData((prev) => ({ ...prev, patientName: userInput }));
-        addMessage(`Thank you, ${userInput}. What's the patient's age?`, "bot");
-      } else if (!caseData.age) {
-        setCaseData((prev) => ({ ...prev, age: userInput }));
-        addMessage("What's the patient's gender? (male/female)", "bot");
-      } else if (!caseData.gender) {
-        setCaseData((prev) => ({ ...prev, gender: userInput }));
-        setCurrentStep("specific");
-        addSpecificQuestion();
-      }
-    } else if (currentStep === "specific") {
-      handleSpecificResponse(userInput);
-    }
-  };
-
-  const addSpecificQuestion = () => {
-    if (caseData.type === "malaria") {
-      addMessage(
-        "What are the main symptoms? (fever, headache, chills, etc.)",
-        "bot"
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/chat`,
+        {
+          userInput: userMessage,
+        }
       );
-    } else if (caseData.type === "nutrition") {
-      addMessage(
-        "What's the child's nutrition status? (normal, moderate_malnutrition, severe_malnutrition)",
-        "bot"
-      );
-    } else if (caseData.type === "maternal") {
-      addMessage(
-        "What's the pregnancy status? (pregnant, postpartum, planning)",
-        "bot"
-      );
+
+      const botReply =
+        response.data.response || "Sorry, I didn't understand that.";
+
+      removeLoadingMessage();
+      addMessage(botReply, "bot");
+    } catch (error) {
+      console.error("Error sending prompt:", error);
+      removeLoadingMessage();
+      addMessage("Something went wrong. Please try again.", "bot");
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const handleSpecificResponse = (userInput: string) => {
-    if (caseData.type === "malaria") {
-      setCaseData((prev) => ({ ...prev, symptoms: userInput.split(", ") }));
-      addMessage("What's the test result? (positive/negative)", "bot");
-    } else if (caseData.type === "nutrition") {
-      setCaseData((prev) => ({ ...prev, nutritionStatus: userInput }));
-      addMessage("What's the child's weight in kg?", "bot");
-    } else if (caseData.type === "maternal") {
-      setCaseData((prev) => ({ ...prev, pregnancyStatus: userInput }));
-      addMessage("How many weeks of gestation?", "bot");
-    }
-
-    // Add more specific questions based on the case type
-    setTimeout(() => {
-      setCurrentStep("recommendation");
-      generateRecommendation();
-    }, 1000);
-  };
-
-  const generateRecommendation = () => {
-    let recommendation = "";
-
-    if (caseData.type === "malaria") {
-      if (caseData.testResult === "positive") {
-        recommendation = `Based on the symptoms and positive test result for ${caseData.patientName}, I recommend:
-        • Immediate treatment with antimalarial medication
-        • Bed rest and hydration
-        • Monitor for severe symptoms
-        • Follow-up in 3 days
-        • Use mosquito nets for prevention`;
-      } else {
-        recommendation = `For ${caseData.patientName} with negative test result:
-        • Continue monitoring for symptoms
-        • Consider other causes of fever
-        • Maintain preventive measures
-        • Re-test if symptoms persist`;
-      }
-    } else if (caseData.type === "nutrition") {
-      if (caseData.nutritionStatus === "severe_malnutrition") {
-        recommendation = `For ${caseData.patientName} with severe malnutrition:
-        • Immediate referral to nutrition center
-        • Therapeutic feeding program
-        • Weekly monitoring
-        • Family education on feeding practices
-        • Vitamin A supplementation`;
-      } else {
-        recommendation = `For ${caseData.patientName}:
-        • Balanced diet recommendations
-        • Growth monitoring
-        • Regular check-ups
-        • Nutritional education for caregivers`;
-      }
-    } else if (caseData.type === "maternal") {
-      recommendation = `For ${caseData.patientName} (${caseData.pregnancyStatus}):
-        • Regular antenatal visits
-        • Proper nutrition and supplements
-        • Rest and stress management
-        • Emergency contact information
-        • Birth preparedness plan`;
-    }
-
-    addMessage(recommendation, "bot");
-    addMessage(
-      "Would you like to save this case data or discuss another case?",
-      "bot"
-    );
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -264,10 +137,11 @@ export const PredictionUploadPage: React.FC<BotProps> = ({ show, onClose }) => {
             onKeyPress={handleKeyPress}
             placeholder="Type your message..."
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            disabled={isLoading}
           />
           <button
             onClick={handleSendMessage}
-            disabled={!currentInput.trim()}
+            disabled={!currentInput.trim() || isLoading}
             className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             <Send className="w-4 h-4" />
