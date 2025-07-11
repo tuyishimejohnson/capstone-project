@@ -1,4 +1,5 @@
 
+# Community Health Workers Dashboard
 **Description** 
 
 A portal for Community Health Workers (CHWs) to manage, track, and analyze health cases related to malaria, nutrition, and maternal health. The dashboard provides insights, patient data collection, AI-powered assistance, and scheduling tools to streamline community healthcare delivery.
@@ -24,7 +25,7 @@ A portal for Community Health Workers (CHWs) to manage, track, and analyze healt
 - **UI Libraries**: Lucide React, MUI (Material UI)
 - **State & Forms**: React Hook Form
 - **HTTP**: Axios
-- **Backend (API)**: Express (API endpoints expected at `VITE_BASE_URL`), Node.js
+- **Backend (API)**: Express, Node.js
 - **Database**: MongoDB
 - **Other**: JWT, bcrypt, ESLint, PostCSS, Autoprefixer
 
