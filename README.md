@@ -1,6 +1,6 @@
 
 # Community Health Workers Dashboard
-**Description** 
+# Description
 
 A portal for Community Health Workers (CHWs) to manage, track, and analyze health cases related to malaria, nutrition, and maternal health. The dashboard provides insights, patient data collection, AI-powered assistance, and scheduling tools to streamline community healthcare delivery.
 
@@ -16,7 +16,6 @@ A portal for Community Health Workers (CHWs) to manage, track, and analyze healt
 - **Availability Scheduling**: Set and display work availability and view registered CHWs.
 - **Responsive UI**: Mobile-friendly interface.
 
----
 
 ## Technologies
 
@@ -29,7 +28,6 @@ A portal for Community Health Workers (CHWs) to manage, track, and analyze healt
 - **Database**: MongoDB
 - **Other**: JWT, bcrypt, ESLint, PostCSS, Autoprefixer
 
----
 
 ## Getting Started
 
@@ -55,7 +53,6 @@ A portal for Community Health Workers (CHWs) to manage, track, and analyze healt
    ```
    The app will be available at [http://localhost:5173](http://localhost:5173) by default.
 
----
 
 ## Usage
 
@@ -71,10 +68,8 @@ A portal for Community Health Workers (CHWs) to manage, track, and analyze healt
 - **Active/Improving/Urgent Cases**: Access modals to manage and review cases by status.
 - **Patient Details**: View and manage patient bookings and details.
 
----
 
 ## User Roles
 - **health_worker**: Community Health Worker (CHW) has the main user role.
----
 
 
