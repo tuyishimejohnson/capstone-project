@@ -8,8 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && npm run postbuild",
-    "postbuild": "copy public\\_redirects dist\\_redirects",
+    "build": "tsc && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
