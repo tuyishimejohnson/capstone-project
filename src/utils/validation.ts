@@ -15,7 +15,8 @@ export const validateName = (name: string): boolean => {
 
 export const validateLoginForm = (
   name: string,
-  password: string
+  password: string,
+  pin: string
 ): FormErrors => {
   const errors: FormErrors = {};
 
@@ -25,7 +26,15 @@ export const validateLoginForm = (
 
   if (!password) {
     errors.password = "Password is required";
-  } else if (!validatePassword(password)) {
+  } 
+
+  if (!pin) {
+    errors.pin = "PIN is required.";
+  } else if (!/^\d{4}$/.test(pin)) {
+    errors.pin = "PIN must be a 4-digit number.";
+  }
+  
+  else if (!validatePassword(password)) {
     errors.password = "Password must be at least 5 characters long";
   }
 

@@ -32,6 +32,11 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
   const [loading, setLoading] = useState(true);
   const [confirmDelete, setConfirmDelete] = useState<{ open: boolean; index: number | null; isFiltered: boolean }>({ open: false, index: null, isFiltered: false });
 
+  // Get logged-in user's name once
+  const userDataString = localStorage.getItem("userData");
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+
+
   useEffect(() => {
     if (isOpen) {
       setLoading(true);
@@ -172,13 +177,15 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
                         {booking.status}
                       </div>
                       <div className="p-2 w-8 flex items-center justify-center">
-                        <button
-                          className="text-red-500 hover:text-red-700"
-                          onClick={() => handleDeleteClick(index, true)}
-                          aria-label="Delete patient"
-                        >
-                          <Trash2 size={18} />
-                        </button>
+                        {booking.userName === userData.name && (
+                          <button
+                            className="text-red-500 hover:text-red-700"
+                            onClick={() => handleDeleteClick(index, true)}
+                            aria-label="Delete patient"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))
@@ -208,13 +215,15 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
                       {booking.status}
                     </div>
                     <div className="p-2 w-8 flex items-center justify-center">
-                      <button
-                        className="text-red-500 hover:text-red-700"
-                        onClick={() => handleDeleteClick(index, false)}
-                        aria-label="Delete patient"
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                      {booking.userName === userData.name && (
+                        <button
+                          className="text-red-500 hover:text-red-700"
+                          onClick={() => handleDeleteClick(index, false)}
+                          aria-label="Delete patient"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))
