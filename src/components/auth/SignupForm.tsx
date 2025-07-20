@@ -275,18 +275,22 @@ export const SignupForm: React.FC<SignupFormProps> = () => {
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
+
+                <select
                   id="specialization"
                   value={specialization}
                   onChange={(e) => setSpecialization(e.target.value)}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all ${
+                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all text-gray-400 ${
                     errors.specialization
                       ? "border-red-300 bg-red-50"
                       : "border-gray-300"
                   }`}
-                  placeholder="What are you specialized in?"
-                />
+                >
+                  <option value="">Select your specialization</option>
+                  <option value="Malaria">Malaria Treatment</option>
+                  <option value="Maternal Health">Maternal Health</option>
+                  <option value="Nutrition">Child Nutrition</option>
+                </select>
               </div>
               {errors.specialization && (
                 <p className="mt-1 text-sm text-red-600">

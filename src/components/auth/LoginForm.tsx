@@ -168,7 +168,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
                   className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all ${
                     errors.pin ? "border-red-300 bg-red-50" : "border-gray-300"
                   }`}
-                  placeholder="Enter your PIN"
+                  placeholder="Enter your CHW PIN"
                   maxLength={4}
                   min={0}
                   max={9999}
