@@ -13,7 +13,7 @@ interface ActiveCasesModalProps {
   pregnancyCases: Pregnancy[];
 }
 
-export function useImprovingCasesCount(userName: string) {
+export function useImprovingCasesCount() {
   const { malariaCases } = useMalariaCases();
   const { maternalData } = useMaternalData();
   const improvingMalariaCount = (malariaCases as MalariaCase[]).filter(
@@ -122,68 +122,90 @@ export const ActiveCases: React.FC<ActiveCasesModalProps> = ({
             <div className="flex justify-center items-center h-32">
               <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">Loading active cases...</span>
             </div>
-          ) : cases.length === 0 ? (
-            <div>No active cases.</div>
           ) : (
             <div>
-              {selectedType === "malaria"
-                ? (cases as MalariaCase[])
-                    .filter(
-                      (c) =>
-                        c.testResult.toLowerCase() === "positive" &&
-                        c.recordedBy === userLogged.name
-                    )
-                    .map((c) => (
-                      <div
-                        key={c._id}
-                        className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
-                      >
-                        <div>
-                          <h2 className="text-xl font-medium text-teal-700">
-                            Name: {c.patientName}
-                          </h2>
-                          <div>Age: {c.age}</div>
-                          <div>Status: {c.testResult}</div>
-                          <div>Severity: {c.severity}</div>
-                        </div>
-                        <button
-                          className="text-red-500 hover:text-red-700 ml-4"
-                          onClick={() => handleDeleteClick(c._id, "malaria")}
-                          aria-label="Delete malaria case"
-                        >
-                          <Trash2 size={18} />
-                        </button>
+              {selectedType === "malaria" ? (
+                (() => {
+                  const filteredCases = (cases as MalariaCase[]).filter(
+                    (c) =>
+                      c.testResult &&
+                      c.testResult.toLowerCase() === "positive" &&
+                      c.recordedBy === userLogged.name
+                  );
+                  if (filteredCases.length === 0) {
+                    return (
+                      <div className="flex justify-center items-center h-32">
+                        <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+                          No malaria cases.
+                        </span>
                       </div>
-                    ))
-                : (cases as Pregnancy[])
-                    .filter(
-                      (c) =>
-                        c.pregnancyStatus.toLowerCase() === "pregnant" &&
-                        c.recordedBy === userLogged.name
-                    )
-                    .map((c) => (
-                      <div
-                        key={c._id}
-                        className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
-                      >
-                        <div>
-                          <h2 className="text-xl font-medium text-teal-700">
-                            Name: {c.patientName}
-                          </h2>
-                          <div>Age: {c.age}</div>
-                          <div>Pregnancy Status: {c.pregnancyStatus}</div>
-                          <div>Gestation Weeks: {c.gestationWeeks}</div>
-                          <div>Antenatal visits: {c.antenatalVisits}</div>
-                        </div>
-                        <button
-                          className="text-red-500 hover:text-red-700 ml-4"
-                          onClick={() => handleDeleteClick(c._id, "maternal")}
-                          aria-label="Delete maternal case"
-                        >
-                          <Trash2 size={18} />
-                        </button>
+                    );
+                  }
+                  return filteredCases.map((c) => (
+                    <div
+                      key={c._id}
+                      className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
+                    >
+                      <div>
+                        <h2 className="text-xl font-medium text-teal-700">
+                          Name: {c.patientName}
+                        </h2>
+                        <div>Age: {c.age}</div>
+                        <div>Status: {c.testResult}</div>
+                        <div>Severity: {c.severity}</div>
                       </div>
-                    ))}
+                      <button
+                        className="text-red-500 hover:text-red-700 ml-4"
+                        onClick={() => handleDeleteClick(c._id, "malaria")}
+                        aria-label="Delete malaria case"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  ));
+                })()
+              ) : (
+                (() => {
+                  const filteredCases = (cases as Pregnancy[]).filter(
+                    (c) =>
+                      c.pregnancyStatus &&
+                      c.pregnancyStatus.toLowerCase() === "pregnant" &&
+                      c.recordedBy === userLogged.name
+                  );
+                  if (filteredCases.length === 0) {
+                    return (
+                      <div className="flex justify-center items-center h-32">
+                        <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+                          No maternal cases.
+                        </span>
+                      </div>
+                    );
+                  }
+                  return filteredCases.map((c) => (
+                    <div
+                      key={c._id}
+                      className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
+                    >
+                      <div>
+                        <h2 className="text-xl font-medium text-teal-700">
+                          Name: {c.patientName}
+                        </h2>
+                        <div>Age: {c.age}</div>
+                        <div>Pregnancy Status: {c.pregnancyStatus}</div>
+                        <div>Gestation Weeks: {c.gestationWeeks}</div>
+                        <div>Antenatal visits: {c.antenatalVisits}</div>
+                      </div>
+                      <button
+                        className="text-red-500 hover:text-red-700 ml-4"
+                        onClick={() => handleDeleteClick(c._id, "maternal")}
+                        aria-label="Delete maternal case"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  ));
+                })()
+              )}
             </div>
           )}
         </div>
@@ -210,5 +232,4 @@ export const ActiveCases: React.FC<ActiveCasesModalProps> = ({
         )}
       </div>
     </div>
-  );
-};
+  )}
