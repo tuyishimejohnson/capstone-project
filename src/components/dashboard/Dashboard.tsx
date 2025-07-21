@@ -57,7 +57,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [displayActiveCases, setDisplayActiveCases] = useState(false);
   const [improving, setImproving] = useState(false);
   const [urgentActions, setUrgentActions] = useState(false);
-  const [closePins, setClosePins] = useState(false)
+  const [viewPins, setViewPins] = useState(false)
 
   const navigate = useNavigate();
 
@@ -217,14 +217,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         {/* Welcome Section */}
         <div className="mb-8 flex justify-between">
           <div>
-            <div className="flex gap-5">
+            <div className="flex gap-5 items-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               {" "}
               Welcome back
               {` ${userName.split(" ")[0]}`}
             </h2>
 
-            {userDataResults.role === "admin" && <button className="bg-teal-200 px-4 rounded-md text-gray-500" onClick={() => setClosePins(true)}>View CHW codes</button>}
+            {userDataResults.role === "admin" && <button className="bg-teal-100 px-4 py-2 border border-teal-300 hover:translate-x-0.5 transform cursor-pointer rounded-md text-gray-500" onClick={() => setViewPins(true)}>View CHW PIN</button>}
 
             
             </div>
@@ -449,8 +449,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       />
 
       <DisplayPinAndNames 
-      show={closePins} 
-      onClose={() => setClosePins(false)}
+      show={viewPins} 
+      onClose={() => setViewPins(false)}
       />
 
       <FooterPrivacy />

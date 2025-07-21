@@ -9,7 +9,7 @@ interface DisplayPinAndNamesProps {
 }
 
 export const DisplayPinAndNames: React.FC<DisplayPinAndNamesProps> = ({ show, onClose }) => {
-  if (!show) return null;
+  
 
   interface User {
     name: string;
@@ -41,6 +41,8 @@ export const DisplayPinAndNames: React.FC<DisplayPinAndNamesProps> = ({ show, on
   const userDataString = localStorage.getItem("userData");
   const userData = userDataString ? JSON.parse(userDataString) : null;
 
+  if (!show) return null;
+
   return (
     <div className="fixed inset-0 bg-opacity-50 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
       <div className="bg-white w-full mx-20 rounded-lg shadow-lg overflow-y-auto max-h-[80vh]">
@@ -63,7 +65,7 @@ export const DisplayPinAndNames: React.FC<DisplayPinAndNamesProps> = ({ show, on
               <span className="flex items-center justify-center text-teal-600 font-semibold text-lg">Loading CHWs...</span>
             </div>
           ) : showUsers.length === 0 ? (
-            <p className="text-gray-500">No registered CHWs available.</p>
+            <p className="text-gray-500">No CHW available.</p>
           ) : (
             <div>
               {/* Header Row */}
