@@ -33,6 +33,7 @@ import { useMaternalData } from "../../hooks/useMaternalData";
 import { useNutritionData } from "../../hooks/useNutritionData";
 import { useUrgentActions } from "./UrgentActions/UrgentActions";
 import { PredictionUploadPage } from "./PredictionModel";
+import {FooterPrivacy} from "../footer/FooterPrivacy";
 
 interface DashboardProps {
   user: User;
@@ -426,6 +427,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         show={prediction}
         onClose={() => setPrediction(false)}
       />
+
+      <FooterPrivacy />
     </div>
   );
 };
