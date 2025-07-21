@@ -3,7 +3,7 @@ import {GlobeLock, Handshake} from "lucide-react"
 
 export const FooterPrivacy = () => {
   return (
-    <footer className="bg-gradient-to-r from-teal-200 via-teal-100 to-teal-200 py-6 px-4 rounded-t-2xl shadow-lg mt-8">
+    <footer className="bg-gradient-to-r from-teal-500 via-teal-100 to-teal-500 py-6 px-4 rounded-t-2xl shadow-lg mt-8">
       <div className="flex justify-center gap-8 items-center mb-2">
         <Link
           to={"/privacy"}

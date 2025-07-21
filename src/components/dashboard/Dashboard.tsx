@@ -36,6 +36,7 @@ import { useNutritionData } from "../../hooks/useNutritionData";
 import { useUrgentActions } from "./UrgentActions/UrgentActions";
 import { PredictionUploadPage } from "./PredictionModel";
 import {FooterPrivacy} from "../footer/FooterPrivacy";
+import {DisplayPinAndNames} from "./DisplayCodes";
 
 interface DashboardProps {
   user: User;
@@ -56,6 +57,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [displayActiveCases, setDisplayActiveCases] = useState(false);
   const [improving, setImproving] = useState(false);
   const [urgentActions, setUrgentActions] = useState(false);
+  const [closePins, setClosePins] = useState(false)
 
   const navigate = useNavigate();
 
@@ -94,6 +96,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   };
 
   const availabilityStatus = getAvailabilityStatus();
+  const userDataResults = JSON.parse(localStorage.getItem("userData") || "{}");
 
   // Use improving cases count from ActiveCases hook
   const improvingTotal = useImprovingCasesCount(userName);
@@ -214,11 +217,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         {/* Welcome Section */}
         <div className="mb-8 flex justify-between">
           <div>
+            <div className="flex gap-5">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               {" "}
               Welcome back
               {` ${userName.split(" ")[0]}`}
             </h2>
+
+            {userDataResults.role === "admin" && <button className="bg-teal-200 px-4 rounded-md text-gray-500" onClick={() => setClosePins(true)}>View CHW codes</button>}
+
+            
+            </div>
+            
             <p className="text-gray-600">
               Here is an overview of your availability customization and
               recommended actions.
@@ -438,7 +448,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         onClose={() => setPrediction(false)}
       />
 
+      <DisplayPinAndNames 
+      show={closePins} 
+      onClose={() => setClosePins(false)}
+      />
+
       <FooterPrivacy />
+
     </div>
   );
 };
