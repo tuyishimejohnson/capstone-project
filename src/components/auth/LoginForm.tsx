@@ -115,6 +115,36 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
 
             <div>
               <label
+                htmlFor="pin"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                PIN
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="number"
+                  id="pin"
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value.slice(0, 4))}
+                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all ${
+                    errors.pin ? "border-red-300 bg-red-50" : "border-gray-300"
+                  }`}
+                  placeholder="Enter your CHW PIN"
+                  maxLength={4}
+                  min={0}
+                  max={9999}
+                  inputMode="numeric"
+                  pattern="\d{4}"
+                />
+              </div>
+              {errors.pin && (
+                <p className="mt-1 text-sm text-red-600">{errors.pin}</p>
+              )}
+            </div>
+
+            <div>
+              <label
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
@@ -148,36 +178,6 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
               </div>
               {errors.password && (
                 <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-              )}
-            </div>
-
-            <div>
-              <label
-                htmlFor="pin"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                PIN
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="number"
-                  id="pin"
-                  value={pin}
-                  onChange={(e) => setPin(e.target.value.slice(0, 4))}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all ${
-                    errors.pin ? "border-red-300 bg-red-50" : "border-gray-300"
-                  }`}
-                  placeholder="Enter your CHW PIN"
-                  maxLength={4}
-                  min={0}
-                  max={9999}
-                  inputMode="numeric"
-                  pattern="\d{4}"
-                />
-              </div>
-              {errors.pin && (
-                <p className="mt-1 text-sm text-red-600">{errors.pin}</p>
               )}
             </div>
 
