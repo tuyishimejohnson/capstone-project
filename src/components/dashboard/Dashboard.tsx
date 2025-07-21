@@ -9,6 +9,8 @@ import {
   Clock,
   Plus,
   BotMessageSquare,
+  Apple,
+  Baby
 } from "lucide-react";
 import { AvailabilityModal } from "./Availability/AvailabilityModal";
 import { AvailabilityDisplay } from "./Availability/AvailabilityDisplay";
@@ -329,35 +331,43 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         </div>
 
         {/* Health Metrics */}
-        <div className="mb-8">
+        <div className="mb-10">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">
             Health Metrics Overview
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 font-bold h-24 text-gray-50 text-center text-2xl">
-            <div
-              className="border border-teal-600 bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all pt-3 hover:bg-transparent hover:text-gray-500"
-              onClick={() => setMaternalCase(true)}
-            >
-              <h2>Pregnant Women Under Care</h2>
-              <span>{maternalData.length}</span>
-            </div>
-            <div
-              className="border border-teal-600 bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all pt-3 hover:bg-transparent hover:text-gray-500"
-              onClick={() => setActiveCases(true)}
-            >
-              <h2>Malaria Cases</h2>
-              <span>{malariaCases.length}</span>
-            </div>
-            <div
-              className="border border-teal-600 bg-teal-600 rounded-md shadow-md hover:translate-x-1 transition-all pt-3 hover:bg-transparent hover:text-gray-500"
-              onClick={() => setNutritionCase(true)}
-            >
-              <h2>Children Nutrition</h2>
-              <span>{nutritionData.length}</span>
-            </div>
 
-            {}
-          </div>
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-gray-50 text-center px-8 py-14 border border-teal-400 shadow-sm rounded-md">
+      {/* Pregnant Women Under Care */}
+      <div
+        className="flex flex-col items-center justify-center border border-teal-600 rounded-2xl shadow-md hover:scale-105 transition-transform bg-teal-900/10 p-6 cursor-pointer text-teal-600"
+        onClick={() => setMaternalCase(true)}
+      >
+        <Baby className="w-12 h-12 mb-3 text-teal-500" />
+        <h2 className="mb-2">Pregnant Women Under Care</h2>
+        <span className="text-4xl font-extrabold">{maternalData.length}</span>
+      </div>
+
+      {/* Malaria Cases */}
+      <div
+        className="flex flex-col items-center justify-center border border-teal-600 rounded-2xl shadow-md hover:scale-105 transition-transform bg-teal-900/10 p-6 cursor-pointer text-teal-600"
+        onClick={() => setActiveCases(true)}
+      >
+        <Activity className="w-12 h-12 mb-3 text-teal-500" />
+        <h2 className="mb-2">Malaria Cases</h2>
+        <span className="text-4xl font-extrabold">{malariaCases.length}</span>
+      </div>
+
+      {/* Children Nutrition */}
+      <div
+        className="flex flex-col items-center justify-center border border-teal-600 rounded-2xl shadow-md hover:scale-105 transition-transform bg-teal-900/10 p-6 cursor-pointer text-teal-600"
+        onClick={() => setNutritionCase(true)}
+      >
+        <Apple className="w-12 h-12 mb-3 text-teal-500" />
+        <h2 className="mb-2">Children Nutrition</h2>
+        <span className="text-4xl font-extrabold">{nutritionData.length}</span>
+      </div>
+    </div>
         </div>
       </main>
       {/* Availability Component */}
