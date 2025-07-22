@@ -259,7 +259,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div
-            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 cursor-pointer"
             onClick={() => setPatientDetail(true)}
           >
             <div className="flex items-center">
@@ -278,7 +278,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           </div>
 
           <div
-            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 cursor-pointer"
             onClick={() => setDisplayActiveCases(true)}
           >
             <div className="flex items-center">
@@ -297,7 +297,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           </div>
 
           <div
-            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 cursor-pointer"
             onClick={() => setImproving(true)}
           >
             <div className="flex items-center">
@@ -314,7 +314,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           </div>
 
           <div
-            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 cursor-pointer"
             onClick={() => setUrgentActions(true)}
           >
             <div className="flex items-center">
