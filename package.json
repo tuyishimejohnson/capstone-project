@@ -23,6 +23,7 @@
     "cookie-parser": "^1.4.7",
     "dayjs": "^1.11.13",
     "express": "^5.1.0",
+    "framer-motion": "^12.23.6",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.516.0",
     "react": "^19.1.0",

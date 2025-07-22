@@ -46,8 +46,8 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
         `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
         {
           name,
-          password,
           pin,
+          password,
         }
       );
 
@@ -57,8 +57,9 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
       console.log("======Login successful======");
       setTimeout(() => {
         setName("");
-        setPassword("");
         setPin("");
+        setPassword("");
+
         navigate("/dashboard");
       }, 1000);
     } catch (error) {
