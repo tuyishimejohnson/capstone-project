@@ -5,12 +5,12 @@ import {
   Users,
   Activity,
   TrendingUp,
-  Heart,
   Clock,
   Plus,
   BotMessageSquare,
   Apple,
   Baby,
+  HeartPulse,
 } from "lucide-react";
 import { AvailabilityModal } from "./Availability/AvailabilityModal";
 import { AvailabilityDisplay } from "./Availability/AvailabilityDisplay";
@@ -115,7 +115,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex items-center">
-                <Heart className="w-8 h-8 text-teal-600" />
+                <HeartPulse className="w-8 h-8 text-teal-600" />
                 <h1 className="ml-2 text-xl font-bold text-gray-900">
                   CHW Portal
                 </h1>

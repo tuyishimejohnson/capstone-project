@@ -13,7 +13,7 @@ interface UrgentActionsModalProps {
   nutritionCases: Nutrition[];
 }
 
-export function useUrgentActions(userName: string) {
+export function useUrgentActions() {
   const { malariaCases } = useMalariaCases();
   const { nutritionData } = useNutritionData();
   const urgentMalaria = (malariaCases as MalariaCase[]).filter(
