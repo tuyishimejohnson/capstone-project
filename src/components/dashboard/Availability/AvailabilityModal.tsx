@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { X, Clock, Save, Calendar } from "lucide-react";
-import type { WeeklySchedule } from "../../types";
+import type { WeeklySchedule } from "../../../types";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import type { AvailabilityModalProps } from "../../types";
+import type { AvailabilityModalProps } from "../../../types";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -134,6 +134,10 @@ export const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
 
       // Save availabilities to localStorage
       localStorage.setItem("availabilities", JSON.stringify(availabilities));
+
+      // Dispatch custom event to notify other components
+      console.log("Dispatching availabilityUpdated event...");
+      window.dispatchEvent(new Event("availabilityUpdated"));
 
       console.log("Sending availability data:============>", {
         availabilities,

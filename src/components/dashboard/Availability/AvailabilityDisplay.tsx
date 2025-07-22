@@ -48,7 +48,7 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
   const [schedule, setSchedule] = useState<WeeklySchedule>({});
   const [showRegistered, setShowRegistered] = useState(false);
 
-  useEffect(() => {
+  const loadScheduleFromStorage = () => {
     const rawData = localStorage.getItem("availabilities");
     let parsed: AvailabilityItem[] = [];
 
@@ -78,6 +78,26 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
     });
 
     setSchedule(formatted);
+  };
+
+  useEffect(() => {
+    // Load initial data
+    loadScheduleFromStorage();
+
+    // Listen for custom event when localStorage is updated
+    const handleAvailabilityUpdate = () => {
+      console.log("Availability update event received, reloading schedule...");
+      loadScheduleFromStorage();
+    };
+
+    window.addEventListener("availabilityUpdated", handleAvailabilityUpdate);
+
+    return () => {
+      window.removeEventListener(
+        "availabilityUpdated",
+        handleAvailabilityUpdate
+      );
+    };
   }, []);
 
   const availableDays = Object.values(schedule).filter(

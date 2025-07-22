@@ -10,7 +10,7 @@ import {
   Plus,
   BotMessageSquare,
   Apple,
-  Baby
+  Baby,
 } from "lucide-react";
 import { AvailabilityModal } from "./Availability/AvailabilityModal";
 import { AvailabilityDisplay } from "./Availability/AvailabilityDisplay";
@@ -35,8 +35,8 @@ import { useMaternalData } from "../../hooks/useMaternalData";
 import { useNutritionData } from "../../hooks/useNutritionData";
 import { useUrgentActions } from "./UrgentActions/UrgentActions";
 import { PredictionUploadPage } from "./PredictionModel";
-import {FooterPrivacy} from "../footer/FooterPrivacy";
-import {DisplayPinAndNames} from "./DisplayCodes";
+import { FooterPrivacy } from "../footer/FooterPrivacy";
+import { DisplayPinAndNames } from "./DisplayCodes";
 
 interface DashboardProps {
   user: User;
@@ -57,7 +57,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [displayActiveCases, setDisplayActiveCases] = useState(false);
   const [improving, setImproving] = useState(false);
   const [urgentActions, setUrgentActions] = useState(false);
-  const [viewPins, setViewPins] = useState(false)
+  const [viewPins, setViewPins] = useState(false);
 
   const navigate = useNavigate();
 
@@ -218,17 +218,22 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         <div className="mb-8 flex justify-between">
           <div>
             <div className="flex gap-5 items-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              {" "}
-              Welcome back
-              {` ${userName.split(" ")[0]}`}
-            </h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                {" "}
+                Welcome back
+                {` ${userName.split(" ")[0]}`}
+              </h2>
 
-            {userDataResults.role === "admin" && <button className="bg-teal-100 px-4 py-2 border border-teal-300 hover:translate-x-0.5 transform cursor-pointer rounded-md text-gray-500" onClick={() => setViewPins(true)}>View CHW PIN</button>}
-
-            
+              {userDataResults.role === "admin" && (
+                <button
+                  className="bg-teal-100 px-4 py-2 border border-teal-300 hover:translate-x-0.5 transform cursor-pointer rounded-md text-gray-500"
+                  onClick={() => setViewPins(true)}
+                >
+                  View CHW PIN
+                </button>
+              )}
             </div>
-            
+
             <p className="text-gray-600">
               Here is an overview of your availability customization and
               recommended actions.
@@ -346,38 +351,43 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             Health Metrics Overview
           </h3>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-gray-50 text-center px-8 py-14 border border-teal-400 shadow-sm rounded-md">
+            {/* Pregnant Women Under Care */}
+            <div
+              className="flex flex-col items-center justify-center border border-teal-600 rounded-2xl shadow-md hover:scale-105 transition-transform bg-teal-900/10 p-6 cursor-pointer text-teal-600"
+              onClick={() => setMaternalCase(true)}
+            >
+              <Baby className="w-12 h-12 mb-3 text-teal-500" />
+              <h2 className="mb-2">Pregnant Women Under Care</h2>
+              <span className="text-4xl font-extrabold">
+                {maternalData.length}
+              </span>
+            </div>
 
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-gray-50 text-center px-8 py-14 border border-teal-400 shadow-sm rounded-md">
-      {/* Pregnant Women Under Care */}
-      <div
-        className="flex flex-col items-center justify-center border border-teal-600 rounded-2xl shadow-md hover:scale-105 transition-transform bg-teal-900/10 p-6 cursor-pointer text-teal-600"
-        onClick={() => setMaternalCase(true)}
-      >
-        <Baby className="w-12 h-12 mb-3 text-teal-500" />
-        <h2 className="mb-2">Pregnant Women Under Care</h2>
-        <span className="text-4xl font-extrabold">{maternalData.length}</span>
-      </div>
+            {/* Malaria Cases */}
+            <div
+              className="flex flex-col items-center justify-center border border-teal-600 rounded-2xl shadow-md hover:scale-105 transition-transform bg-teal-900/10 p-6 cursor-pointer text-teal-600"
+              onClick={() => setActiveCases(true)}
+            >
+              <Activity className="w-12 h-12 mb-3 text-teal-500" />
+              <h2 className="mb-2">Malaria Cases</h2>
+              <span className="text-4xl font-extrabold">
+                {malariaCases.length}
+              </span>
+            </div>
 
-      {/* Malaria Cases */}
-      <div
-        className="flex flex-col items-center justify-center border border-teal-600 rounded-2xl shadow-md hover:scale-105 transition-transform bg-teal-900/10 p-6 cursor-pointer text-teal-600"
-        onClick={() => setActiveCases(true)}
-      >
-        <Activity className="w-12 h-12 mb-3 text-teal-500" />
-        <h2 className="mb-2">Malaria Cases</h2>
-        <span className="text-4xl font-extrabold">{malariaCases.length}</span>
-      </div>
-
-      {/* Children Nutrition */}
-      <div
-        className="flex flex-col items-center justify-center border border-teal-600 rounded-2xl shadow-md hover:scale-105 transition-transform bg-teal-900/10 p-6 cursor-pointer text-teal-600"
-        onClick={() => setNutritionCase(true)}
-      >
-        <Apple className="w-12 h-12 mb-3 text-teal-500" />
-        <h2 className="mb-2">Children Nutrition</h2>
-        <span className="text-4xl font-extrabold">{nutritionData.length}</span>
-      </div>
-    </div>
+            {/* Children Nutrition */}
+            <div
+              className="flex flex-col items-center justify-center border border-teal-600 rounded-2xl shadow-md hover:scale-105 transition-transform bg-teal-900/10 p-6 cursor-pointer text-teal-600"
+              onClick={() => setNutritionCase(true)}
+            >
+              <Apple className="w-12 h-12 mb-3 text-teal-500" />
+              <h2 className="mb-2">Children Nutrition</h2>
+              <span className="text-4xl font-extrabold">
+                {nutritionData.length}
+              </span>
+            </div>
+          </div>
         </div>
       </main>
       {/* Availability Component */}
@@ -448,13 +458,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         onClose={() => setPrediction(false)}
       />
 
-      <DisplayPinAndNames 
-      show={viewPins} 
-      onClose={() => setViewPins(false)}
-      />
+      <DisplayPinAndNames show={viewPins} onClose={() => setViewPins(false)} />
 
       <FooterPrivacy />
-
     </div>
   );
 };
