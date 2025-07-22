@@ -7,17 +7,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import type { AvailabilityModalProps } from "../../../types";
 import { useNavigate } from "react-router-dom";
+import { daysOfWeek } from "./days/daysOfWeek";
 import axios from "axios";
-
-const daysOfWeek = [
-  { key: "monday", label: "Monday" },
-  { key: "tuesday", label: "Tuesday" },
-  { key: "wednesday", label: "Wednesday" },
-  { key: "thursday", label: "Thursday" },
-  { key: "friday", label: "Friday" },
-  { key: "saturday", label: "Saturday" },
-  { key: "sunday", label: "Sunday" },
-];
 
 export const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
   isOpen,

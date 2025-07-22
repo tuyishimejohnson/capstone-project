@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { AvailabilityModal } from "./Availability/AvailabilityModal";
 import { AvailabilityDisplay } from "./Availability/AvailabilityDisplay";
-import { healthMetrics, suggestions } from "../../data/mockData";
 import type { User, WeeklySchedule } from "../../types";
 import { PatientDetailsModal } from "./PatientDetail/PatientDetail";
 import { useNavigate } from "react-router-dom";
@@ -68,17 +67,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const { maternalData, loading: loadingMaternal } = useMaternalData();
   const { nutritionData, loading: loadingNutrition } = useNutritionData();
 
-  const criticalMetrics = healthMetrics.filter(
-    (m: any) => m.status === "critical"
-  );
-  const warningMetrics = healthMetrics.filter(
-    (m: any) => m.status === "warning"
-  );
-  const goodMetrics = healthMetrics.filter((m: any) => m.status === "good");
-  const highPrioritySuggestions = suggestions.filter(
-    (s: any) => s.priority === "high"
-  );
-
   const handleScheduleSave = (newSchedule: WeeklySchedule) => {
     setSchedule(newSchedule);
     console.log("Schedule saved:", newSchedule);
@@ -99,7 +87,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const userDataResults = JSON.parse(localStorage.getItem("userData") || "{}");
 
   // Use improving cases count from ActiveCases hook
-  const improvingTotal = useImprovingCasesCount(userName);
+  const improvingTotal = useImprovingCasesCount();
   const urgentTotal = useUrgentActions(userName);
 
   // Show loading indicator until all data is loaded

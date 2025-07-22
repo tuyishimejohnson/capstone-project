@@ -1,37 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Clock, Calendar, CheckCircle2, XCircle } from "lucide-react";
 import RegisteredCHW from "../RegisteredCHW";
-
-interface AvailabilityItem {
-  userId: string;
-  day: string;
-  availableFrom: string;
-  availableTo: string;
-}
-
-interface DaySchedule {
-  isAvailable: boolean;
-  startTime: string;
-  endTime: string;
-}
-
-interface WeeklySchedule {
-  [key: string]: DaySchedule;
-}
-
-interface AvailabilityDisplayProps {
-  onEditClick: () => void;
-}
-
-const daysOfWeek = [
-  { key: "monday", label: "Monday", short: "Mon" },
-  { key: "tuesday", label: "Tuesday", short: "Tue" },
-  { key: "wednesday", label: "Wednesday", short: "Wed" },
-  { key: "thursday", label: "Thursday", short: "Thu" },
-  { key: "friday", label: "Friday", short: "Fri" },
-  { key: "saturday", label: "Saturday", short: "Sat" },
-  { key: "sunday", label: "Sunday", short: "Sun" },
-];
+import { daysOfWeek } from "./days/daysOfWeek";
+import type { AvailabilityDisplayProps } from "./types/availability";
+import type { WeeklySchedule } from "./types/availability";
+import type { AvailabilityItem } from "./types/availability";
 
 const formatTime = (time: string) => {
   if (!time) return "";
