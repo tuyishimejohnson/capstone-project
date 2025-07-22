@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { X, Trash2 } from "lucide-react";
 import type { MalariaCase } from "../../../types/formTypes";
 import type { Nutrition } from "../../../types/formTypes";
-import { useMalariaCases } from '../../../hooks/useMalariaCases';
-import { useNutritionData } from '../../../hooks/useNutritionData';
+import { useMalariaCases } from "../../../hooks/useMalariaCases";
+import { useNutritionData } from "../../../hooks/useNutritionData";
 import axios from "axios";
 
 interface UrgentActionsModalProps {
@@ -17,10 +17,15 @@ export function useUrgentActions(userName: string) {
   const { malariaCases } = useMalariaCases();
   const { nutritionData } = useNutritionData();
   const urgentMalaria = (malariaCases as MalariaCase[]).filter(
-    (c) => c.testResult && c.testResult.toLowerCase() === "positive" && c.severity.toLowerCase() === "severe"
+    (c) =>
+      c.testResult &&
+      c.testResult.toLowerCase() === "positive" &&
+      c.severity.toLowerCase() === "severe"
   ).length;
   const urgentNutrition = (nutritionData as Nutrition[]).filter(
-    (c) => c.nutritionStatus && c.nutritionStatus.toLowerCase() === "severe_malnutrition"
+    (c) =>
+      c.nutritionStatus &&
+      c.nutritionStatus.toLowerCase() === "severe_malnutrition"
   ).length;
   return urgentMalaria + urgentNutrition;
 }
@@ -35,7 +40,11 @@ export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
     "malaria"
   );
   const [loading, setLoading] = useState(true);
-  const [confirmDelete, setConfirmDelete] = useState<{ open: boolean; caseId: string | null; caseType: string | null }>({ open: false, caseId: null, caseType: null });
+  const [confirmDelete, setConfirmDelete] = useState<{
+    open: boolean;
+    caseId: string | null;
+    caseType: string | null;
+  }>({ open: false, caseId: null, caseType: null });
 
   useEffect(() => {
     if (isOpen) {
@@ -54,16 +63,25 @@ export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
   const handleDeleteConfirm = async () => {
     if (!confirmDelete.caseId || !confirmDelete.caseType) return;
     try {
-      const endpoint = confirmDelete.caseType === "malaria" ? "malaria" : "nutrition";
+      const endpoint =
+        confirmDelete.caseType === "malaria" ? "malaria" : "nutrition";
       // First, get the case by id
-      const getRes = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${confirmDelete.caseId}`);
+      const getRes = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${
+          confirmDelete.caseId
+        }`
+      );
       if (!getRes.data || getRes.status !== 200) {
         alert(`${confirmDelete.caseType} case not found.`);
         setConfirmDelete({ open: false, caseId: null, caseType: null });
         return;
       }
       // If found, delete it
-      await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${confirmDelete.caseId}`);
+      await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${
+          confirmDelete.caseId
+        }`
+      );
       // Refresh the page or update the list
       window.location.reload();
     } catch (error) {
@@ -128,19 +146,32 @@ export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
         <div className="p-6">
           {loading ? (
             <div className="flex justify-center items-center h-32">
-              <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">Loading urgent actions...</span>
+              <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+                Loading urgent actions...
+              </span>
             </div>
-          ) : cases.length === 0 ? (
-            <div className="text-center">No urgent actions.</div>
           ) : (
             <div>
               {selectedType === "malaria"
-                ? (cases as MalariaCase[])
-                    .filter(
+                ? (() => {
+                    const filteredCases = (cases as MalariaCase[]).filter(
                       (c) =>
-                        c.severity.toLowerCase() === "severe" 
-                    )
-                    .map((c) => (
+                        c.testResult &&
+                        c.testResult.toLowerCase() === "positive" &&
+                        c.severity &&
+                        c.severity.toLowerCase() === "severe" &&
+                        c.recordedBy === userLogged.name
+                    );
+                    if (filteredCases.length === 0) {
+                      return (
+                        <div className="flex justify-center items-center h-32">
+                          <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+                            No urgent malaria cases for you.
+                          </span>
+                        </div>
+                      );
+                    }
+                    return filteredCases.map((c) => (
                       <div
                         key={c._id}
                         className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
@@ -161,14 +192,26 @@ export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
                           <Trash2 size={18} />
                         </button>
                       </div>
-                    ))
-                : (cases as Nutrition[])
-                    .filter(
+                    ));
+                  })()
+                : (() => {
+                    const filteredCases = (cases as Nutrition[]).filter(
                       (c) =>
+                        c.nutritionStatus &&
                         c.nutritionStatus.toLowerCase() ===
-                          "severe_malnutrition"
-                    )
-                    .map((c) => (
+                          "severe_malnutrition" &&
+                        c.recordedBy === userLogged.name
+                    );
+                    if (filteredCases.length === 0) {
+                      return (
+                        <div className="flex justify-center items-center h-32">
+                          <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+                            No urgent nutrition cases for you.
+                          </span>
+                        </div>
+                      );
+                    }
+                    return filteredCases.map((c) => (
                       <div
                         key={c._id}
                         className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
@@ -190,32 +233,36 @@ export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
                           <Trash2 size={18} />
                         </button>
                       </div>
-                    ))}
+                    ));
+                  })()}
             </div>
           )}
         </div>
-        {confirmDelete.open && (
-          <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)] bg-opacity-40 z-50">
-            <div className="bg-white p-6 rounded shadow-lg flex flex-col items-center">
-              <p className="mb-4 text-lg font-semibold">Are you sure you want to delete this {confirmDelete.caseType} case?</p>
-              <div className="flex gap-4">
-                <button
-                  className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-red-600"
-                  onClick={handleDeleteConfirm}
-                >
-                  Delete
-                </button>
-                <button
-                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
-                  onClick={handleDeleteCancel}
-                >
-                  Cancel
-                </button>
-              </div>
+      </div>
+      {confirmDelete.open && (
+        <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)] bg-opacity-40 z-50">
+          <div className="bg-white p-6 rounded shadow-lg flex flex-col items-center">
+            <p className="mb-4 text-lg font-semibold">
+              Are you sure you want to delete this {confirmDelete.caseType}{" "}
+              case?
+            </p>
+            <div className="flex gap-4">
+              <button
+                className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-red-600"
+                onClick={handleDeleteConfirm}
+              >
+                Delete
+              </button>
+              <button
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+                onClick={handleDeleteCancel}
+              >
+                Cancel
+              </button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

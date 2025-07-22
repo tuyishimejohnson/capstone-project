@@ -21,7 +21,11 @@ export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
     "malaria"
   );
   const [loading, setLoading] = useState(true);
-  const [confirmDelete, setConfirmDelete] = useState<{ open: boolean; caseId: string | null; caseType: string | null }>({ open: false, caseId: null, caseType: null });
+  const [confirmDelete, setConfirmDelete] = useState<{
+    open: boolean;
+    caseId: string | null;
+    caseType: string | null;
+  }>({ open: false, caseId: null, caseType: null });
 
   useEffect(() => {
     if (isOpen) {
@@ -40,18 +44,27 @@ export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
   const handleDeleteConfirm = async () => {
     if (!confirmDelete.caseId || !confirmDelete.caseType) return;
     try {
-      const endpoint = confirmDelete.caseType === "malaria" ? "malaria" : "maternal";
+      const endpoint =
+        confirmDelete.caseType === "malaria" ? "malaria" : "maternal";
       // First, get the case by id
-      const getRes = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${confirmDelete.caseId}`);
+      const getRes = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${
+          confirmDelete.caseId
+        }`
+      );
       if (!getRes.data || getRes.status !== 200) {
         alert(`${confirmDelete.caseType} case not found.`);
         setConfirmDelete({ open: false, caseId: null, caseType: null });
         return;
       }
       // If found, delete it
-      await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${confirmDelete.caseId}`);
+      await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${
+          confirmDelete.caseId
+        }`
+      );
       // Refresh the page or update the list
-      window.location.reload();
+      //window.location.reload();
     } catch (error) {
       alert(`Failed to delete ${confirmDelete.caseType} case.`);
     } finally {
@@ -107,19 +120,30 @@ export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
         <div className="p-6">
           {loading ? (
             <div className="flex justify-center items-center h-32">
-              <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">Loading improving cases...</span>
+              <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+                Loading improving cases...
+              </span>
             </div>
-          ) : cases.length === 0 ? (
-            <div>No active cases.</div>
           ) : (
             <div>
               {selectedType === "malaria"
-                ? (cases as MalariaCase[])
-                    .filter(
-                      (c) => c.testResult.toLowerCase() === "negative" /* &&
-                        c.recordedBy === userLogged.name */
-                    )
-                    .map((c) => (
+                ? (() => {
+                    const filteredCases = (cases as MalariaCase[]).filter(
+                      (c) =>
+                        c.testResult &&
+                        c.testResult.toLowerCase() === "negative" &&
+                        c.recordedBy === userLogged.name
+                    );
+                    if (filteredCases.length === 0) {
+                      return (
+                        <div className="flex justify-center items-center h-32">
+                          <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+                            No malaria cases.
+                          </span>
+                        </div>
+                      );
+                    }
+                    return filteredCases.map((c) => (
                       <div
                         key={c._id}
                         className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
@@ -140,14 +164,25 @@ export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
                           <Trash2 size={18} />
                         </button>
                       </div>
-                    ))
-                : (cases as Pregnancy[])
-                    .filter(
+                    ));
+                  })()
+                : (() => {
+                    const filteredCases = (cases as Pregnancy[]).filter(
                       (c) =>
-                        c.pregnancyStatus.toLowerCase() === "postpartum" /* &&
-                        c.recordedBy === userLogged.name */
-                    )
-                    .map((c) => (
+                        c.pregnancyStatus &&
+                        c.pregnancyStatus.toLowerCase() === "postpartum" &&
+                        c.recordedBy === userLogged.name
+                    );
+                    if (filteredCases.length === 0) {
+                      return (
+                        <div className="flex justify-center items-center h-32">
+                          <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+                            No maternal cases.
+                          </span>
+                        </div>
+                      );
+                    }
+                    return filteredCases.map((c) => (
                       <div
                         key={c._id}
                         className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
@@ -169,32 +204,36 @@ export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
                           <Trash2 size={18} />
                         </button>
                       </div>
-                    ))}
+                    ));
+                  })()}
             </div>
           )}
         </div>
-        {confirmDelete.open && (
-          <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)] bg-opacity-40 z-50">
-            <div className="bg-white p-6 rounded shadow-lg flex flex-col items-center">
-              <p className="mb-4 text-lg font-semibold">Are you sure you want to delete this {confirmDelete.caseType} case?</p>
-              <div className="flex gap-4">
-                <button
-                  className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-red-600"
-                  onClick={handleDeleteConfirm}
-                >
-                  Delete
-                </button>
-                <button
-                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
-                  onClick={handleDeleteCancel}
-                >
-                  Cancel
-                </button>
-              </div>
+      </div>
+      {confirmDelete.open && (
+        <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)] bg-opacity-40 z-50">
+          <div className="bg-white p-6 rounded shadow-lg flex flex-col items-center">
+            <p className="mb-4 text-lg font-semibold">
+              Are you sure you want to delete this {confirmDelete.caseType}{" "}
+              case?
+            </p>
+            <div className="flex gap-4">
+              <button
+                className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-red-600"
+                onClick={handleDeleteConfirm}
+              >
+                Delete
+              </button>
+              <button
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+                onClick={handleDeleteCancel}
+              >
+                Cancel
+              </button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
