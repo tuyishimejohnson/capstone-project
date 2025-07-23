@@ -86,34 +86,37 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center">
-          <div className="p-2 bg-teal-100 rounded-lg">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+        {/* Left: Icon + Title + Subtitle */}
+        <div className="flex items-center flex-1 min-w-0">
+          <div className="p-2 bg-teal-100 rounded-lg flex-shrink-0">
             <Calendar className="w-6 h-6 text-teal-600" />
           </div>
-          <div className="ml-4">
-            <h3 className="text-lg font-semibold text-gray-900">
+          <div className="ml-3 sm:ml-4 min-w-0">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
               My Weekly Availability
             </h3>
-            <p className="text-sm text-gray-600">
+            <p className="text-xs sm:text-sm text-gray-600 truncate">
               {availableDays.length} days • {totalHours.toFixed(1)} hours per
               week
             </p>
           </div>
         </div>
-        <button
-          className="px-4 py-2 text-teal-600 hover:text-teal-700 hover:bg-teal-50 rounded-lg text-sm font-medium"
-          onClick={() => setShowRegistered(true)}
-        >
-          View registered CHW
-        </button>
-
-        <button
-          onClick={onEditClick}
-          className="shadow-md text-gray-600 border border-gray-300 hover:translate-x-0.5 transition-all duration-200 hover:transform px-5 py-2 rounded-md"
-        >
-          Edit Schedule
-        </button>
+        {/* Right: Buttons */}
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-2 sm:mt-0">
+          <button
+            className="px-4 py-2 text-teal-600 hover:text-teal-700 hover:bg-teal-50 rounded-lg text-xs sm:text-sm font-medium w-full sm:w-auto"
+            onClick={() => setShowRegistered(true)}
+          >
+            View registered CHW
+          </button>
+          <button
+            onClick={onEditClick}
+            className="shadow-md text-gray-600 border border-gray-300 hover:translate-x-0.5 transition-all duration-200 hover:transform px-4 sm:px-5 py-2 rounded-md text-xs sm:text-sm w-full sm:w-auto"
+          >
+            Edit Schedule
+          </button>
+        </div>
       </div>
 
       {/* Weekly Schedule Grid */}

@@ -203,18 +203,17 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-12">
         {/* Welcome Section */}
-        <div className="mb-8 flex justify-between">
-          <div>
-            <div className="flex gap-5 items-center">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                {" "}
+        <div className="mb-8 flex flex-col md:flex-row md:justify-between gap-6 md:gap-0">
+          <div className="w-full md:w-auto">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 items-start sm:items-center">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2 sm:mb-0">
                 Welcome back
                 {` ${userName.split(" ")[0]}`}
               </h2>
 
               {userDataResults.role === "admin" && (
                 <button
-                  className="bg-teal-100 px-4 py-2 border border-teal-300 hover:translate-x-0.5 transform cursor-pointer rounded-md text-gray-500"
+                  className="bg-teal-100 px-4 py-2 border border-teal-300 hover:translate-x-0.5 transform cursor-pointer rounded-md text-gray-500 mt-2 sm:mt-0"
                   onClick={() => setViewPins(true)}
                 >
                   View CHW PIN
@@ -222,26 +221,26 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               )}
             </div>
 
-            <p className="text-gray-600">
+            <p className="text-gray-600 mt-2 sm:mt-0">
               Here is an overview of your availability customization and
               recommended actions.
             </p>
           </div>
 
-          <div className="gap-7 border-gray-200 flex items-center justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-7 border-gray-200 items-center justify-center w-full md:w-auto">
             <button
-              className="flex items-center px-4 py-2 shadow-sm text-gray-600 rounded-lg hover:bg-teal-600 hover:text-white transition-all duration-200 border border-gray-300"
+              className="flex items-center px-4 py-2 shadow-sm text-gray-600 rounded-lg hover:bg-teal-600 hover:text-white transition-all duration-200 border border-gray-300 w-full sm:w-auto"
               onClick={() => setPrediction(true)}
             >
               <span className="text-teal-600 hover:text-white flex items-center justify-center">
-                <BotMessageSquare className="w-6 h-6 " />
+                <BotMessageSquare className="w-6 h-6 mr-2" />
                 Ask Assistant
               </span>
             </button>
             {/* Add Patient Data Button */}
             <button
               onClick={() => setShowForm(true)}
-              className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:border hover:border-gray-300 hover:bg-transparent hover:text-gray-400 transition-all duration-200 shadow-sm"
+              className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:border hover:border-gray-300 hover:bg-transparent hover:text-gray-400 transition-all duration-200 shadow-sm w-full sm:w-auto"
             >
               <Plus className="w-4 h-4 mr-2" />
               <span className="text-sm font-medium">Add Patient</span>
