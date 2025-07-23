@@ -88,7 +88,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
   // Use improving cases count from ActiveCases hook
   const improvingTotal = useImprovingCasesCount();
-  const urgentTotal = useUrgentActions(userName);
+  const urgentTotal = useUrgentActions();
 
   // Show loading indicator until all data is loaded
   if (
@@ -110,23 +110,23 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 fixed right-0 left-0 top-0">
+      <header className="bg-white shadow-sm border-b border-gray-200 sm:fixed sm:right-0 sm:left-0 sm:top-0 sm:z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <div className="flex items-center">
-                <HeartPulse className="w-8 h-8 text-teal-600" />
-                <h1 className="ml-2 text-xl font-bold text-gray-900">
-                  CHW Portal
-                </h1>
-              </div>
+          <div className="flex flex-col sm:flex-row justify-between items-center h-auto sm:h-16 py-3 sm:py-0 gap-3 sm:gap-0">
+            {/* Logo and Title */}
+            <div className="flex items-center w-full sm:w-auto justify-center sm:justify-start">
+              <HeartPulse className="w-8 h-8 text-teal-600" />
+              <h1 className="ml-2 text-xl font-bold text-gray-900 whitespace-nowrap">
+                CHW Portal
+              </h1>
             </div>
 
-            <div className="flex justify-center items-center space-x-4">
+            {/* Actions */}
+            <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-3 sm:gap-4 justify-center sm:justify-end">
               {/* Availability Button */}
               <button
                 onClick={() => setIsAvailabilityModalOpen(true)}
-                className="flex items-center px-3 py-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition-all duration-200 border border-teal-200"
+                className="hidden md:flex items-center px-3 py-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition-all duration-200 border border-teal-200 w-full sm:w-auto justify-center"
               >
                 <Clock className="w-4 h-4 mr-2" />
                 <span className="text-sm font-medium">Availability</span>
@@ -137,7 +137,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 </span>
               </button>
 
-              <div className="flex items-center space-x-3">
+              {/* User Info and Logout */}
+              <div className="flex items-center space-x-3 w-full sm:w-auto justify-center sm:justify-end">
                 <div className="flex items-center">
                   <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
                     <span className="text-sm font-medium text-teal-600">
@@ -149,12 +150,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                     </span>
                   </div>
                   <div className="ml-2">
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-gray-900 truncate max-w-[80px] sm:max-w-none">
                       {userName || "user"}
                     </p>
-                    <p className="text-xs text-gray-500 capitalize">
-                      {/* {user.role.replace("_", " ")} */}
-                    </p>
+                    <p className="text-xs text-gray-500 capitalize"></p>
                   </div>
                 </div>
 
@@ -205,7 +204,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         {/* Welcome Section */}
         <div className="mb-8 flex flex-col md:flex-row md:justify-between gap-6 md:gap-0">
           <div className="w-full md:w-auto">
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 items-start sm:items-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 lg:items-start sm:items-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-2 sm:mb-0">
                 Welcome back
                 {` ${userName.split(" ")[0]}`}
