@@ -1,4 +1,1 @@
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+https://chws-dashboard.j-tuyishime4.workers.dev/* /index.html 200
