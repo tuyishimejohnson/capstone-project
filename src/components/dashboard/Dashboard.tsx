@@ -204,7 +204,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         {/* Welcome Section */}
         <div className="mb-8 flex flex-col md:flex-row md:justify-between gap-6 md:gap-0">
           <div className="w-full md:w-auto">
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 lg:items-start sm:items-center">
+            <div className="flex flex-col justify-between lg:justify-normal sm:flex-row gap-3 sm:gap-5 lg:items-start sm:items-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-2 sm:mb-0">
                 Welcome back
                 {` ${userName.split(" ")[0]}`}
