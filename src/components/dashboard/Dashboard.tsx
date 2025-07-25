@@ -264,14 +264,16 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               <div className="p-2 bg-teal-100 rounded-lg">
                 <Users className="w-6 h-6 text-teal-600" />
               </div>
-              <p className="ml-4">
+
+              <div className="flex flex-col ml-4">
                 <p className="text-sm font-medium text-gray-600">
                   Total Patients
                 </p>
+
                 <p className="text-2xl font-bold text-gray-900">
                   {bookings.length}
                 </p>
-              </p>
+              </div>
             </div>
           </div>
 
