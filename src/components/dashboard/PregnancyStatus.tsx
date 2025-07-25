@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 interface Pregnancy {
   _id: string;
@@ -33,6 +34,7 @@ export const PregnancyModal: React.FC<PregnancyModalProps> = ({
   pregnancyStatus,
 }) => {
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (isOpen) {
       setLoading(true);
@@ -40,7 +42,13 @@ export const PregnancyModal: React.FC<PregnancyModalProps> = ({
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
+
   if (!isOpen) return null;
+  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+  // Filter data collected by logged user
+  const userPregnancies = pregnancyStatus.filter(
+    (pregnancy) => pregnancy.recordedBy === userData.name
+  );
 
   return (
     <div className="fixed inset-0 bg-opacity-50 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
@@ -51,7 +59,6 @@ export const PregnancyModal: React.FC<PregnancyModalProps> = ({
         >
           <h2 className="text-xl font-semibold text-white">Maternal Cases</h2>
           <div className="flex gap-5">
-            {/* Add filter or other action buttons here if needed */}
             <button
               onClick={onClose}
               className="text-white hover:text-gray-200"
@@ -65,9 +72,9 @@ export const PregnancyModal: React.FC<PregnancyModalProps> = ({
             <div className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
               Loading maternal cases...
             </div>
-          ) : pregnancyStatus.length === 0 ? (
+          ) : userPregnancies.length === 0 ? (
             <p className="text-gray-500 text-center">
-              No active cases available.
+              No data collected by you.
             </p>
           ) : (
             <div>
@@ -83,14 +90,15 @@ export const PregnancyModal: React.FC<PregnancyModalProps> = ({
                 <div className="flex-1 p-2">Collected by</div>
               </div>
               {/* Data Rows */}
-              {pregnancyStatus.map((pregnancy: Pregnancy, index: number) => (
-                <div
+              {userPregnancies.map((pregnancy, index) => (
+                <Link
                   key={pregnancy._id}
+                  to={`/pregnancy-details/${pregnancy._id}`}
                   className={`flex items-center ${
-                    index !== pregnancyStatus.length - 1
+                    index !== userPregnancies.length - 1
                       ? "border-b border-gray-200"
                       : ""
-                  } hover:bg-gray-50`}
+                  } hover:bg-gray-50 cursor-pointer`}
                 >
                   <div className="flex-1 p-2">{pregnancy.patientName}</div>
                   <div className="flex-1 p-2">{pregnancy.contactNumber}</div>
@@ -100,7 +108,7 @@ export const PregnancyModal: React.FC<PregnancyModalProps> = ({
                   <div className="flex-1 p-2">{pregnancy.antenatalVisits}</div>
                   <div className="flex-1 p-2">{pregnancy.nextVisitDate}</div>
                   <div className="flex-1 p-2">{pregnancy.recordedBy}</div>
-                </div>
+                </Link>
               ))}
             </div>
           )}
