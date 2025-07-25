@@ -23,6 +23,12 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
   }, [isOpen]);
   if (!isOpen) return null;
 
+  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+
+  const userNutrition = nutritionCase.filter(
+    (pregnancy) => pregnancy.recordedBy === userData.name
+  );
+
   return (
     <div className="fixed inset-0 bg-opacity-50 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
       <div className="bg-white w-full mx-20 rounded-lg shadow-lg overflow-y-auto max-h-[80vh]">
@@ -48,8 +54,8 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
             <div className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
               Loading nutrition cases...
             </div>
-          ) : nutritionCase.length === 0 ? (
-            <p className="text-gray-500 text-center">
+          ) : userNutrition.length === 0 ? (
+            <p className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
               No active cases available.
             </p>
           ) : (
@@ -67,7 +73,7 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
                 <div className="flex-1 p-2">Collected by</div>
               </div>
               {/* Data Rows */}
-              {nutritionCase.map((nutrition: Nutrition, index: number) => (
+              {userNutrition.map((nutrition: Nutrition, index: number) => (
                 <div
                   key={nutrition._id}
                   className={`flex items-center ${

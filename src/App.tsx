@@ -17,6 +17,7 @@ function App() {
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/ethics" element={<Ethics />} />
           <Route path="/pregnancy-details/:id" element={<PregnancyDetails />} />
+          <Route path="/pregnancy-details/:id" element={<PregnancyDetails />} />
         </Routes>
       </Router>
     </>
