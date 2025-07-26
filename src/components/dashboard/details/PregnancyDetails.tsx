@@ -1,9 +1,10 @@
 import { useMaternalData } from "../../../hooks/useMaternalData";
 import type { Pregnancy } from "../../../types/formTypes";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 export const PregnancyDetails = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const {
     maternalData,
     loading,
@@ -28,6 +29,13 @@ export const PregnancyDetails = () => {
       className="max-w-xl mx-auto bg-white rounded-lg shadow-md p-6 mt-6"
       style={{ borderTop: "6px solid #0d9488" }}
     >
+      <button
+        className="mb-4 text-teal-600 hover:underline flex items-center"
+        onClick={() => navigate(-1)}
+        type="button"
+      >
+        &larr; Back
+      </button>
       <h2 className="text-2xl font-bold text-teal-600 mb-4 text-center">
         Pregnancy Details
       </h2>

@@ -1,6 +1,6 @@
 import { X, Trash2 } from "lucide-react";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { Link } from "react-router-dom";
 
 interface MalariaCase {
   _id: string;
@@ -43,6 +43,14 @@ export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
     }
   }, [isOpen]);
 
+  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+  const filteredMalariaCases = activeCases.filter(
+    (malariaCase) => malariaCase.recordedBy === userData.name
+  );
+  console.log(
+    "These are filtered cases==============================?",
+    filteredMalariaCases
+  );
   // const handleDeleteClick = (caseId: string) => {
   //   setConfirmDelete({ open: true, caseId });
   // };
@@ -97,7 +105,7 @@ export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
             <div className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
               Loading malaria cases...
             </div>
-          ) : activeCases.length === 0 ? (
+          ) : filteredMalariaCases.length === 0 ? (
             <p className="text-gray-500 text-center">
               No active malaria cases available.
             </p>
@@ -117,35 +125,42 @@ export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
                 <div className="p-2 w-8"></div>
               </div>
               {/* Data Rows */}
-              {activeCases.map((malariaCase: MalariaCase, index: number) => (
-                <div
-                  key={malariaCase._id}
-                  className={`flex items-center ${
-                    index !== activeCases.length - 1
-                      ? "border-b border-gray-200"
-                      : ""
-                  } hover:bg-gray-50`}
-                >
-                  <div className="flex-1 p-2">{malariaCase.patientName}</div>
-                  <div className="flex-1 p-2">{malariaCase.contactNumber}</div>
-                  <div className="flex-1 p-2">{malariaCase.age}</div>
-                  <div className="flex-1 p-2">{malariaCase.gender}</div>
-                  <div className="flex-1 p-2">{malariaCase.address}</div>
-                  <div className="flex-1 p-2">{malariaCase.testResult}</div>
-                  <div className="flex-1 p-2">{malariaCase.severity}</div>
-                  <div className="flex-1 p-2">{malariaCase.treatmentGiven}</div>
-                  <div className="flex-1 p-2">{malariaCase.recordedBy}</div>
-                  <div className="p-2 w-8 flex items-center justify-center">
-                    {/* <button
+              {filteredMalariaCases.map(
+                (malariaCase: MalariaCase, index: number) => (
+                  <Link
+                    key={malariaCase._id}
+                    to={`/malaria-details/${malariaCase._id}`}
+                    className={`flex items-center ${
+                      index !== activeCases.length - 1
+                        ? "border-b border-gray-200"
+                        : ""
+                    } hover:bg-gray-50`}
+                  >
+                    <div className="flex-1 p-2">{malariaCase.patientName}</div>
+                    <div className="flex-1 p-2">
+                      {malariaCase.contactNumber}
+                    </div>
+                    <div className="flex-1 p-2">{malariaCase.age}</div>
+                    <div className="flex-1 p-2">{malariaCase.gender}</div>
+                    <div className="flex-1 p-2">{malariaCase.address}</div>
+                    <div className="flex-1 p-2">{malariaCase.testResult}</div>
+                    <div className="flex-1 p-2">{malariaCase.severity}</div>
+                    <div className="flex-1 p-2">
+                      {malariaCase.treatmentGiven}
+                    </div>
+                    <div className="flex-1 p-2">{malariaCase.recordedBy}</div>
+                    <div className="p-2 w-8 flex items-center justify-center">
+                      {/* <button
                       className="text-red-500 hover:text-red-700"
                       onClick={() => handleDeleteClick(malariaCase._id)}
                       aria-label="Delete malaria case"
                     >
                       <Trash2 size={18} />
                     </button> */}
-                  </div>
-                </div>
-              ))}
+                    </div>
+                  </Link>
+                )
+              )}
             </div>
           )}
         </div>

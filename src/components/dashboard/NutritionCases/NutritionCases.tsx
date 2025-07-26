@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import type { Nutrition } from "../../../types/formTypes";
-import { useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface ActiveCasesModalProps {
   isOpen: boolean;
@@ -15,7 +15,7 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
   nutritionCase,
 }) => {
   const [loading, setLoading] = useState(true);
-  const { id } = useParams();
+
   useEffect(() => {
     if (isOpen) {
       setLoading(true);

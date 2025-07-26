@@ -6,6 +6,7 @@ import { Ethics } from "./privacy/Ethics";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { PregnancyDetails } from "./components/dashboard/details/PregnancyDetails";
 import { NutritionDetails } from "./components/dashboard/details/NutritionDetails";
+import { MalariaDetails } from "./components/dashboard/details/MalariaDetails";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/ethics" element={<Ethics />} />
           <Route path="/pregnancy-details/:id" element={<PregnancyDetails />} />
           <Route path="/nutrition-details/:id" element={<NutritionDetails />} />
+          <Route path="/malaria-details/:id" element={<MalariaDetails />} />
         </Routes>
       </Router>
     </>
