@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import type { Nutrition } from "../../../types/formTypes";
+import { useParams, Link } from "react-router-dom";
 
 interface ActiveCasesModalProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
   nutritionCase,
 }) => {
   const [loading, setLoading] = useState(true);
+  const { id } = useParams();
   useEffect(() => {
     if (isOpen) {
       setLoading(true);
@@ -73,9 +75,11 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
                 <div className="flex-1 p-2">Collected by</div>
               </div>
               {/* Data Rows */}
+
               {userNutrition.map((nutrition: Nutrition, index: number) => (
-                <div
+                <Link
                   key={nutrition._id}
+                  to={`/nutrition-details/${nutrition._id}`}
                   className={`flex items-center ${
                     index !== nutritionCase.length - 1
                       ? "border-b border-gray-200"
@@ -91,7 +95,7 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
                   <div className="flex-1 p-2">{nutrition.nutritionStatus}</div>
                   <div className="flex-1 p-2">{nutrition.notes}</div>
                   <div className="flex-1 p-2">{nutrition.recordedBy}</div>
-                </div>
+                </Link>
               ))}
             </div>
           )}
