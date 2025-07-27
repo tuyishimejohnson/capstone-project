@@ -44,7 +44,7 @@ export const PrivacyPolicy = () => {
         </motion.div>
 
         <motion.div
-          className="bg-white rounded-2xl shadow-lg p-6 md:p-8"
+          className="bg-white rounded-2xl shadow-lg p-6 md:p-8 text-lg"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
@@ -67,7 +67,7 @@ export const PrivacyPolicy = () => {
         </motion.div>
 
         <motion.div
-          className="bg-white rounded-2xl shadow-lg p-6 md:p-8"
+          className="bg-white rounded-2xl shadow-lg p-6 md:p-8 text-lg"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
@@ -85,6 +85,13 @@ export const PrivacyPolicy = () => {
             through USSD is handled with the same level of confidentiality and
             security as information collected through the portal, and is only
             accessible to authorized CHWs for healthcare support.
+          </p>
+          <p className="text-gray-700 leading-relaxed mt-2">
+            Using the USSD system is completely free of charge. Patients will
+            not be charged any fees for booking appointments via USSD, and the
+            service does not deduct any money from your phone or account. This
+            ensures that everyone can access healthcare support without concern
+            for financial costs or unauthorized charges.
           </p>
         </motion.div>
       </div>
