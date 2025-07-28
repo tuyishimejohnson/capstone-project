@@ -152,18 +152,20 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
                 <div className="space-y-1">
                   <div className="flex items-center text-xs text-gray-600">
                     <Clock className="w-3 h-3 mr-1" />
-                    <span className="font-medium">Available</span>
+                    <span className="font-medium">{t("available")}</span>
                   </div>
                   <div className="text-sm font-semibold text-gray-900">
                     {formatTime(daySchedule.startTime)}
                   </div>
-                  <div className="text-xs text-gray-500">to</div>
+                  <div className="text-xs text-gray-500">{t("to")}</div>
                   <div className="text-sm font-semibold text-gray-900">
                     {formatTime(daySchedule.endTime)}
                   </div>
                 </div>
               ) : (
-                <div className="text-xs text-gray-500 mt-2">Not Available</div>
+                <div className="text-xs text-gray-500 mt-2">
+                  {t("notAvailable")}
+                </div>
               )}
             </div>
           );
@@ -205,7 +207,7 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
             </div>
             <div className="ml-3">
               <p className="text-sm font-medium text-teal-900">
-                Next Available:{" "}
+                {t("nextAvailable")}{" "}
                 {(() => {
                   const today = new Date().getDay();
                   const dayKeys = [

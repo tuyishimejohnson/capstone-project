@@ -302,8 +302,8 @@ i18n.use(initReactI18next).init({
         required: "Birasabwa",
         optional: "Bitarasabwa",
         na: "Nta kimenyetso",
-        available: "Biraboneka",
-        notAvailable: "Ntibiboneka",
+        available: "Ndaboneka",
+        notAvailable: "Sindaboneka",
         active: "Bigakora",
         inactive: "Bidakora",
         male: "Gabo",
@@ -514,7 +514,7 @@ i18n.use(initReactI18next).init({
         assistant: "Umufasha",
 
         // Modal Titles
-        availableChws: "Abakozi b'Ubuzima baboneka",
+        availableChws: "Abajyanama b'ubuzima Banditse",
         chwsPin: "Kode z'Abakozi",
         maternalCases: "Ababyeyi batwite",
         improvingCases: "Indwara zitezimbere",

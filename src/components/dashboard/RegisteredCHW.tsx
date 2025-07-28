@@ -2,6 +2,7 @@ import React from "react";
 import { X } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 interface RegisteredCHWProps {
   show: boolean;
@@ -23,6 +24,7 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
 
   const [showUsers, setShowUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const getAllUsers = async () => {
@@ -60,7 +62,9 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
           className="flex justify-between items-center mb-0 px-6 py-4 rounded-t-lg"
           style={{ backgroundColor: "#0d9488" }}
         >
-          <h2 className="text-xl font-semibold text-white">Available CHWs</h2>
+          <h2 className="text-xl font-semibold text-white">
+            {t("availableChws")}
+          </h2>
           <button
             onClick={onClose}
             className="text-white hover:text-gray-200"
@@ -72,7 +76,9 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
         <div className="p-6">
           {loading ? (
             <div className="flex justify-center items-center py-8">
-              <span className="flex items-center justify-center text-teal-600 font-semibold text-lg">Loading CHWs...</span>
+              <span className="flex items-center justify-center text-teal-600 font-semibold text-lg">
+                Loading CHWs...
+              </span>
             </div>
           ) : showUsers.length === 0 ? (
             <p className="text-gray-500">No registered CHWs available.</p>
