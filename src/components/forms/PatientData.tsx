@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Save, User, Calendar, MapPin, Phone, X } from "lucide-react";
 import { MalariaForm } from "./MalariaForm";
@@ -20,6 +21,7 @@ export const PatientDataForm: React.FC<PatientDataFormProps> = ({
   onClose,
   currentUser,
 }) => {
+  const { t } = useTranslation();
   const [formType, setFormType] = useState<
     "malaria" | "nutrition" | "maternal"
   >("malaria");

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { Save, TestTube, Thermometer, Calendar } from "lucide-react";
 import axios from "axios";
@@ -59,6 +60,7 @@ export const MalariaForm: React.FC<
     defaultValues?: Partial<FormValues>;
   }
 > = ({ onSubmit, isSaving, defaultValues = {}, patientData }) => {
+  const { t } = useTranslation();
   let savedData = JSON.parse(localStorage.getItem("userData") || "{}");
   const {
     register,
@@ -93,7 +95,7 @@ export const MalariaForm: React.FC<
 
   return (
     <form
-      onSubmit={handleSubmit(async (data) => {
+      onSubmit={handleSubmit(async (data: FormValues) => {
         const dataToSubmit = {
           ...data,
           patientName: patientData?.patientName,
@@ -134,8 +136,8 @@ export const MalariaForm: React.FC<
         <Controller
           name="symptoms"
           control={control}
-          rules={{ required: true, validate: (v) => v.length > 0 }}
-          render={({ field }) => (
+          rules={{ required: true, validate: (v: string[]) => v.length > 0 }}
+          render={({ field }: { field: any }) => (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {symptoms.map((symptom) => (
                 <label key={symptom} className="flex items-center">
@@ -148,7 +150,9 @@ export const MalariaForm: React.FC<
                       if (e.target.checked) {
                         field.onChange([...selected, symptom]);
                       } else {
-                        field.onChange(selected.filter((s) => s !== symptom));
+                        field.onChange(
+                          selected.filter((s: string) => s !== symptom)
+                        );
                       }
                     }}
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"

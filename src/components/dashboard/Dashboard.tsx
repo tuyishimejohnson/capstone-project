@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import {
   LogOut,
   Bell,
@@ -43,6 +45,7 @@ interface DashboardProps {
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
+  const { t, i18n } = useTranslation();
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
   const [schedule, setSchedule] = useState<WeeklySchedule>(defaultSchedule);
   const [patientDetail, setPatientDetail] = useState(false);
@@ -77,10 +80,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       (day) => day.isAvailable
     );
     if (availableDays.length === 0)
-      return { text: "Not Set", color: "text-red-600 bg-red-50" };
+      return { text: t("notSet"), color: "text-red-600 bg-red-50" };
     if (availableDays.length <= 2)
-      return { text: "Limited", color: "text-yellow-600 bg-yellow-50" };
-    return { text: "Available", color: "text-green-600 bg-green-50" };
+      return { text: t("limited"), color: "text-yellow-600 bg-yellow-50" };
+    return { text: t("availableStatus"), color: "text-green-600 bg-green-50" };
   };
 
   const availabilityStatus = getAvailabilityStatus();
@@ -101,7 +104,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-xl text-teal-600 font-semibold">
-          Loading dashboard...
+          {t("loadingDashboard")}
         </div>
       </div>
     );
@@ -117,19 +120,44 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             <div className="flex items-center w-full sm:w-auto justify-center sm:justify-start">
               <HeartPulse className="w-8 h-8 text-teal-600" />
               <h1 className="ml-2 text-xl font-bold text-gray-900 whitespace-nowrap">
-                CHW Portal
+                {t("appTitle")}
               </h1>
             </div>
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-3 sm:gap-4 justify-center sm:justify-end">
+              {/* Language Switcher */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => i18n.changeLanguage("en")}
+                  className={`px-2 py-1 text-xs rounded ${
+                    i18n.language === "en"
+                      ? "bg-teal-100 text-teal-600"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => i18n.changeLanguage("rw")}
+                  className={`px-2 py-1 text-xs rounded ${
+                    i18n.language === "rw"
+                      ? "bg-teal-100 text-teal-600"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  RW
+                </button>
+              </div>
+
               {/* Availability Button */}
+
               <button
                 onClick={() => setIsAvailabilityModalOpen(true)}
                 className="hidden md:flex items-center px-3 py-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition-all duration-200 border border-teal-200 w-full sm:w-auto justify-center"
               >
                 <Clock className="w-4 h-4 mr-2" />
-                <span className="text-sm font-medium">Availability</span>
+                <span className="text-sm font-medium">{t("availability")}</span>
                 <span
                   className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${availabilityStatus.color}`}
                 >
@@ -151,7 +179,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                   </div>
                   <div className="ml-2">
                     <p className="text-sm font-medium text-gray-900 truncate max-w-[80px] sm:max-w-none">
-                      {userName || "user"}
+                      {userName || t("user")}
                     </p>
                     <p className="text-xs text-gray-500 capitalize"></p>
                   </div>
@@ -161,21 +189,23 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 <button
                   onClick={() => setShowLogoutDialog(true)}
                   className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                  title="Logout"
+                  title={t("logout")}
                 >
                   <LogOut className="w-5 h-5" />
                 </button>
                 {showLogoutDialog && (
                   <div className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-50 bg-[rgba(0,0,0,0.5)]">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-80">
-                      <h2 className="text-lg font-semibold mb-2">Logout</h2>
-                      <p className="mb-4">Are you sure you want to logout?</p>
+                      <h2 className="text-lg font-semibold mb-2">
+                        {t("logout")}
+                      </h2>
+                      <p className="mb-4">{t("logoutConfirm")}</p>
                       <div className="flex justify-end space-x-2">
                         <button
                           className="px-4 py-2 rounded bg-gray-100 text-gray-700 hover:bg-gray-200"
                           onClick={() => setShowLogoutDialog(false)}
                         >
-                          Cancel
+                          {t("cancel")}
                         </button>
                         <button
                           className="px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700"
@@ -188,7 +218,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                             }, 1000);
                           }}
                         >
-                          Logout
+                          {t("logout")}
                         </button>
                       </div>
                     </div>
@@ -206,7 +236,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           <div className="w-full md:w-auto">
             <div className="flex flex-col justify-between lg:justify-normal sm:flex-row gap-3 sm:gap-5 lg:items-start sm:items-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-2 sm:mb-0">
-                Welcome back
+                {t("welcomeBackUser")}
                 {` ${userName.split(" ")[0]}`}
               </h2>
 
@@ -221,8 +251,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             </div>
 
             <p className="text-gray-600 mt-2 sm:mt-0">
-              Here is an overview of your availability customization and
-              recommended actions.
+              {t("scheduleDescription")}
             </p>
           </div>
 
@@ -233,7 +262,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             >
               <span className="text-teal-600 hover:text-white flex items-center justify-center">
                 <BotMessageSquare className="w-6 h-6 mr-2" />
-                Ask Assistant
+                {t("askAssistant")}
               </span>
             </button>
             {/* Add Patient Data Button */}
@@ -242,7 +271,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:border hover:border-gray-300 hover:bg-transparent hover:text-gray-400 transition-all duration-200 shadow-sm w-full sm:w-auto"
             >
               <Plus className="w-4 h-4 mr-2" />
-              <span className="text-sm font-medium">Add Patient</span>
+              <span className="text-sm font-medium">{t("addPatient")}</span>
             </button>
           </div>
         </div>
@@ -267,7 +296,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
               <div className="flex flex-col ml-4">
                 <p className="text-sm font-medium text-gray-600">
-                  Total Patients
+                  {t("totalRegistered")}
                 </p>
 
                 <p className="text-2xl font-bold text-gray-900">
@@ -287,7 +316,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">
-                  Active Cases
+                  {t("activeCases")}
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
                   {malariaCases.length + maternalData.length}
@@ -305,7 +334,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 <TrendingUp className="w-6 h-6 text-green-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Improving</p>
+                <p className="text-sm font-medium text-gray-600">
+                  {t("improving")}
+                </p>
                 <p className="text-2xl font-bold text-gray-900">
                   {improvingTotal}
                 </p>
@@ -323,7 +354,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">
-                  Urgent Actions
+                  {t("urgentActions")}
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
                   {urgentTotal}
@@ -336,7 +367,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         {/* Health Metrics */}
         <div className="mb-10">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">
-            Health Metrics Overview
+            {t("healthMetricsOverview")}
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-gray-50 text-center px-8 py-14 border border-teal-400 shadow-sm rounded-md">
@@ -346,7 +377,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               onClick={() => setMaternalCase(true)}
             >
               <Baby className="w-12 h-12 mb-3 text-teal-500" />
-              <h2 className="mb-2">Pregnant Women Under Care</h2>
+              <h2 className="mb-2">{t("pregnantWomenUnderCare")}</h2>
               <span className="text-4xl font-extrabold">
                 {maternalData.length}
               </span>
@@ -358,7 +389,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               onClick={() => setActiveCases(true)}
             >
               <Activity className="w-12 h-12 mb-3 text-teal-500" />
-              <h2 className="mb-2">Malaria Cases</h2>
+              <h2 className="mb-2">{t("malariaCases")}</h2>
               <span className="text-4xl font-extrabold">
                 {malariaCases.length}
               </span>
@@ -370,7 +401,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               onClick={() => setNutritionCase(true)}
             >
               <Apple className="w-12 h-12 mb-3 text-teal-500" />
-              <h2 className="mb-2">Children Nutrition</h2>
+              <h2 className="mb-2">{t("childrenNutrition")}</h2>
               <span className="text-4xl font-extrabold">
                 {nutritionData.length}
               </span>

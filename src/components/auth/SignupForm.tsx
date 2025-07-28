@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Eye,
   EyeOff,
@@ -28,6 +29,7 @@ interface SignupFormProps {
 }
 
 export const SignupForm: React.FC<SignupFormProps> = () => {
+  const { t } = useTranslation();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [district, setDistrict] = useState("");
@@ -102,9 +104,9 @@ export const SignupForm: React.FC<SignupFormProps> = () => {
               <HeartPulse className="w-8 h-8 text-teal-600" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Join Our Community
+              {t("createAccount")}
             </h1>
-            <p className="text-gray-600">Create your account</p>
+            <p className="text-gray-600">{t("createAccount")}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">

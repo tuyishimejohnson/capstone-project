@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Eye, EyeOff, User, Lock, HeartPulse } from "lucide-react";
 import { validateLoginForm } from "../../utils/validation";
 import type { FormErrors } from "../../types";
@@ -12,6 +13,7 @@ interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -25,12 +27,12 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
 
     // Validate fields including pin
     const validationErrors: FormErrors = {};
-    if (!name) validationErrors.name = "Name is required.";
-    if (!password) validationErrors.password = "Password is required.";
+    if (!name) validationErrors.name = t("fieldRequired");
+    if (!password) validationErrors.password = t("fieldRequired");
     if (!pin) {
-      validationErrors.pin = "PIN is required.";
+      validationErrors.pin = t("fieldRequired");
     } else if (!/^\d{4}$/.test(pin)) {
-      validationErrors.pin = "PIN must be a 4-digit number.";
+      validationErrors.pin = t("invalidPin");
     }
 
     if (Object.keys(validationErrors).length > 0) {
@@ -83,9 +85,9 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
               <HeartPulse className="w-8 h-8 text-teal-600" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Welcome Back
+              {t("welcomeBack")}
             </h1>
-            <p className="text-gray-600">CHW Portal</p>
+            <p className="text-gray-600">{t("appTitle")}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -94,7 +96,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Full Name
+                {t("fullName")}
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -106,7 +108,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
                   className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all ${
                     errors.name ? "border-red-300 bg-red-50" : "border-gray-300"
                   }`}
-                  placeholder="Enter your full name"
+                  placeholder={t("enterFullName")}
                 />
               </div>
               {errors.name && (
@@ -119,7 +121,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
                 htmlFor="pin"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                PIN
+                {t("pin")}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -131,7 +133,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
                   className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all ${
                     errors.pin ? "border-red-300 bg-red-50" : "border-gray-300"
                   }`}
-                  placeholder="Enter your CHW PIN"
+                  placeholder={t("enterPin")}
                   maxLength={4}
                   min={0}
                   max={9999}
@@ -149,7 +151,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Password
+                {t("password")}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -163,7 +165,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
                       ? "border-red-300 bg-red-50"
                       : "border-gray-300"
                   }`}
-                  placeholder="Enter your password"
+                  placeholder={t("enterPassword")}
                 />
                 <button
                   type="button"
@@ -190,22 +192,22 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
               {isLoading ? (
                 <div className="flex items-center justify-center">
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                  Signing In...
+                  {t("signingIn")}
                 </div>
               ) : (
-                "Sign In"
+                t("signIn")
               )}
             </button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-gray-600">
-              Don't have an account?{" "}
+              {t("dontHaveAccount")}{" "}
               <Link
                 to={"/signup"}
                 className="text-teal-600 hover:text-teal-700 font-medium transition-colors"
               >
-                Sign up here
+                {t("signUpHere")}
               </Link>
             </p>
           </div>

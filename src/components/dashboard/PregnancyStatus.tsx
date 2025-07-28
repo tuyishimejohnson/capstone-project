@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface Pregnancy {
   _id: string;
@@ -34,6 +35,7 @@ export const PregnancyModal: React.FC<PregnancyModalProps> = ({
   pregnancyStatus,
 }) => {
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isOpen) {
@@ -57,7 +59,9 @@ export const PregnancyModal: React.FC<PregnancyModalProps> = ({
           className="flex justify-between items-center mb-0 px-6 py-4 rounded-t-lg"
           style={{ backgroundColor: "#0d9488" }}
         >
-          <h2 className="text-xl font-semibold text-white">Maternal Cases</h2>
+          <h2 className="text-xl font-semibold text-white">
+            {t("maternalCases")}
+          </h2>
           <div className="flex gap-5">
             <button
               onClick={onClose}

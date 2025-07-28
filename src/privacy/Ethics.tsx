@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 export const Ethics = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="bg-gradient-to-br from-teal-500 via-teal-400 to-cyan-300 min-h-screen px-6 md:px-20 py-10">
@@ -16,7 +18,7 @@ export const Ethics = () => {
           <ArrowLeft className="text-white w-6 h-6" />
         </button>
         <h2 className="text-4xl font-bold text-white tracking-wide">
-          Code of Ethics
+          {t("ethics")}
         </h2>
       </div>
 

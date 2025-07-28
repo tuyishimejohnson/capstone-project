@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { GlobeLock, Handshake } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export const FooterPrivacy = () => {
+  const { t } = useTranslation();
   return (
     <footer className="bg-gray-100 border-t-1 border-gray-300 py-6 px-4 rounded-t-2xl shadow-lg mt-8">
       <div className="flex justify-center gap-8 items-center mb-2">
@@ -12,7 +14,7 @@ export const FooterPrivacy = () => {
           <span role="img" aria-label="Privacy">
             <GlobeLock />
           </span>{" "}
-          Privacy Policy
+          {t("privacyPolicy")}
         </Link>
         <span className="text-teal-400">|</span>
         <Link
@@ -22,7 +24,7 @@ export const FooterPrivacy = () => {
           <span role="img" aria-label="Ethics">
             <Handshake />
           </span>{" "}
-          Code of Ethics
+          {t("ethics")}
         </Link>
       </div>
       <div className="text-center text-xs text-teal-800 opacity-80">

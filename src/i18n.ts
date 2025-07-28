@@ -1,0 +1,566 @@
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+
+i18n.use(initReactI18next).init({
+  fallbackLng: "en",
+  resources: {
+    en: {
+      translation: {
+        // Common
+        loading: "Loading...",
+        save: "Save",
+        cancel: "Cancel",
+        delete: "Delete",
+        edit: "Edit",
+        back: "Back",
+        next: "Next",
+        previous: "Previous",
+        yes: "Yes",
+        no: "No",
+        submit: "Submit",
+        close: "Close",
+        view: "View",
+        add: "Add",
+        remove: "Remove",
+        required: "Required",
+        optional: "Optional",
+        na: "N/A",
+        available: "Available",
+        notAvailable: "Not Available",
+        active: "Active",
+        inactive: "Inactive",
+        male: "Male",
+        female: "Female",
+        pending: "Pending",
+        positive: "Positive",
+        negative: "Negative",
+        normal: "Normal",
+
+        // Application Title
+        appTitle: "CHW Portal",
+        appSubtitle: "Community Health Worker Portal",
+        scheduleDescription:
+          "Here is an overview of your availability customization and recommended actions.",
+
+        // Authentication
+        welcomeBack: "Welcome Back",
+        createAccount: "Create your account",
+        signIn: "Sign In",
+        signUp: "Sign Up",
+        signingIn: "Signing In...",
+        signingUp: "Signing Up...",
+        logout: "Logout",
+        logoutConfirm: "Are you sure you want to logout?",
+        dontHaveAccount: "Don't have an account?",
+        alreadyHaveAccount: "Already have an account?",
+        signUpHere: "Sign up here",
+        signInHere: "Sign in here",
+
+        // Form Labels
+        fullName: "Full Name",
+        phoneNumber: "Phone Number",
+        district: "District",
+        sector: "Sector",
+        cell: "Cell",
+        village: "Village",
+        specialization: "Specialization",
+        password: "Password",
+        confirmPassword: "Confirm Password",
+        pin: "PIN",
+        patientName: "Patient Name",
+        age: "Age",
+        gender: "Gender",
+        contactNumber: "Contact Number",
+        address: "Address",
+        notes: "Notes",
+
+        // Placeholders
+        enterFullName: "Enter your full name",
+        enterPhoneNumber: "Enter your phone number",
+        enterDistrict: "Enter your district",
+        enterSector: "Enter your sector",
+        enterCell: "Enter your cell",
+        enterVillage: "Enter your village",
+        selectSpecialization: "Select your specialization",
+        enterPassword: "Enter your password",
+        confirmYourPassword: "Confirm your password",
+        enterPin: "Enter your CHW PIN",
+        enterPatientName: "Enter patient's full name",
+        ageInYears: "Age in years",
+        ageInMonths: "Age in months",
+        enterContactNumber: "Enter contact number",
+        enterAddress: "Enter address",
+        enterNotes: "Any additional observations or notes",
+
+        // Specializations
+        malariaSpecialization: "Malaria Treatment",
+        maternalHealthSpecialization: "Maternal Health",
+        nutritionSpecialization: "Child Nutrition",
+
+        // Dashboard
+        welcomeBackUser: "Welcome back",
+        myWeeklyAvailability: "My Weekly Availability",
+        daysAvailable: "Days Available",
+        hoursPerWeek: "Hours per Week",
+        avgHoursPerDay: "Avg Hours per Day",
+        nextAvailable: "Next Available:",
+        noUpcomingAvailability: "No upcoming availability",
+        loadingDashboard: "Loading dashboard...",
+        healthMetricsOverview: "Health Metrics Overview",
+        totalRegistered: "Total Registered",
+        activeCases: "Active Cases",
+        improving: "Improving",
+        urgentActions: "Urgent Actions",
+
+        // Availability Status
+        notSet: "Not Set",
+        limited: "Limited",
+        availableStatus: "Available",
+
+        // Patient Forms
+        basicPatientInfo: "Basic Patient Information",
+        malariaCase: "Malaria Case",
+        childNutrition: "Child Nutrition",
+        maternalHealth: "Maternal Health",
+        addPatient: "Add Patient",
+
+        // Malaria Form
+        malariaSymptoms: "Malaria Symptoms",
+        fever: "Fever",
+        chills: "Chills",
+        headache: "Headache",
+        nausea: "Nausea",
+        vomiting: "Vomiting",
+        muscleAches: "Muscle aches",
+        fatigue: "Fatigue",
+        testMethod: "Test Method",
+        rapidDiagnosticTest: "Rapid Diagnostic Test (RDT)",
+        microscopy: "Microscopy",
+        clinicalDiagnosis: "Clinical Diagnosis",
+        testResult: "Test Result",
+        severity: "Severity",
+        mild: "Mild",
+        moderate: "Moderate",
+        severe: "Severe",
+        treatmentGiven: "Treatment Given",
+        followUpDate: "Follow-up Date",
+        pleaseSelectSymptoms: "Please select at least one symptom.",
+        pleaseSelectSeverity: "Please select severity level.",
+        thisFieldRequired: "This field is required.",
+        describeTreatment: "Describe treatment provided",
+
+        // Nutrition Form
+        childAgeMonths: "Child Age (months)",
+        weightKg: "Weight (kg)",
+        heightCm: "Height (cm)",
+        muac: "MUAC (cm)",
+        nutritionStatus: "Nutrition Status",
+        severeMalnutrition: "Severe Malnutrition",
+        moderateMalnutrition: "Moderate Malnutrition",
+        normalNutritionStatus: "Normal Nutrition Status",
+        feedingPractices: "Feeding Practices",
+        continuedBreastfeeding: "Continued breastfeeding",
+        complementaryFeedingStarted: "Complementary feeding started",
+        adequateMealFrequency: "Adequate meal frequency",
+        diverseDiet: "Diverse diet",
+        fortifiedFoodsGiven: "Fortified foods given",
+        interventions: "Interventions",
+        nutritionalCounseling: "Nutritional counseling",
+        therapeuticFeeding: "Therapeutic feeding",
+        micronutrientSupplementation: "Micronutrient supplementation",
+        deworming: "Deworming",
+        growthMonitoring: "Growth monitoring",
+        referralToNutritionProgram: "Referral to nutrition program",
+        referralMade: "Referral made",
+        referralLocation: "Referral Location",
+        wherePatientReferred: "Where was the patient referred?",
+        weightInKg: "Weight in kg",
+        heightInCm: "Height in cm",
+        muacInCm: "MUAC in cm",
+
+        // Maternal Form
+        pregnancyStatus: "Pregnancy Status",
+        currentlyPregnant: "Currently Pregnant",
+        postpartum: "Postpartum",
+        pregnancyHistory: "Pregnancy History",
+        gestationWeeks: "Gestation Weeks",
+        gravida: "Gravida",
+        para: "Para",
+        antenatalVisits: "Antenatal Visits",
+        vitalSigns: "Vital Signs",
+        bloodPressure: "Blood Pressure",
+        weight: "Weight",
+        temperature: "Temperature",
+        riskFactors: "Risk Factors",
+        complications: "Complications",
+        nextVisitDate: "Next Visit Date",
+        numberOfAncVisits: "Number of ANC visits",
+        exampleBloodPressure: "e.g., 120/80",
+        weightExample: "Weight (kg)",
+        temperatureExample: "Temperature (°C)",
+
+        // Health Metrics
+        pregnantWomenUnderCare: "Pregnant Women Under Care",
+        malariaCases: "Malaria Cases",
+        childrenNutrition: "Children Nutrition",
+
+        // Actions & Buttons
+        editSchedule: "Edit Schedule",
+        saveSchedule: "Save Schedule",
+        viewRegisteredChw: "View registered CHW",
+        askAssistant: "Ask Assistant",
+        viewDetails: "View Details",
+        deletePatient: "Delete patient",
+        loadingCases: "Loading cases...",
+
+        // Days of Week
+        monday: "Monday",
+        tuesday: "Tuesday",
+        wednesday: "Wednesday",
+        thursday: "Thursday",
+        friday: "Friday",
+        saturday: "Saturday",
+        sunday: "Sunday",
+
+        // Time
+        startTime: "Start Time",
+        endTime: "End Time",
+        to: "to",
+
+        // CHW Assistant
+        chwAssistant: "CHW Assistant",
+        typeMessage: "Type your message...",
+        assistantGreeting:
+          "Hello! I'm your CHW Assistant. Ask me anything about malaria, nutrition, or maternal cases.",
+        you: "You",
+        assistant: "Assistant",
+
+        // Modal Titles
+        availableChws: "Available CHWs",
+        chwsPin: "CHWs PIN",
+        maternalCases: "Maternal Cases",
+        improvingCases: "Improving Cases",
+        nutritionDetails: "Nutrition Details",
+        pregnancyDetails: "Pregnancy Details",
+        malariaDetails: "Malaria Details",
+
+        // Details Labels
+        name: "Name",
+        recordedBy: "Recorded By",
+        vitals: "Vitals",
+        noVitalsRecorded: "No vitals recorded",
+
+        // Status Messages
+        noCasesFound: "No cases found for this filter.",
+        noCHWAvailable: "No CHW available.",
+        loadingChws: "Loading CHWs...",
+        loadingMaternalCases: "Loading maternal cases...",
+
+        // Form Validation
+        fieldRequired: "This field is required",
+        invalidPhoneNumber: "Invalid phone number",
+        passwordTooShort: "Password must be at least 6 characters",
+        passwordsDontMatch: "Passwords don't match",
+        invalidPin: "PIN must be 4 digits",
+
+        // Success Messages
+        patientSaved: "Patient data saved successfully",
+        profileUpdated: "Profile updated successfully",
+        scheduleUpdated: "Schedule updated successfully",
+
+        // Error Messages
+        somethingWentWrong: "Something went wrong. Please try again.",
+        failedToSave: "Failed to save data",
+        networkError: "Network error. Please check your connection.",
+
+        // Privacy & Ethics
+        privacyPolicy: "Privacy Notice",
+        ethics: "Code of Ethics",
+        chwRole: "CHW Role",
+        dataProtection: "Data Protection",
+        informedConsent: "Informed Consent",
+      },
+    },
+    rw: {
+      translation: {
+        // Common
+        loading: "Ihangane...",
+        save: "Kubika",
+        cancel: "Kureka",
+        delete: "Gusiba",
+        edit: "Guhindura",
+        back: "Gusubira inyuma",
+        next: "Komeza",
+        previous: "Ibanziriza",
+        yes: "Yego",
+        no: "Oya",
+        submit: "Kohereza",
+        close: "Gufunga",
+        view: "Kureba",
+        add: "Kongeramo",
+        remove: "Gukuramo",
+        required: "Birasabwa",
+        optional: "Bitarasabwa",
+        na: "Nta kimenyetso",
+        available: "Biraboneka",
+        notAvailable: "Ntibiboneka",
+        active: "Bigakora",
+        inactive: "Bidakora",
+        male: "Gabo",
+        female: "Gore",
+        pending: "Bitegereje",
+        positive: "Byemejwe",
+        negative: "Byanga",
+        normal: "Bisanzwe",
+
+        // Application Title
+        appTitle: "Urubuga rw'Abajyanama b'Ubuzima",
+        appSubtitle: "Urubuga rw'Abajyanama b'Ubuzima mu Muryango",
+        scheduleDescription:
+          "Aha niho mwarebera ishusho rusange no gushyiraho igihe mubonekeraho.",
+
+        // Authentication
+        welcomeBack: "Ikaze nanone",
+        createAccount: "Kora konti yawe",
+        signIn: "Kwinjira",
+        signUp: "Kwiyandikisha",
+        signingIn: "Urinjira...",
+        signingUp: "Uriyandikisha...",
+        logout: "Gusohoka",
+        logoutConfirm: "Uremeza gusohoka?",
+        dontHaveAccount: "Nta konti ufite?",
+        alreadyHaveAccount: "Usanzwe ufite konti?",
+        signUpHere: "Iyandikishe hano",
+        signInHere: "Injira hano",
+
+        // Form Labels
+        fullName: "Amazina yose",
+        phoneNumber: "Numero ya Terefone",
+        district: "Akarere",
+        sector: "Umurenge",
+        cell: "Akagari",
+        village: "Umudugudu",
+        specialization: "Icyo akora",
+        password: "Ijambo ry'ibanga",
+        confirmPassword: "Emeza ijambo ry'ibanga",
+        pin: "Kode",
+        patientName: "Izina ry'umurwayi",
+        age: "Imyaka",
+        gender: "Igitsina",
+        contactNumber: "Terefone",
+        address: "Aderesi",
+        notes: "Ibisobanuro",
+
+        // Placeholders
+        enterFullName: "Andika amazina yawe yose",
+        enterPhoneNumber: "Andika numero ya terefone yawe",
+        enterDistrict: "Andika akarere kawe",
+        enterSector: "Andika umurenge wawe",
+        enterCell: "Andika akagari kawe",
+        enterVillage: "Andika umudugudu wawe",
+        selectSpecialization: "Hitamo icyo ukora",
+        enterPassword: "Andika ijambo ry'ibanga",
+        confirmYourPassword: "Emeza ijambo ry'ibanga",
+        enterPin: "Andika kode yawe",
+        enterPatientName: "Andika izina ry'umurwayi",
+        ageInYears: "Imyaka",
+        ageInMonths: "Amezi",
+        enterContactNumber: "Andika numero y'itumanaho",
+        enterAddress: "Andika aderesi",
+        enterNotes: "Andika ibisobanuro byose",
+
+        // Specializations
+        malariaSpecialization: "Kuvura Malariya",
+        maternalHealthSpecialization: "Ubuzima bw'Ababyeyi",
+        nutritionSpecialization: "Imirire y'Abana",
+
+        // Dashboard
+        welcomeBackUser: "Ikaze nanone",
+        myWeeklyAvailability: "Igihe Mbonetse mu Cyumweru",
+        daysAvailable: "Iminsi Nabonetse",
+        hoursPerWeek: "Amasaha mu Cyumweru",
+        avgHoursPerDay: "Amasaha mu Munsi",
+        nextAvailable: "Nzaboneka:",
+        noUpcomingAvailability: "Nta gihe kigaragara",
+        loadingDashboard: "Ihangane...",
+        healthMetricsOverview: "Ubuzima muri Rusange",
+        totalRegistered: "Abasabye",
+        activeCases: "Indwara zihari",
+        improving: "Ibitanga icyizere",
+        urgentActions: "Ibikorwa by'ihutirwa",
+
+        // Availability Status
+        notSet: "Nta gihe mwahisemo",
+        limited: "Igipimo gito",
+        availableStatus: "Igihe kirahari",
+
+        // Patient Forms
+        basicPatientInfo: "Amakuru y'umurwayi",
+        malariaCase: "Indwara ya Malariya",
+        childNutrition: "Imirire y'Umwana",
+        maternalHealth: "Ubuzima bw'Umubyeyi",
+        addPatient: "Ongeramo Umurwayi",
+
+        // Malaria Form
+        malariaSymptoms: "Ibimenyetso bya Malariya",
+        fever: "Umuriro",
+        chills: "Kuyikonja",
+        headache: "Kubabara mu mutwe",
+        nausea: "Kumva nabi",
+        vomiting: "Kuraguza",
+        muscleAches: "Kubabara mu mitsi",
+        fatigue: "Kunanirwa",
+        testMethod: "Uburyo bwo gupima",
+        rapidDiagnosticTest: "Ikizamini cyo vuba (RDT)",
+        microscopy: "Mikrosikopi",
+        clinicalDiagnosis: "Isuzuma ry'amavuriro",
+        testResult: "Igisubizo cy'ikizamini",
+        severity: "Uburemere",
+        mild: "Bukabije",
+        moderate: "Buringaniye",
+        severe: "Bukabije cyane",
+        treatmentGiven: "Ubuvuzi bwatanzwe",
+        followUpDate: "Italiki yo gukurikirana",
+        pleaseSelectSymptoms:
+          "Nyamuneka hitamo ibimenyetso kimwe cyangwa byinshi.",
+        pleaseSelectSeverity: "Nyamuneka hitamo uburemere.",
+        thisFieldRequired: "Iki gice kirasabwa.",
+        describeTreatment: "Sobanura ubuvuzi bwatanzwe",
+
+        // Nutrition Form
+        childAgeMonths: "Imyaka y'umwana (amezi)",
+        weightKg: "Uburemere (kg)",
+        heightCm: "Uburebure (cm)",
+        muac: "MUAC (cm)",
+        nutritionStatus: "Uko amirire ameze",
+        severeMalnutrition: "Imirire mibi cyane",
+        moderateMalnutrition: "Imirire mibi",
+        normalNutritionStatus: "Imirire myiza",
+        feedingPractices: "Uburyo bwo kurisha",
+        continuedBreastfeeding: "Gukomeza konsa",
+        complementaryFeedingStarted: "Ibiryo byongerwaho byatangiye",
+        adequateMealFrequency: "Kurisha kenshi",
+        diverseDiet: "Ibiryo bitandukanye",
+        fortifiedFoodsGiven: "Ibiryo byakomejwe",
+        interventions: "Ibikorwa",
+        nutritionalCounseling: "Inama ku mirire",
+        therapeuticFeeding: "Kurisha kwa kivuzo",
+        micronutrientSupplementation: "Intungamubiri",
+        deworming: "Gukuramo inzoka",
+        growthMonitoring: "Gukurikirana ukura",
+        referralToNutritionProgram: "Koherezwa muri programa y'imirire",
+        referralMade: "Yoherejwe",
+        referralLocation: "Aho yaherejwe",
+        wherePatientReferred: "Umurwayi yaherejwe he?",
+        weightInKg: "Uburemere muri kg",
+        heightInCm: "Uburebure muri cm",
+        muacInCm: "MUAC muri cm",
+
+        // Maternal Form
+        pregnancyStatus: "Uko inda imeze",
+        currentlyPregnant: "Afite inda",
+        postpartum: "Yarabyaye",
+        pregnancyHistory: "Amateka y'inda",
+        gestationWeeks: "Ibyumweru by'inda",
+        gravida: "Inshuro z'inda",
+        para: "Abana yabyaye",
+        antenatalVisits: "Gusura mbere yo kubyara",
+        vitalSigns: "Ibimenyetso by'ubuzima",
+        bloodPressure: "Umuvuduko w'amaraso",
+        weight: "Uburemere",
+        temperature: "Ubushyuhe",
+        riskFactors: "Ibitera akaga",
+        complications: "Ingorane",
+        nextVisitDate: "Italiki y'usura utaha",
+        numberOfAncVisits: "Umubare w'usura ANC",
+        exampleBloodPressure: "urugero: 120/80",
+        weightExample: "Uburemere (kg)",
+        temperatureExample: "Ubushyuhe (°C)",
+
+        // Health Metrics
+        pregnantWomenUnderCare: "Abagore bafite inda bakurikiranwa",
+        malariaCases: "Indwara za Malariya",
+        childrenNutrition: "Imirire y'Abana",
+
+        // Actions & Buttons
+        editSchedule: "Hindura gahunda",
+        saveSchedule: "Bika gahunda",
+        viewRegisteredChw: "Reba abajyanama banditswe",
+        askAssistant: "Baza umufasha",
+        viewDetails: "Reba amakuru arambuye",
+        deletePatient: "Siba umurwayi",
+        loadingCases: "Gushaka indwara...",
+
+        // Days of Week
+        monday: "Kuwa mbere",
+        tuesday: "Kuwa kabiri",
+        wednesday: "Kuwa gatatu",
+        thursday: "Kuwa kane",
+        friday: "Kuwa gatanu",
+        saturday: "Kuwa gatandatu",
+        sunday: "Ku cyumweru",
+
+        // Time
+        startTime: "Igihe cyo gutangira",
+        endTime: "Igihe cyo kurangiza",
+        to: "kugeza",
+
+        // CHW Assistant
+        chwAssistant: "Umufasha w'Umukozi w'Ubuzima",
+        typeMessage: "Andika ubutumwa bwawe...",
+        assistantGreeting:
+          "Muraho! Ndi umufasha wawe. Mbaza ibyose ku malariya, imirire, cyangwa ubuzima bw'ababyeyi.",
+        you: "Wowe",
+        assistant: "Umufasha",
+
+        // Modal Titles
+        availableChws: "Abakozi b'Ubuzima baboneka",
+        chwsPin: "Kode z'Abakozi",
+        maternalCases: "Ababyeyi batwite",
+        improvingCases: "Indwara zitezimbere",
+        nutritionDetails: "Amakuru y'imirire",
+        pregnancyDetails: "Amakuru y'inda",
+        malariaDetails: "Amakuru ya malariya",
+
+        // Details Labels
+        name: "Izina",
+        recordedBy: "Wanditse",
+        vitals: "Ibimenyetso by'ubuzima",
+        noVitalsRecorded: "Nta bimenyetso byanditswe",
+
+        // Status Messages
+        noCasesFound: "Nta ndwara zabonetse kuri iki cyunyangira.",
+        noCHWAvailable: "Nta mukozi w'ubuzima uboneka.",
+        loadingChws: "Gushakisha abajyanama...",
+        loadingMaternalCases: "Gushakisha ubuzima bw' Umubyeyi...",
+
+        // Form Validation
+        fieldRequired: "Iki gice kirasabwa",
+        invalidPhoneNumber: "Numero ya terefone ntibaho",
+        passwordTooShort:
+          "Ijambo ry'ibanga rigomba kuba rifite byibura inyuguti 6",
+        passwordsDontMatch: "Amagambo y'ibanga ntabwo ahuriye",
+        invalidPin: "Kode igomba kuba ifite imibare 4",
+
+        // Success Messages
+        patientSaved: "Amakuru y'umurwayi yabitswe neza",
+        profileUpdated: "Umwirondoro wavuguruwe neza",
+        scheduleUpdated: "Gahunda yavuguruwe neza",
+
+        // Error Messages
+        somethingWentWrong: "Habaye ikosa. Ongera ugerageze.",
+        failedToSave: "Byanze kubikwa",
+        networkError: "Ikosa rya network. Reba kwihuza kwawe.",
+
+        // Privacy & Ethics
+        privacyPolicy: "Politiki y'Ibanga",
+        ethics: "Ubumuntu n'imyitwarire myiza",
+        chwRole: "Inshingano z'Umukozi w'Ubuzima",
+        dataProtection: "Kurinda Amakuru",
+        informedConsent: "Kwemera kwisanzura",
+      },
+    },
+  },
+});
+
+export default i18n;

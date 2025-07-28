@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Clock, Calendar, CheckCircle2, XCircle } from "lucide-react";
 import RegisteredCHW from "../RegisteredCHW";
 import { daysOfWeek } from "./days/daysOfWeek";
@@ -18,6 +19,7 @@ const formatTime = (time: string) => {
 export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
   onEditClick,
 }) => {
+  const { t } = useTranslation();
   const [schedule, setSchedule] = useState<WeeklySchedule>({});
   const [showRegistered, setShowRegistered] = useState(false);
 
@@ -94,11 +96,11 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
           </div>
           <div className="ml-3 sm:ml-4 min-w-0">
             <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
-              My Weekly Availability
+              {t("myWeeklyAvailability")}
             </h3>
             <p className="text-xs sm:text-sm text-gray-600 truncate">
-              {availableDays.length} days • {totalHours.toFixed(1)} hours per
-              week
+              {availableDays.length} {t("daysAvailable")} •{" "}
+              {totalHours.toFixed(1)} {t("hoursPerWeek")}
             </p>
           </div>
         </div>
@@ -108,13 +110,13 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
             className="px-4 py-2 text-teal-600 hover:text-teal-700 hover:bg-teal-50 rounded-lg text-xs sm:text-sm font-medium w-full sm:w-auto"
             onClick={() => setShowRegistered(true)}
           >
-            View registered CHW
+            {t("viewRegisteredChw")}
           </button>
           <button
             onClick={onEditClick}
             className="shadow-md text-gray-600 border border-gray-300 hover:translate-x-0.5 transition-all duration-200 hover:transform px-4 sm:px-5 py-2 rounded-md text-xs sm:text-sm w-full sm:w-auto"
           >
-            Edit Schedule
+            {t("editSchedule")}
           </button>
         </div>
       </div>
@@ -175,13 +177,13 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
             <div className="text-2xl font-bold text-teal-600">
               {availableDays.length}
             </div>
-            <div className="text-sm text-gray-600">Days Available</div>
+            <div className="text-sm text-gray-600">{t("daysAvailable")}</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-blue-600">
               {totalHours.toFixed(1)}
             </div>
-            <div className="text-sm text-gray-600">Hours per Week</div>
+            <div className="text-sm text-gray-600">{t("hoursPerWeek")}</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-green-600">
@@ -189,7 +191,7 @@ export const AvailabilityDisplay: React.FC<AvailabilityDisplayProps> = ({
                 ? (totalHours / availableDays.length).toFixed(1)
                 : "0"}
             </div>
-            <div className="text-sm text-gray-600">Avg Hours per Day</div>
+            <div className="text-sm text-gray-600">{t("avgHoursPerDay")}</div>
           </div>
         </div>
       </div>
