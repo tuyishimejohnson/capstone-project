@@ -27,9 +27,8 @@ export interface FormErrors {
 
 export interface DayAvailability {
   day: string;
-  isAvailable: boolean;
-  startTime: string;
-  endTime: string;
+  availableFrom: string;
+  availableTo: string;
 }
 
 export interface WeeklySchedule {

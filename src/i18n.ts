@@ -226,6 +226,7 @@ i18n.use(initReactI18next).init({
         startTime: "Start Time",
         endTime: "End Time",
         to: "to",
+        availability: "availability",
 
         // CHW Assistant
         chwAssistant: "CHW Assistant",
@@ -478,7 +479,7 @@ i18n.use(initReactI18next).init({
         temperatureExample: "Ubushyuhe (°C)",
 
         // Health Metrics
-        pregnantWomenUnderCare: "Abagore bafite inda bakurikiranwa",
+        pregnantWomenUnderCare: "Ababyeyi batwite bakurikiranwa",
         malariaCases: "Indwara za Malariya",
         childrenNutrition: "Imirire y'Abana",
 
@@ -504,6 +505,7 @@ i18n.use(initReactI18next).init({
         startTime: "Igihe cyo gutangira",
         endTime: "Igihe cyo kurangiza",
         to: "kugeza",
+        availability: "Igihe muboneka",
 
         // CHW Assistant
         chwAssistant: "Umufasha w'Umukozi w'Ubuzima",

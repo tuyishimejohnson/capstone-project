@@ -77,9 +77,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   };
 
   const getAvailabilityStatus = () => {
-    const availableDays = Object.values(schedule).filter(
-      (day) => day.isAvailable
+    const storedAvailabilities = JSON.parse(
+      localStorage.getItem("availabilities") || "null"
     );
+    const availableDays = Object.values(
+      storedAvailabilities || schedule
+    ).filter((day) => day.availableFrom || day.availableTo);
+
     if (availableDays.length === 0)
       return { text: t("notSet"), color: "text-red-600 bg-red-50" };
     if (availableDays.length <= 2)
@@ -88,6 +92,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   };
 
   const availabilityStatus = getAvailabilityStatus();
+
   const userDataResults = JSON.parse(localStorage.getItem("userData") || "{}");
 
   // Use improving cases count from ActiveCases hook
