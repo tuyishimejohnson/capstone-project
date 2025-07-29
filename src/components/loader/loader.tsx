@@ -1,13 +1,4 @@
-import { useEffect, useState } from "react";
-
 export const Loader = () => {
-  /*   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
- */
   return (
     <div className="flex flex-col items-center">
       {/* Loader spinner */}

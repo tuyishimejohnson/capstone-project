@@ -5,6 +5,7 @@ import type { Nutrition } from "../../../types/formTypes";
 import { useMalariaCases } from "../../../hooks/useMalariaCases";
 import { useNutritionData } from "../../../hooks/useNutritionData";
 import axios from "axios";
+import { Loader } from "../../loader/loader";
 
 interface UrgentActionsModalProps {
   isOpen: boolean;
@@ -149,7 +150,7 @@ export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
           {loading ? (
             <div className="flex justify-center items-center h-32">
               <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
-                Loading urgent actions...
+                <Loader />
               </span>
             </div>
           ) : (

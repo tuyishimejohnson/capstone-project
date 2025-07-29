@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { X, Trash2 } from "lucide-react";
 import type { MalariaCase } from "../../../types/formTypes";
 import type { Pregnancy } from "../../../types/formTypes";
-import { useMalariaCases } from '../../../hooks/useMalariaCases';
-import { useMaternalData } from '../../../hooks/useMaternalData';
+import { useMalariaCases } from "../../../hooks/useMalariaCases";
+import { useMaternalData } from "../../../hooks/useMaternalData";
 import axios from "axios";
+import { Loader } from "../../loader/loader";
 
 interface ActiveCasesModalProps {
   isOpen: boolean;
@@ -35,7 +36,11 @@ export const ActiveCases: React.FC<ActiveCasesModalProps> = ({
     "malaria"
   );
   const [loading, setLoading] = useState(true);
-  const [confirmDelete, setConfirmDelete] = useState<{ open: boolean; caseId: string | null; caseType: string | null }>({ open: false, caseId: null, caseType: null });
+  const [confirmDelete, setConfirmDelete] = useState<{
+    open: boolean;
+    caseId: string | null;
+    caseType: string | null;
+  }>({ open: false, caseId: null, caseType: null });
 
   useEffect(() => {
     if (isOpen) {
@@ -54,16 +59,25 @@ export const ActiveCases: React.FC<ActiveCasesModalProps> = ({
   const handleDeleteConfirm = async () => {
     if (!confirmDelete.caseId || !confirmDelete.caseType) return;
     try {
-      const endpoint = confirmDelete.caseType === "malaria" ? "malaria" : "maternal";
+      const endpoint =
+        confirmDelete.caseType === "malaria" ? "malaria" : "maternal";
       // First, get the case by id
-      const getRes = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${confirmDelete.caseId}`);
+      const getRes = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${
+          confirmDelete.caseId
+        }`
+      );
       if (!getRes.data || getRes.status !== 200) {
         alert(`${confirmDelete.caseType} case not found.`);
         setConfirmDelete({ open: false, caseId: null, caseType: null });
         return;
       }
       // If found, delete it
-      await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${confirmDelete.caseId}`);
+      await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/api/${endpoint}/${
+          confirmDelete.caseId
+        }`
+      );
       //window.location.reload();
     } catch (error) {
       alert(`Failed to delete ${confirmDelete.caseType} case.`);
@@ -120,99 +134,102 @@ export const ActiveCases: React.FC<ActiveCasesModalProps> = ({
         <div className="p-6">
           {loading ? (
             <div className="flex justify-center items-center h-32">
-              <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">Loading active cases...</span>
+              <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+                <Loader />
+              </span>
             </div>
           ) : (
             <div>
-              {selectedType === "malaria" ? (
-                (() => {
-                  const filteredCases = (cases as MalariaCase[]).filter(
-                    (c) =>
-                      c.testResult &&
-                      c.testResult.toLowerCase() === "positive" &&
-                      c.recordedBy === userLogged.name
-                  );
-                  if (filteredCases.length === 0) {
-                    return (
-                      <div className="flex justify-center items-center h-32">
-                        <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
-                          No malaria cases.
-                        </span>
-                      </div>
+              {selectedType === "malaria"
+                ? (() => {
+                    const filteredCases = (cases as MalariaCase[]).filter(
+                      (c) =>
+                        c.testResult &&
+                        c.testResult.toLowerCase() === "positive" &&
+                        c.recordedBy === userLogged.name
                     );
-                  }
-                  return filteredCases.map((c) => (
-                    <div
-                      key={c._id}
-                      className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
-                    >
-                      <div>
-                        <h2 className="text-xl font-medium text-teal-700">
-                          Name: {c.patientName}
-                        </h2>
-                        <div>Age: {c.age}</div>
-                        <div>Status: {c.testResult}</div>
-                        <div>Severity: {c.severity}</div>
-                      </div>
-                      <button
-                        className="text-red-500 hover:text-red-700 ml-4"
-                        onClick={() => handleDeleteClick(c._id, "malaria")}
-                        aria-label="Delete malaria case"
+                    if (filteredCases.length === 0) {
+                      return (
+                        <div className="flex justify-center items-center h-32">
+                          <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+                            No malaria cases.
+                          </span>
+                        </div>
+                      );
+                    }
+                    return filteredCases.map((c) => (
+                      <div
+                        key={c._id}
+                        className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
                       >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  ));
-                })()
-              ) : (
-                (() => {
-                  const filteredCases = (cases as Pregnancy[]).filter(
-                    (c) =>
-                      c.pregnancyStatus &&
-                      c.pregnancyStatus.toLowerCase() === "pregnant" &&
-                      c.recordedBy === userLogged.name
-                  );
-                  if (filteredCases.length === 0) {
-                    return (
-                      <div className="flex justify-center items-center h-32">
-                        <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
-                          No maternal cases.
-                        </span>
+                        <div>
+                          <h2 className="text-xl font-medium text-teal-700">
+                            Name: {c.patientName}
+                          </h2>
+                          <div>Age: {c.age}</div>
+                          <div>Status: {c.testResult}</div>
+                          <div>Severity: {c.severity}</div>
+                        </div>
+                        <button
+                          className="text-red-500 hover:text-red-700 ml-4"
+                          onClick={() => handleDeleteClick(c._id, "malaria")}
+                          aria-label="Delete malaria case"
+                        >
+                          <Trash2 size={18} />
+                        </button>
                       </div>
+                    ));
+                  })()
+                : (() => {
+                    const filteredCases = (cases as Pregnancy[]).filter(
+                      (c) =>
+                        c.pregnancyStatus &&
+                        c.pregnancyStatus.toLowerCase() === "pregnant" &&
+                        c.recordedBy === userLogged.name
                     );
-                  }
-                  return filteredCases.map((c) => (
-                    <div
-                      key={c._id}
-                      className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
-                    >
-                      <div>
-                        <h2 className="text-xl font-medium text-teal-700">
-                          Name: {c.patientName}
-                        </h2>
-                        <div>Age: {c.age}</div>
-                        <div>Pregnancy Status: {c.pregnancyStatus}</div>
-                        <div>Gestation Weeks: {c.gestationWeeks}</div>
-                        <div>Antenatal visits: {c.antenatalVisits}</div>
-                      </div>
-                      <button
-                        className="text-red-500 hover:text-red-700 ml-4"
-                        onClick={() => handleDeleteClick(c._id, "maternal")}
-                        aria-label="Delete maternal case"
+                    if (filteredCases.length === 0) {
+                      return (
+                        <div className="flex justify-center items-center h-32">
+                          <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
+                            No maternal cases.
+                          </span>
+                        </div>
+                      );
+                    }
+                    return filteredCases.map((c) => (
+                      <div
+                        key={c._id}
+                        className="mb-4 border-gray-300 border-b pb-2 flex justify-between items-start"
                       >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  ));
-                })()
-              )}
+                        <div>
+                          <h2 className="text-xl font-medium text-teal-700">
+                            Name: {c.patientName}
+                          </h2>
+                          <div>Age: {c.age}</div>
+                          <div>Pregnancy Status: {c.pregnancyStatus}</div>
+                          <div>Gestation Weeks: {c.gestationWeeks}</div>
+                          <div>Antenatal visits: {c.antenatalVisits}</div>
+                        </div>
+                        <button
+                          className="text-red-500 hover:text-red-700 ml-4"
+                          onClick={() => handleDeleteClick(c._id, "maternal")}
+                          aria-label="Delete maternal case"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    ));
+                  })()}
             </div>
           )}
         </div>
         {confirmDelete.open && (
           <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)] bg-opacity-40 z-50">
             <div className="bg-white p-6 rounded shadow-lg flex flex-col items-center">
-              <p className="mb-4 text-lg font-semibold">Are you sure you want to delete this {confirmDelete.caseType} case?</p>
+              <p className="mb-4 text-lg font-semibold">
+                Are you sure you want to delete this {confirmDelete.caseType}{" "}
+                case?
+              </p>
               <div className="flex gap-4">
                 <button
                   className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-red-600"
@@ -232,4 +249,5 @@ export const ActiveCases: React.FC<ActiveCasesModalProps> = ({
         )}
       </div>
     </div>
-  )}
+  );
+};

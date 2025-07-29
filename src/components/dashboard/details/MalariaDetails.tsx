@@ -1,6 +1,7 @@
 import { useMalariaCases } from "../../../hooks/useMalariaCases";
 import type { MalariaCase } from "../../../types/formTypes";
 import { useNavigate, useParams } from "react-router-dom";
+import { Loader } from "../../loader/loader";
 
 export const MalariaDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,7 +12,13 @@ export const MalariaDetails = () => {
   }: { malariaCases: MalariaCase[]; loading: boolean } = useMalariaCases();
 
   if (loading) {
-    return <p className="text-teal-600 text-center items-center">Loading...</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-teal-600 text-center text-lg">
+          <Loader />
+        </div>
+      </div>
+    );
   }
 
   if (!malariaCases || malariaCases.length === 0) {

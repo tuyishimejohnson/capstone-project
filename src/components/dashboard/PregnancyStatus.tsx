@@ -2,6 +2,7 @@ import { X } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Loader } from "../loader/loader";
 
 interface Pregnancy {
   _id: string;
@@ -74,7 +75,7 @@ export const PregnancyModal: React.FC<PregnancyModalProps> = ({
         <div className="p-6">
           {loading ? (
             <div className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
-              Loading maternal cases...
+              <Loader />
             </div>
           ) : userPregnancies.length === 0 ? (
             <p className="text-gray-500 text-center">

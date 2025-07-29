@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import type { Nutrition } from "../../../types/formTypes";
 import { Link } from "react-router-dom";
+import { Loader } from "../../loader/loader";
 
 interface ActiveCasesModalProps {
   isOpen: boolean;
@@ -54,7 +55,7 @@ export const NutritionCases: React.FC<ActiveCasesModalProps> = ({
         <div className="p-6">
           {loading ? (
             <div className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
-              Loading nutrition cases...
+              <Loader />
             </div>
           ) : userNutrition.length === 0 ? (
             <p className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">

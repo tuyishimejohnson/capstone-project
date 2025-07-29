@@ -1,6 +1,7 @@
 import { useNutritionData } from "../../../hooks/useNutritionData";
 import type { Nutrition } from "../../../types/formTypes";
 import { useParams, useNavigate } from "react-router-dom";
+import { Loader } from "../../loader/loader";
 
 export const NutritionDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,7 +12,13 @@ export const NutritionDetails = () => {
   }: { nutritionData: Nutrition[]; loading: boolean } = useNutritionData();
 
   if (loading) {
-    return <p className="text-teal-600 text-center items-center">Loading...</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-teal-600 text-center text-lg">
+          <Loader />
+        </div>
+      </div>
+    );
   }
 
   if (!nutritionData || nutritionData.length === 0) {

@@ -3,6 +3,7 @@ import { X, Trash2 } from "lucide-react";
 import type { MalariaCase } from "../../../types/formTypes";
 import type { Pregnancy } from "../../../types/formTypes";
 import axios from "axios";
+import { Loader } from "../../loader/loader";
 
 interface ImprovingCasesModalProps {
   isOpen: boolean;
@@ -121,7 +122,7 @@ export const ImprovingCases: React.FC<ImprovingCasesModalProps> = ({
           {loading ? (
             <div className="flex justify-center items-center h-32">
               <span className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
-                Loading improving cases...
+                <Loader />
               </span>
             </div>
           ) : (

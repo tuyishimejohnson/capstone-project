@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { X, Funnel, Trash2 } from "lucide-react";
 import axios from "axios";
+import { Loader } from "../../loader/loader";
 
 interface Booking {
   _id: string;
@@ -28,14 +29,19 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
   onClose,
   bookings,
 }) => {
-  const [filteredBookings, setFilteredBookings] = useState<Booking[] | null>(null);
+  const [filteredBookings, setFilteredBookings] = useState<Booking[] | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
-  const [confirmDelete, setConfirmDelete] = useState<{ open: boolean; index: number | null; isFiltered: boolean }>({ open: false, index: null, isFiltered: false });
+  const [confirmDelete, setConfirmDelete] = useState<{
+    open: boolean;
+    index: number | null;
+    isFiltered: boolean;
+  }>({ open: false, index: null, isFiltered: false });
 
   // Get logged-in user's name once
   const userDataString = localStorage.getItem("userData");
   const userData = userDataString ? JSON.parse(userDataString) : null;
-
 
   useEffect(() => {
     if (isOpen) {
@@ -52,22 +58,35 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
   const handleDeleteConfirm = async () => {
     if (confirmDelete.index === null) return;
     const isFiltered = confirmDelete.isFiltered;
-    const bookingsList = isFiltered && filteredBookings ? filteredBookings : (filteredBookings || bookings);
+    const bookingsList =
+      isFiltered && filteredBookings
+        ? filteredBookings
+        : filteredBookings || bookings;
     const booking = bookingsList[confirmDelete.index];
     try {
       // First, get the appointment by id
-      const getRes = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/appointments/${booking._id}`);
+      const getRes = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/api/appointments/${booking._id}`
+      );
       if (!getRes.data || getRes.status !== 200) {
         alert("Appointment not found.");
         setConfirmDelete({ open: false, index: null, isFiltered: false });
         return;
       }
       // If found, delete it
-      await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/appointments/${booking._id}`);
+      await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/api/appointments/${booking._id}`
+      );
       if (isFiltered && filteredBookings) {
-        setFilteredBookings(filteredBookings.filter((_, i) => i !== confirmDelete.index));
+        setFilteredBookings(
+          filteredBookings.filter((_, i) => i !== confirmDelete.index)
+        );
       } else {
-        setFilteredBookings((filteredBookings || bookings).filter((_, i) => i !== confirmDelete.index));
+        setFilteredBookings(
+          (filteredBookings || bookings).filter(
+            (_, i) => i !== confirmDelete.index
+          )
+        );
       }
     } catch (error) {
       alert("Failed to delete booking.");
@@ -132,7 +151,7 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
         <div className="p-6">
           {loading ? (
             <div className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
-              Loading patient details...
+              <Loader />
             </div>
           ) : bookings.length === 0 ? (
             <p className="text-gray-500">No patient bookings available.</p>
@@ -141,7 +160,12 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
               {/* Header Row */}
               <div className="flex font-semibold bg-gray-100">
                 {headers.map((header, i) => (
-                  <div key={i} className={i === headers.length - 1 ? "p-2 w-8" : "flex-1 p-2"}>
+                  <div
+                    key={i}
+                    className={
+                      i === headers.length - 1 ? "p-2 w-8" : "flex-1 p-2"
+                    }
+                  >
                     {header}
                   </div>
                 ))}
@@ -235,7 +259,9 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
       {confirmDelete.open && (
         <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)] bg-opacity-40 z-50">
           <div className="bg-white p-6 rounded shadow-lg flex flex-col items-center">
-            <p className="mb-4 text-lg font-semibold">Are you sure you want to delete this patient?</p>
+            <p className="mb-4 text-lg font-semibold">
+              Are you sure you want to delete this patient?
+            </p>
             <div className="flex gap-4">
               <button
                 className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-red-600"

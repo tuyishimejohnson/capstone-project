@@ -1,6 +1,7 @@
 import { useMaternalData } from "../../../hooks/useMaternalData";
 import type { Pregnancy } from "../../../types/formTypes";
 import { useParams, useNavigate } from "react-router-dom";
+import { Loader } from "../../loader/loader";
 
 export const PregnancyDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,7 +12,13 @@ export const PregnancyDetails = () => {
   }: { maternalData: Pregnancy[]; loading: boolean } = useMaternalData();
 
   if (loading) {
-    return <p className="text-teal-600 text-center items-center">Loading...</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-teal-600 text-center text-lg">
+          <Loader />
+        </div>
+      </div>
+    );
   }
 
   if (!maternalData || maternalData.length === 0) {

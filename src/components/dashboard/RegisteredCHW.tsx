@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import { Loader } from "../loader/loader";
 
 interface RegisteredCHWProps {
   show: boolean;
@@ -77,7 +78,7 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
           {loading ? (
             <div className="flex justify-center items-center py-8">
               <span className="flex items-center justify-center text-teal-600 font-semibold text-lg">
-                Loading CHWs...
+                <Loader />
               </span>
             </div>
           ) : showUsers.length === 0 ? (

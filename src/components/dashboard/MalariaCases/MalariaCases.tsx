@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Loader } from "../../loader/loader";
 
 interface MalariaCase {
   _id: string;
@@ -70,10 +71,10 @@ export const ActiveCasesModal: React.FC<ActiveCasesModalProps> = ({
         <div className="p-6">
           {loading ? (
             <div className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
-              Loading malaria cases...
+              <Loader />
             </div>
           ) : filteredMalariaCases.length === 0 ? (
-            <p className="text-gray-500 text-center">
+            <p className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
               No active malaria cases available.
             </p>
           ) : (
