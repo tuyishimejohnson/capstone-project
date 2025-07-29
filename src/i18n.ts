@@ -107,7 +107,7 @@ i18n.use(initReactI18next).init({
         noUpcomingAvailability: "No upcoming availability",
         loadingDashboard: "Loading dashboard...",
         healthMetricsOverview: "Health Metrics Overview",
-        totalRegistered: "Total Registered",
+        totalRegistered: "Total bookings",
         activeCases: "Active Cases",
         improving: "Improving",
         urgentActions: "Urgent Actions",
@@ -274,7 +274,7 @@ i18n.use(initReactI18next).init({
         networkError: "Network error. Please check your connection.",
 
         // Privacy & Ethics
-        privacyPolicy: "Privacy Notice",
+        privacyPolicy: "Privacy Policy",
         ethics: "Code of Ethics",
         chwRole: "CHW Role",
         dataProtection: "Data Protection",
@@ -509,7 +509,7 @@ i18n.use(initReactI18next).init({
         chwAssistant: "Umufasha w'Umukozi w'Ubuzima",
         typeMessage: "Andika ubutumwa bwawe...",
         assistantGreeting:
-          "Muraho! Ndi umufasha wawe. Mbaza ibyose ku malariya, imirire, cyangwa ubuzima bw'ababyeyi.",
+          "Muraho! Ndi umufasha wawe. Mbaza byose kuri malariya, imirire y'abana, cyangwa ubuzima bw'umugore utwite.",
         you: "Wowe",
         assistant: "Umufasha",
 

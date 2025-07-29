@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { X, Send, Bot, User } from "lucide-react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 interface ChatMessage {
   id: string;
@@ -17,12 +18,12 @@ interface BotProps {
 export const PredictionUploadPage: React.FC<BotProps> = ({ show, onClose }) => {
   if (!show) return null;
 
+  const { t } = useTranslation();
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "1",
       type: "bot",
-      content:
-        "Hello! I'm your CHW Assistant. Ask me anything about malaria, nutrition, or maternal cases.",
+      content: t("assistantGreeting"),
       timestamp: new Date(),
     },
   ]);

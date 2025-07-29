@@ -38,6 +38,7 @@ import { useUrgentActions } from "./UrgentActions/UrgentActions";
 import { PredictionUploadPage } from "./PredictionModel";
 import { FooterPrivacy } from "../footer/FooterPrivacy";
 import { DisplayPinAndNames } from "./DisplayCodes";
+import { Loader } from "../loader/loader";
 
 interface DashboardProps {
   user: User;
@@ -103,9 +104,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   ) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-xl text-teal-600 font-semibold">
-          {t("loadingDashboard")}
-        </div>
+        <Loader />
       </div>
     );
   }
