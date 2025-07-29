@@ -19,7 +19,7 @@ export function useMalariaCases() {
       }
     };
     getMalariaData();
-  }, []);
+  }, [malariaCases]);
 
   return { malariaCases, loading };
-} 
+}

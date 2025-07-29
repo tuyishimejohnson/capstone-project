@@ -62,6 +62,7 @@ export const MalariaForm: React.FC<
 > = ({ onSubmit, isSaving, defaultValues = {}, patientData }) => {
   const { t } = useTranslation();
   let savedData = JSON.parse(localStorage.getItem("userData") || "{}");
+  console.log(savedData);
   const {
     register,
     handleSubmit,

@@ -19,7 +19,7 @@ export function useMaternalData() {
       }
     };
     getMaternalData();
-  }, []);
+  }, [maternalData]);
 
   return { maternalData, loading };
-} 
+}

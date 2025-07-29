@@ -8,16 +8,16 @@ export const PrivacyPolicy = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="bg-gradient-to-br from-teal-500 via-teal-400 to-teal-300 min-h-screen px-6 md:px-20 py-10">
+    <div className="bg-gray-100 min-h-screen px-6 md:px-20 py-10">
       {/* Header Section */}
       <div className="flex items-center gap-4 mb-8">
         <button
           onClick={() => navigate("/dashboard")}
-          className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition"
+          className="p-2 rounded-full bg-white hover:bg-white/30 transition"
         >
-          <ArrowLeft className="text-white w-6 h-6" />
+          <ArrowLeft className="text-teal-600 w-6 h-6" />
         </button>
-        <h2 className="text-4xl font-bold text-white tracking-wide">
+        <h2 className="text-4xl font-bold text-teal-600 tracking-wide">
           {t("privacyPolicy")}
         </h2>
       </div>

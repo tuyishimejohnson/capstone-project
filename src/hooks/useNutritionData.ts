@@ -19,7 +19,7 @@ export function useNutritionData() {
       }
     };
     getNutritionData();
-  }, []);
+  }, [nutritionData]);
 
   return { nutritionData, loading };
-} 
+}
