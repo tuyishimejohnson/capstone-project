@@ -392,7 +392,7 @@ i18n.use(initReactI18next).init({
 
         // Availability Status
         notSet: "Nta gihe mwahisemo",
-        limited: "Igipimo gito",
+        limited: "Igihe ntigihagije",
         availableStatus: "Igihe kirahari",
 
         // Patient Forms
