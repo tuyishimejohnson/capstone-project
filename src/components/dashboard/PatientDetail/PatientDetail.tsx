@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { X, Funnel, Trash2 } from "lucide-react";
 import axios from "axios";
+import { Trash2, X } from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Loader } from "../../loader/loader";
 
 interface Booking {
@@ -29,74 +29,67 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
   onClose,
   bookings,
 }) => {
-  const [filteredBookings, setFilteredBookings] = useState<Booking[] | null>(
-    null
-  );
+  const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [confirmDelete, setConfirmDelete] = useState<{
     open: boolean;
     index: number | null;
-    isFiltered: boolean;
-  }>({ open: false, index: null, isFiltered: false });
+  }>({ open: false, index: null });
 
-  // Get logged-in user's name once
+  const userData = useMemo(() => {
   const userDataString = localStorage.getItem("userData");
-  const userData = userDataString ? JSON.parse(userDataString) : null;
+  return userDataString ? JSON.parse(userDataString) : null;
+}, []);
+
 
   useEffect(() => {
     if (isOpen) {
       setLoading(true);
+      // Filter bookings automatically for current user
+      const filtered = bookings.filter(
+        (booking) => userData && booking.userName === userData.name
+      );
+      setFilteredBookings(filtered);
+
       const timer = setTimeout(() => setLoading(false), 1000);
       return () => clearTimeout(timer);
     }
-  }, [isOpen]);
+  }, [isOpen, bookings, userData]);
 
-  const handleDeleteClick = (index: number, isFiltered: boolean) => {
-    setConfirmDelete({ open: true, index, isFiltered });
+  const handleDeleteClick = (index: number) => {
+    setConfirmDelete({ open: true, index });
   };
 
   const handleDeleteConfirm = async () => {
     if (confirmDelete.index === null) return;
-    const isFiltered = confirmDelete.isFiltered;
-    const bookingsList =
-      isFiltered && filteredBookings
-        ? filteredBookings
-        : filteredBookings || bookings;
-    const booking = bookingsList[confirmDelete.index];
+    const booking = filteredBookings[confirmDelete.index];
+
     try {
-      // First, get the appointment by id
+      // Get the appointment by id
       const getRes = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/api/appointments/${booking._id}`
       );
       if (!getRes.data || getRes.status !== 200) {
         alert("Appointment not found.");
-        setConfirmDelete({ open: false, index: null, isFiltered: false });
+        setConfirmDelete({ open: false, index: null });
         return;
       }
       // If found, delete it
       await axios.delete(
         `${import.meta.env.VITE_BASE_URL}/api/appointments/${booking._id}`
       );
-      if (isFiltered && filteredBookings) {
-        setFilteredBookings(
-          filteredBookings.filter((_, i) => i !== confirmDelete.index)
-        );
-      } else {
-        setFilteredBookings(
-          (filteredBookings || bookings).filter(
-            (_, i) => i !== confirmDelete.index
-          )
-        );
-      }
+      setFilteredBookings(
+        filteredBookings.filter((_, i) => i !== confirmDelete.index)
+      );
     } catch (error) {
       alert("Failed to delete booking.");
     } finally {
-      setConfirmDelete({ open: false, index: null, isFiltered: false });
+      setConfirmDelete({ open: false, index: null });
     }
   };
 
   const handleDeleteCancel = () => {
-    setConfirmDelete({ open: false, index: null, isFiltered: false });
+    setConfirmDelete({ open: false, index: null });
   };
 
   if (!isOpen) return null;
@@ -113,16 +106,6 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
     "",
   ];
 
-  const getFilteredPatients = () => {
-    const userDataString = localStorage.getItem("userData");
-    const userData = userDataString ? JSON.parse(userDataString) : null;
-    setFilteredBookings(
-      bookings.filter(
-        (booking) => userData && booking.userName === userData.name
-      )
-    );
-  };
-
   return (
     <div className="fixed inset-0 bg-opacity-50 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
       <div className="bg-white w-full mx-20 rounded-lg shadow-lg overflow-y-auto max-h-[80vh]">
@@ -131,21 +114,12 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
           style={{ backgroundColor: "#0d9488" }}
         >
           <h2 className="text-xl font-semibold text-white">Patient Details</h2>
-          <div className="flex gap-5">
-            <button
-              className="text-teal-700 flex shadow-md shadow-gray-500 bg-teal-200 rounded-md px-2 py-1"
-              onClick={() => getFilteredPatients()}
-            >
-              Your patients <Funnel className="" />
-            </button>
-
-            <button
-              onClick={onClose}
-              className="text-white hover:text-gray-200"
-            >
-              <X />
-            </button>
-          </div>
+          <button
+            onClick={onClose}
+            className="text-white hover:text-gray-200"
+          >
+            <X />
+          </button>
         </div>
 
         <div className="p-6">
@@ -153,8 +127,8 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
             <div className="flex items-center justify-center h-32 text-teal-600 font-semibold text-lg">
               <Loader />
             </div>
-          ) : bookings.length === 0 ? (
-            <p className="text-gray-500">No patient bookings available.</p>
+          ) : filteredBookings.length === 0 ? (
+            <p className="text-gray-500 text-center">No patients booked you.</p>
           ) : (
             <div>
               {/* Header Row */}
@@ -171,87 +145,40 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
                 ))}
               </div>
               {/* Data Rows */}
-              {filteredBookings !== null ? (
-                filteredBookings.length === 0 ? (
-                  <div className="text-gray-500 p-4 text-center">
-                    No patients booked you
+              {filteredBookings.map((booking, index) => (
+                <div
+                  key={index}
+                  className={`flex items-center ${
+                    index !== filteredBookings.length - 1
+                      ? "border-b border-gray-200"
+                      : ""
+                  } hover:bg-gray-50`}
+                >
+                  <div className="flex-1 p-2">{booking.patientName}</div>
+                  <div className="flex-1 p-2">
+                    {booking.patientPhoneNumber}
                   </div>
-                ) : (
-                  filteredBookings.map((booking, index) => (
-                    <div
-                      key={index}
-                      className={`flex items-center ${
-                        index !== filteredBookings.length - 1
-                          ? "border-b border-gray-200"
-                          : ""
-                      } hover:bg-gray-50`}
+                  <div className="flex-1 p-2">
+                    {new Date(booking.appointmentDate).toLocaleString()}
+                  </div>
+                  <div className="flex-1 p-2">{booking.district}</div>
+                  <div className="flex-1 p-2">{booking.sector}</div>
+                  <div className="flex-1 p-2">{booking.cell}</div>
+                  <div className="flex-1 p-2">{booking.village}</div>
+                  <div className="flex-1 p-2 capitalize">
+                    {booking.status}
+                  </div>
+                  <div className="p-2 w-8 flex items-center justify-center">
+                    <button
+                      className="text-red-500 hover:text-red-700"
+                      onClick={() => handleDeleteClick(index)}
+                      aria-label="Delete patient"
                     >
-                      <div className="flex-1 p-2">{booking.patientName}</div>
-                      <div className="flex-1 p-2">
-                        {booking.patientPhoneNumber}
-                      </div>
-                      <div className="flex-1 p-2">
-                        {new Date(booking.appointmentDate).toLocaleString()}
-                      </div>
-                      <div className="flex-1 p-2">{booking.district}</div>
-                      <div className="flex-1 p-2">{booking.sector}</div>
-                      <div className="flex-1 p-2">{booking.cell}</div>
-                      <div className="flex-1 p-2">{booking.village}</div>
-                      <div className="flex-1 p-2 capitalize">
-                        {booking.status}
-                      </div>
-                      <div className="p-2 w-8 flex items-center justify-center">
-                        {booking.userName === userData.name && (
-                          <button
-                            className="text-red-500 hover:text-red-700"
-                            onClick={() => handleDeleteClick(index, true)}
-                            aria-label="Delete patient"
-                          >
-                            <Trash2 size={18} />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                )
-              ) : (
-                bookings.map((booking, index) => (
-                  <div
-                    key={index}
-                    className={`flex items-center ${
-                      index !== bookings.length - 1
-                        ? "border-b border-gray-200"
-                        : ""
-                    } hover:bg-gray-50`}
-                  >
-                    <div className="flex-1 p-2">{booking.patientName}</div>
-                    <div className="flex-1 p-2">
-                      {booking.patientPhoneNumber}
-                    </div>
-                    <div className="flex-1 p-2">
-                      {new Date(booking.appointmentDate).toLocaleString()}
-                    </div>
-                    <div className="flex-1 p-2">{booking.district}</div>
-                    <div className="flex-1 p-2">{booking.sector}</div>
-                    <div className="flex-1 p-2">{booking.cell}</div>
-                    <div className="flex-1 p-2">{booking.village}</div>
-                    <div className="flex-1 p-2 capitalize">
-                      {booking.status}
-                    </div>
-                    <div className="p-2 w-8 flex items-center justify-center">
-                      {booking.userName === userData.name && (
-                        <button
-                          className="text-red-500 hover:text-red-700"
-                          onClick={() => handleDeleteClick(index, false)}
-                          aria-label="Delete patient"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      )}
-                    </div>
+                      <Trash2 size={18} />
+                    </button>
                   </div>
-                ))
-              )}
+                </div>
+              ))}
             </div>
           )}
         </div>
