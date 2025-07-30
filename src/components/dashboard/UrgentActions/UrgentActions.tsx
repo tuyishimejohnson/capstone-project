@@ -249,7 +249,7 @@ export const UrgentActions: React.FC<UrgentActionsModalProps> = ({
               Are you sure you want to delete this {confirmDelete.caseType}{" "}
               case?
             </p>
-            <div className="flex gap-2 sm:gap-4 flex-col sm:flex-row w-full">
+            <div className="flex gap-2 sm:gap-4 flex-col sm:flex-row w-full justify-center">
               <button
                 className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-red-600 w-full sm:w-auto"
                 onClick={handleDeleteConfirm}
