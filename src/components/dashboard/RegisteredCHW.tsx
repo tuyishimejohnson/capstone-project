@@ -113,7 +113,7 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
                     <div className="flex-1 p-2">
                       {user.name}
                       {isCurrentUser && (
-                        <span className="text-teal-600">({t("you")})</span>
+                        <span className="text-teal-600">(You)</span>
                       )}
                     </div>
                     <div className="flex-1 p-2">{user.phone}</div>

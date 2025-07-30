@@ -1,6 +1,6 @@
+import React, { useState, useEffect } from "react";
+import { X, Funnel, Trash2 } from "lucide-react";
 import axios from "axios";
-import { Trash2, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
 import { Loader } from "../../loader/loader";
 
 interface Booking {
@@ -46,17 +46,6 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setLoading(true);
-
-       if (userData) {
-        setFilteredBookings(
-          bookings.filter((booking) => booking.userName === userData.name)
-        );
-      } else {
-        setFilteredBookings([])};
-
-
-
-
       const timer = setTimeout(() => setLoading(false), 1000);
       return () => clearTimeout(timer);
     }
@@ -124,6 +113,15 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
     "",
   ];
 
+  const getFilteredPatients = () => {
+    const userDataString = localStorage.getItem("userData");
+    const userData = userDataString ? JSON.parse(userDataString) : null;
+    setFilteredBookings(
+      bookings.filter(
+        (booking) => userData && booking.userName === userData.name
+      )
+    );
+  };
 
   return (
     <div className="fixed inset-0 bg-opacity-50 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
@@ -134,7 +132,13 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
         >
           <h2 className="text-xl font-semibold text-white">Patient Details</h2>
           <div className="flex gap-5">
-         
+            <button
+              className="text-teal-700 flex shadow-md shadow-gray-500 bg-teal-200 rounded-md px-2 py-1"
+              onClick={() => getFilteredPatients()}
+            >
+              Your patients <Funnel className="" />
+            </button>
+
             <button
               onClick={onClose}
               className="text-white hover:text-gray-200"
@@ -210,8 +214,8 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
                     </div>
                   ))
                 )
-              ) : null
-                /* bookings.map((booking, index) => (
+              ) : (
+                bookings.map((booking, index) => (
                   <div
                     key={index}
                     className={`flex items-center ${
@@ -246,8 +250,8 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
                       )}
                     </div>
                   </div>
-                )) */
-              }
+                ))
+              )}
             </div>
           )}
         </div>
@@ -278,4 +282,3 @@ export const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
     </div>
   );
 };
-
