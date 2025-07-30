@@ -1,7 +1,6 @@
-import React from "react";
-import { X } from "lucide-react";
-import { useState, useEffect } from "react";
 import axios from "axios";
+import { X } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Loader } from "../loader/loader";
 
@@ -35,15 +34,7 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
           `${import.meta.env.VITE_BASE_URL}/api/users`
         );
         setShowUsers(response.data);
-        console.log(
-          "=========================> received users data data",
-          response.data
-        );
       } catch (error) {
-        console.log(
-          "=====+++++++++++++++++++++++0 error while receiving data",
-          error
-        );
       } finally {
         setTimeout(() => {
           setLoading(false);
@@ -113,7 +104,7 @@ const RegisteredCHW: React.FC<RegisteredCHWProps> = ({ show, onClose }) => {
                     <div className="flex-1 p-2">
                       {user.name}
                       {isCurrentUser && (
-                        <span className="text-teal-600">(You)</span>
+                          <span className="text-teal-600">({t("you")})</span>
                       )}
                     </div>
                     <div className="flex-1 p-2">{user.phone}</div>
