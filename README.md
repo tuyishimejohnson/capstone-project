@@ -46,7 +46,23 @@ A portal for Community Health Workers (CHWs) to manage, track, and analyze healt
    ```
 3. **Set up environment variables:**
 
-   - Create a `.env` file or set `VITE_BASE_URL` in your environment to point to your backend API.
+   - Create a `.env` file or set `VITE_BASE_URL` in your environment to point to your backend API(http://localhost:5000).
+
+5. **Run the backend server:**
+      - Create`server` directory and `index.js` file:
+        ```bash
+        cd server/index.js
+        ```
+      - Install backend dependencies:
+        ```bash
+        npm install
+        ```
+      - Set up backend environment variables (e.g., `.env` for MongoDB URI, JWT secret).
+      - Start the backend server:
+        ```bash
+        npm run dev
+        ```
+      The backend API will be available at [http://localhost:5000](http://localhost:5000) by default.
 
 4. **Run the development server:**
    ```bash
