@@ -49,7 +49,7 @@ A portal for Community Health Workers (CHWs) to manage, track, and analyze healt
    - Create a `.env` file or set `VITE_BASE_URL` in your environment to point to your backend API(http://localhost:5000).
 
 5. **Run the backend server:**
-      - Create`server` directory and `index.js` file:
+      - Create`server` directory and inside, create `index.js` file:
         ```bash
         cd server/index.js
         ```
